@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2E90B37B-27A5-419A-B05D-071C55701A85}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>FaithEngage.AppServices.Tests</RootNamespace>
+    <AssemblyName>FaithEngage.AppServices.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="FakeItEasy">
+      <HintPath>..\packages\FakeItEasy.1.25.3\lib\net40\FakeItEasy.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Providers\KonvesReferenceProviderTests.cs" />
+    <Compile Include="Wrappers\KonvesReferenceTests.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OpenReference\OpenReference.csproj">
+      <Project>{281CAAAB-13E3-46CD-B3AB-B5E702DD2430}</Project>
+      <Name>OpenReference</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FaithEngage.AppServices\FaithEngage.AppServices.csproj">
+      <Project>{5EEEC5F2-370B-42BA-A6A1-5A43A601DE4C}</Project>
+      <Name>FaithEngage.AppServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FaithEngage.Core\FaithEngage.Core.csproj">
+      <Project>{F94B6862-B7CC-4507-BC82-9093F97CDEC2}</Project>
+      <Name>FaithEngage.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Providers\" />
+    <Folder Include="Wrappers\" />
+  </ItemGroup>
+</Project>

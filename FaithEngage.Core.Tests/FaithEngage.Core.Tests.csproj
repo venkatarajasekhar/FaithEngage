@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{147B18C6-44DD-4ED0-AAC6-1032E2934A38}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>FaithEngage.Core.Tests</RootNamespace>
+    <AssemblyName>FaithEngage.Core.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="FakeItEasy">
+      <HintPath>..\packages\FakeItEasy.1.25.3\lib\net40\FakeItEasy.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DisplayUnitsTests\" />
+    <Folder Include="TestingFiles\" />
+    <Folder Include="DummyTypes\" />
+    <Folder Include="ManagersTests\" />
+    <Folder Include="CardTests\" />
+    <Folder Include="CardTests\DefaultImplementations\" />
+    <Folder Include="ActionProcessorTests\" />
+    <Folder Include="CardProcessorTests\" />
+    <Folder Include="ContainersTests\" />
+    <Folder Include="DisplayUnitEditorTests\" />
+    <Folder Include="EventProcessorTests\" />
+    <Folder Include="EventsTests\" />
+    <Folder Include="PluginManagersTests\" />
+    <Folder Include="PluginManagersTests\DisplayUnitPluginsTests\" />
+    <Folder Include="PluginManagersTests\PluginContainersTests\" />
+    <Folder Include="RepoManagersTests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DummyTypes\Dummies.cs" />
+    <Compile Include="CardTests\DefaultImplementations\RenderableCardSectionTests.cs" />
+    <Compile Include="CardTests\DefaultImplementations\RenderableCardTests.cs" />
+    <Compile Include="CardTests\CardActionTests.cs" />
+    <Compile Include="ContainersTests\IocContainerTests.cs" />
+    <Compile Include="ContainersTests\RegisteredObjectTests.cs" />
+    <Compile Include="DisplayUnitsTests\DisplayUnitTests.cs" />
+    <Compile Include="PluginManagersTests\PluginContainersTests\DisplayUnitPluginContainerTests.cs" />
+    <Compile Include="DisplayUnitEditorTests\DisplayUnitEditorDefinitionTests.cs" />
+    <Compile Include="DisplayUnitsTests\DisplayUnitFactoryTests.cs" />
+    <Compile Include="RepoManagersTests\DisplayUnitRepoManagerTests.cs" />
+    <Compile Include="CardProcessorTests\CardProcessorTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestingFiles\levelcards.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestingFiles\cross_sunset-26.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestingFiles\SermonWk5.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FaithEngage.Core\FaithEngage.Core.csproj">
+      <Project>{F94B6862-B7CC-4507-BC82-9093F97CDEC2}</Project>
+      <Name>FaithEngage.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FaithEngage.Plugins\FaithEngage.Plugins.csproj">
+      <Project>{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}</Project>
+      <Name>FaithEngage.Plugins</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
