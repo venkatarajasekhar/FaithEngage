@@ -7,6 +7,7 @@ using FaithEngage.Core.DisplayUnits;
 using System.Linq;
 using FaithEngage.Core.Cards;
 using System.Collections.Generic;
+using FaithEngage.Core.Exceptions;
 
 namespace FaithEngage.Core.CardProcessor
 {
@@ -63,6 +64,25 @@ namespace FaithEngage.Core.CardProcessor
 
             Assert.That (cards, Is.Not.Null);
             Assert.That (cards.Length, Is.EqualTo (0));
+        }
+
+        [Test]
+        public void GetLiveCardsByEvent_InvalidIdException_ReturnsEmptyArray()
+        {
+            var cp = new CardProcessor (_container);
+            A.CallTo (() => _mgr.GetByEvent (VALID_GUID, true)).Throws<InvalidIdException> ();
+            var cards = cp.GetLiveCardsByEvent (VALID_GUID);
+            Assert.That (cards, Is.Not.Null);
+            Assert.That (cards.Length, Is.EqualTo (0));
+        }
+
+        [Test]
+        [ExpectedException(typeof(RepositoryException))]
+        public void GetLiveCardsByEvent_RepoException_Throws()
+        {
+            var cp = new CardProcessor (_container);
+            A.CallTo (() => _mgr.GetByEvent (VALID_GUID, true)).Throws<RepositoryException> ();
+            var cards = cp.GetLiveCardsByEvent (VALID_GUID);
         }
     }
 }

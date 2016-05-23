@@ -3,6 +3,7 @@ using FaithEngage.Core.Containers;
 using FaithEngage.Core.Cards;
 using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.DisplayUnits.Interfaces;
+using FaithEngage.Core.Exceptions;
 
 namespace FaithEngage.Core.CardProcessor
 {
@@ -30,8 +31,15 @@ namespace FaithEngage.Core.CardProcessor
 
         public RenderableCardDTO[] GetLiveCardsByEvent(Guid eventId)
         {
-            var dus = _duRepoMgr.GetByEvent (eventId, true);
-            return  _cardFactory.GetCards (dus);
+            try {
+                var dus = _duRepoMgr.GetByEvent (eventId, true);
+                return  _cardFactory.GetCards (dus);
+            } catch (InvalidIdException) {
+                return new RenderableCardDTO[]{};
+            } catch (RepositoryException) {
+                throw;
+            }
+
         }
 
         public RenderableCardDTO GetCard(Guid displayUnitId)
