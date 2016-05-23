@@ -1,12 +1,10 @@
 ﻿using System;
-
+using NUnit.Framework;
 namespace FaithEngage.Core.Cards
 {
-    public class CardActionTests
+	[TestFixture]
+	public class CardActionTests
     {
-        public CardActionTests ()
-        {
-        }
     }
 }
 

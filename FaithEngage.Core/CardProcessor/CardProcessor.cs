@@ -39,7 +39,7 @@ namespace FaithEngage.Core.CardProcessor
             var du = _duRepoMgr.PushDU (displayUnitId);
             var card = _cardFactory.GetCard (du);
             var args = createCardEventArgs (card);
-            onPushCard?.Invoke (args);                
+			pushCard (args);
         }
 
         public void PushNewCard(DisplayUnitDTO newDto)
@@ -49,14 +49,14 @@ namespace FaithEngage.Core.CardProcessor
             _duRepoMgr.SaveDtoToEvent (newDto);
             var card = _cardFactory.GetCard (du);
             var args = createCardEventArgs (card);
-            onPushCard?.Invoke (args);
+			pushCard (args);
         }
 
         public void PullCard(Guid displayUnitId)
         {
             var du = _duRepoMgr.PullDu (displayUnitId);
             var args = createCardEventArgs (du.AssociatedEvent, du.Id);
-            onPullCard?.Invoke (args);
+			pullCard (args);
         }
 
         private CardEventArgs createCardEventArgs (RenderableCardDTO card){
@@ -71,6 +71,20 @@ namespace FaithEngage.Core.CardProcessor
                 DisplayUnitId = displayUnitId
             };
         }
+		private void pushCard(CardEventArgs args)
+		{
+			if (onPushCard != null)
+			{
+				onPushCard (args);
+			}   
+		}
+		private void pullCard(CardEventArgs args)
+		{
+			if(onPullCard != null)
+			{
+				onPullCard(args);
+			}	
+		}
 
     }
 }
