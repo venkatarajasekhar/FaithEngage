@@ -16,7 +16,7 @@ namespace FaithEngage.Core.CardProcessor
     {
         private readonly IContainer _container;
         private readonly IDisplayUnitsRepoManager _duRepoMgr;
-        private readonly CardDtoFactory _cardFactory;
+        private readonly ICardDTOFactory _cardFactory;
 
         public event PushPullEventHandler onPushCard;
         public event PushPullEventHandler onPullCard;
@@ -25,7 +25,7 @@ namespace FaithEngage.Core.CardProcessor
         {
             _container = container;
             _duRepoMgr = _container.Resolve<IDisplayUnitsRepoManager> ();
-            _cardFactory = _container.Resolve<
+            _cardFactory = _container.Resolve<ICardDTOFactory> ();
         }
 
         public RenderableCardDTO[] GetLiveCardsByEvent(Guid eventId)
