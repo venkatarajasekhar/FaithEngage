@@ -6,6 +6,7 @@ using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.DisplayUnits;
 using System.Linq;
 using FaithEngage.Core.Cards;
+using System.Collections.Generic;
 
 namespace FaithEngage.Core.CardProcessor
 {
@@ -16,6 +17,7 @@ namespace FaithEngage.Core.CardProcessor
         private IDisplayUnitsRepoManager _mgr;
         private ICardDTOFactory _cardFactory;
         private Guid VALID_GUID = Guid.NewGuid();
+        private Guid INVALID_GUID = Guid.NewGuid ();
 
 
         [TestFixtureSetUp]
@@ -46,6 +48,21 @@ namespace FaithEngage.Core.CardProcessor
             Assert.That (cards, Is.Not.Null);
             Assert.That(cards, Is.EqualTo(dummyCards));
                 
+        }
+
+        [Test]
+        public void GetLiveCardsByEvent_InvalidEventId_ReturnsEmptyArray()
+        {
+            var cp = new CardProcessor (_container);
+            var dummies = new Dictionary<int,DisplayUnit> ();
+            var emptyArray = new RenderableCardDTO[]{};
+            A.CallTo (() => _mgr.GetByEvent (VALID_GUID, true)).Returns (dummies);
+            A.CallTo (() => _cardFactory.GetCards (dummies)).Returns (emptyArray);
+
+            var cards = cp.GetLiveCardsByEvent (INVALID_GUID);
+
+            Assert.That (cards, Is.Not.Null);
+            Assert.That (cards.Length, Is.EqualTo (0));
         }
     }
 }
