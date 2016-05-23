@@ -92,6 +92,7 @@
     <Compile Include="CardProcessor\CardProcessor.cs" />
     <Compile Include="CardProcessor\PushPullEventHandler.cs" />
     <Compile Include="Cards\CardDtoFactory.cs" />
+    <Compile Include="Cards\Interfaces\ICardDTOFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

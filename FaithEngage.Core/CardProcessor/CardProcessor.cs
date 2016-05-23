@@ -6,6 +6,12 @@ using FaithEngage.Core.DisplayUnits.Interfaces;
 
 namespace FaithEngage.Core.CardProcessor
 {
+    /// <summary>
+    /// This is the high-level processor for dealing with cards. It will be accessed
+    /// by the app facade to push, pull, and get cards.
+    /// 
+    /// Dependencies (injected through the IContainer): IDisplayUnitsRepoManager
+    /// </summary>
     public class CardProcessor
     {
         private readonly IContainer _container;
@@ -19,7 +25,7 @@ namespace FaithEngage.Core.CardProcessor
         {
             _container = container;
             _duRepoMgr = _container.Resolve<IDisplayUnitsRepoManager> ();
-            _cardFactory = new CardDtoFactory ();
+            _cardFactory = _container.Resolve<
         }
 
         public RenderableCardDTO[] GetLiveCardsByEvent(Guid eventId)
