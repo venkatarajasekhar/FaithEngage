@@ -6,9 +6,11 @@ namespace FaithEngage.Core.Tests
     [TestFixture]
     public class CardProcessorTests
     {
-        public CardProcessorTests ()
-        {
-        }
+		[Test]
+		public void TestThis()
+		{
+			throw new NotImplementedException ();
+		}
     }
 }
 
