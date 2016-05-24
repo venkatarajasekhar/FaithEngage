@@ -207,6 +207,23 @@ namespace FaithEngage.Core.CardProcessor
             cp.PushNewCard (A.Dummy<DisplayUnitDTO> ());
         }
 
+        [Test]
+        public void PullCard_ValidId_PullsCard()
+        {
+            var du = A.Fake<DisplayUnit>();
+            du.AssociatedEvent = VALID_GUID;
+            A.CallTo (() => _mgr.PullDu (VALID_GUID)).Returns (du);
+            CardEventArgs args = null;
+
+            var cp = new CardProcessor (_container);
+            cp.onPullCard += (e) => args = e;
+            cp.PullCard (VALID_GUID);
+
+            A.CallTo (() => _mgr.PullDu (VALID_GUID)).MustHaveHappened ();
+            Assert.That (args, Is.Not.Null);
+            Assert.That (args.EventId, Is.EqualTo(VALID_GUID));
+        }
+
     }
 }
 
