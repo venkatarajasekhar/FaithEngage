@@ -58,6 +58,8 @@ namespace FaithEngage.Core.CardProcessor
         public void PushCard(Guid displayUnitId)
         {
             var du = _duRepoMgr.PushDU (displayUnitId);
+            if (du == null)
+                return;
             var card = _cardFactory.GetCard (du);
             var args = createCardEventArgs (card);
 			pushCard (args);

@@ -147,6 +147,21 @@ namespace FaithEngage.Core.CardProcessor
             Assert.That (args.card, Is.EqualTo (card));
         }
 
+        [Test]
+        public void PushCard_InvalidDisplayUnitId_NoAction()
+        {
+            var cp = new CardProcessor (_container);
+            A.CallTo (() => _mgr.PushDU (INVALID_GUID)).Returns (null);
+
+            CardEventArgs args = null;
+            cp.onPushCard += (x) => args = x;
+
+            cp.PushCard (INVALID_GUID);
+
+            A.CallTo (() => _mgr.PushDU (INVALID_GUID)).MustHaveHappened ();
+            A.CallTo (() => _cardFactory.GetCard (A<DisplayUnit>.Ignored)).MustNotHaveHappened ();
+            Assert.That (args, Is.Null);
+        }
 
     }
 }
