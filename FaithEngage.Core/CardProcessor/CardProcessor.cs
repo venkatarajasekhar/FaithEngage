@@ -36,7 +36,7 @@ namespace FaithEngage.Core.CardProcessor
                 return  _cardFactory.GetCards (dus);
             } catch (InvalidIdException) {
                 return new RenderableCardDTO[]{};
-            } catch (RepositoryException) {
+            } catch (Exception) {
                 throw;
             }
 
@@ -44,10 +44,15 @@ namespace FaithEngage.Core.CardProcessor
 
         public RenderableCardDTO GetCard(Guid displayUnitId)
         {
-            var du = _duRepoMgr.GetById (displayUnitId);
-            if (du == null)
-                return null;
-            return _cardFactory.GetCard (du);
+            try {
+                var du = _duRepoMgr.GetById (displayUnitId);
+                if (du == null)
+                    return null;
+                return _cardFactory.GetCard (du);
+            } catch (Exception) {
+                throw;
+            }
+
         }
 
         public void PushCard(Guid displayUnitId)

@@ -106,11 +106,20 @@ namespace FaithEngage.Core.CardProcessor
         {
             var cp = new CardProcessor (_container);
 
-            A.CallTo (() => _mgr.GetById (VALID_GUID)).Returns (null);
+            A.CallTo (() => _mgr.GetById (INVALID_GUID)).Returns (null);
 
-            var card = cp.GetCard (VALID_GUID);
+            var card = cp.GetCard (INVALID_GUID);
 
             Assert.That (card, Is.Null);
+        }
+
+        [Test]
+        [ExpectedException]
+        public void GetCard_RepoMgrThrowsException_Throws()
+        {
+            var cp = new CardProcessor (_container);
+            A.CallTo (() => _mgr.GetById (VALID_GUID)).Throws<Exception> ();
+            cp.GetCard (VALID_GUID);
         }
 
     }

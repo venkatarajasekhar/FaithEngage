@@ -8,10 +8,10 @@ namespace FaithEngage.Core.DisplayUnits
 {
     public class DisplayUnitFactory : IDisplayUnitFactory
     {
-        private readonly IDisplayUnitPluginContainer _mgr;
+        private readonly IDisplayUnitPluginContainer _container;
         public DisplayUnitFactory (IDisplayUnitPluginContainer plginCtr)
         {
-            _mgr = plginCtr;
+            _container = plginCtr;
         }
         public DisplayUnit InstantiateNew (string pluginId, Dictionary<string, string> attributes)
         {
@@ -59,7 +59,7 @@ namespace FaithEngage.Core.DisplayUnits
 
         private ConstructorInfo getCtor(string pluginId, Type[] paramTypes)
         {
-            var plugin = _mgr.Resolve (pluginId);
+            var plugin = _container.Resolve (pluginId);
             if (plugin == null)
                 throw new NotRegisteredPluginException ("Plugin not registered: " + pluginId);
             var type = plugin.DisplayUnitType;
