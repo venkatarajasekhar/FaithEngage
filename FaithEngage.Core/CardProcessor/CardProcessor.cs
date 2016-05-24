@@ -44,51 +44,41 @@ namespace FaithEngage.Core.CardProcessor
 
         public RenderableCardDTO GetCard(Guid displayUnitId)
         {
-            try {
+            
                 var du = _duRepoMgr.GetById (displayUnitId);
                 if (du == null)
                     return null;
                 return _cardFactory.GetCard (du);
-            } catch (Exception) {
-                throw;
-            }
-
         }
 
         public void PushCard(Guid displayUnitId)
         {
-            try {
-                var du = _duRepoMgr.PushDU (displayUnitId);
-                if (du == null)
-                    throw new InvalidIdException();
-                var card = _cardFactory.GetCard (du);
-                var args = createCardEventArgs (card);
-                pushCard (args);
-            } catch (Exception){
-                throw;
-            }
+            var du = _duRepoMgr.PushDU (displayUnitId);
+            if (du == null)
+                throw new InvalidIdException();
+            var card = _cardFactory.GetCard (du);
+            var args = createCardEventArgs (card);
+            pushCard (args);
         }
 
         public void PushNewCard(DisplayUnitDTO newDto)
         {
-            try {
-                var factory = _container.Resolve<IDisplayUnitFactory> ();
-                var du = factory.ConvertFromDto (newDto);
-                if(du == null)
-                    throw new CouldNotConvertDTOException();
-                _duRepoMgr.SaveDtoToEvent (newDto);
-                var card = _cardFactory.GetCard (du);
-                var args = createCardEventArgs (card);
-                pushCard (args);
-            } catch (Exception) {
-                throw;
-            }
+            var factory = _container.Resolve<IDisplayUnitFactory> ();
+            var du = factory.ConvertFromDto (newDto);
+            if(du == null)
+                throw new CouldNotConvertDTOException();
+            _duRepoMgr.SaveDtoToEvent (newDto);
+            var card = _cardFactory.GetCard (du);
+            var args = createCardEventArgs (card);
+            pushCard (args);
         }
 
         public void PullCard(Guid displayUnitId)
         {
             var du = _duRepoMgr.PullDu (displayUnitId);
-            var args = createCardEventArgs (du.AssociatedEvent, du.Id);
+			if (du == null)
+				throw new InvalidIdException ();
+			var args = createCardEventArgs (du.AssociatedEvent, du.Id);
 			pullCard (args);
         }
 

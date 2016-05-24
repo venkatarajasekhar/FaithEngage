@@ -200,7 +200,7 @@ namespace FaithEngage.Core.CardProcessor
 
         [Test]
         [ExpectedException]
-        public void PushNewCard_EncountersException_Throws()
+        public void PushNewCard_EncountersException_BubblesUp()
         {
             A.CallTo (() => _mgr.SaveDtoToEvent (A<DisplayUnitDTO>.Ignored)).Throws<Exception> ();
             var cp = new CardProcessor (_container);
@@ -222,7 +222,29 @@ namespace FaithEngage.Core.CardProcessor
             A.CallTo (() => _mgr.PullDu (VALID_GUID)).MustHaveHappened ();
             Assert.That (args, Is.Not.Null);
             Assert.That (args.EventId, Is.EqualTo(VALID_GUID));
+			Assert.That(args.DisplayUnitId, Is.Not.Null);
+			Assert.That(args.DisplayUnitId, Is.Not.EqualTo(Guid.Empty));
         }
+
+		[Test]
+		[ExpectedException(typeof(InvalidIdException))]
+		public void PullCard_InvalidId_ThrowsInvalidIdException()
+		{
+			A.CallTo (() => _mgr.PullDu (INVALID_GUID)).Returns (null);
+			var cp = new CardProcessor (_container);
+			cp.PullCard (INVALID_GUID);
+		}
+
+		[Test]
+		[ExpectedException]
+		public void PullCard_EncountersException_BubblesUp()
+		{
+			A.CallTo (() => _mgr.PullDu (VALID_GUID)).Throws<Exception> ();
+			var cp = new CardProcessor (_container);
+			cp.PullCard (VALID_GUID);
+		}
+
+
 
     }
 }
