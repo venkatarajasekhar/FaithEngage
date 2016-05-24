@@ -57,22 +57,32 @@ namespace FaithEngage.Core.CardProcessor
 
         public void PushCard(Guid displayUnitId)
         {
-            var du = _duRepoMgr.PushDU (displayUnitId);
-            if (du == null)
-                return;
-            var card = _cardFactory.GetCard (du);
-            var args = createCardEventArgs (card);
-			pushCard (args);
+            try {
+                var du = _duRepoMgr.PushDU (displayUnitId);
+                if (du == null)
+                    throw new InvalidIdException();
+                var card = _cardFactory.GetCard (du);
+                var args = createCardEventArgs (card);
+                pushCard (args);
+            } catch (Exception){
+                throw;
+            }
         }
 
         public void PushNewCard(DisplayUnitDTO newDto)
         {
-            var factory = _container.Resolve<IDisplayUnitFactory> ();
-            var du = factory.ConvertFromDto (newDto);
-            _duRepoMgr.SaveDtoToEvent (newDto);
-            var card = _cardFactory.GetCard (du);
-            var args = createCardEventArgs (card);
-			pushCard (args);
+            try {
+                var factory = _container.Resolve<IDisplayUnitFactory> ();
+                var du = factory.ConvertFromDto (newDto);
+                if(du == null)
+                    throw new CouldNotConvertDTOException();
+                _duRepoMgr.SaveDtoToEvent (newDto);
+                var card = _cardFactory.GetCard (du);
+                var args = createCardEventArgs (card);
+                pushCard (args);
+            } catch (Exception) {
+                throw;
+            }
         }
 
         public void PullCard(Guid displayUnitId)

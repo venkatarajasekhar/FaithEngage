@@ -93,6 +93,7 @@
     <Compile Include="CardProcessor\PushPullEventHandler.cs" />
     <Compile Include="Cards\CardDtoFactory.cs" />
     <Compile Include="Cards\Interfaces\ICardDTOFactory.cs" />
+    <Compile Include="Exceptions\CouldNotConvertDTOException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
