@@ -36,7 +36,7 @@ namespace FaithEngage.Core.CardProcessor
                 return  _cardFactory.GetCards (dus);
             } catch (InvalidIdException) {
                 return new RenderableCardDTO[]{};
-            } catch (RepositoryException) {
+            } catch (Exception) {
                 throw;
             }
 
@@ -44,32 +44,41 @@ namespace FaithEngage.Core.CardProcessor
 
         public RenderableCardDTO GetCard(Guid displayUnitId)
         {
-            var du = _duRepoMgr.GetById (displayUnitId);
-            return _cardFactory.GetCard (du);
+            
+                var du = _duRepoMgr.GetById (displayUnitId);
+                if (du == null)
+                    return null;
+                return _cardFactory.GetCard (du);
         }
 
         public void PushCard(Guid displayUnitId)
         {
             var du = _duRepoMgr.PushDU (displayUnitId);
+            if (du == null)
+                throw new InvalidIdException();
             var card = _cardFactory.GetCard (du);
             var args = createCardEventArgs (card);
-			pushCard (args);
+            pushCard (args);
         }
 
         public void PushNewCard(DisplayUnitDTO newDto)
         {
             var factory = _container.Resolve<IDisplayUnitFactory> ();
             var du = factory.ConvertFromDto (newDto);
+            if(du == null)
+                throw new CouldNotConvertDTOException();
             _duRepoMgr.SaveDtoToEvent (newDto);
             var card = _cardFactory.GetCard (du);
             var args = createCardEventArgs (card);
-			pushCard (args);
+            pushCard (args);
         }
 
         public void PullCard(Guid displayUnitId)
         {
             var du = _duRepoMgr.PullDu (displayUnitId);
-            var args = createCardEventArgs (du.AssociatedEvent, du.Id);
+			if (du == null)
+				throw new InvalidIdException ();
+			var args = createCardEventArgs (du.AssociatedEvent, du.Id);
 			pullCard (args);
         }
 
