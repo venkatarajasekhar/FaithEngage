@@ -84,6 +84,35 @@ namespace FaithEngage.Core.CardProcessor
             A.CallTo (() => _mgr.GetByEvent (VALID_GUID, true)).Throws<RepositoryException> ();
             var cards = cp.GetLiveCardsByEvent (VALID_GUID);
         }
+
+        [Test]
+        public void GetCard_ValidDuId_RenderableCardDTO()
+        {
+            var cp = new CardProcessor (_container);
+            var dummy = A.Dummy<DisplayUnit> ();
+            var dummyCard = A.Dummy<RenderableCardDTO> ();
+
+            A.CallTo (() => _mgr.GetById (VALID_GUID)).Returns (dummy);
+            A.CallTo (() => _cardFactory.GetCard (dummy)).Returns (dummyCard);
+
+            var card = cp.GetCard (VALID_GUID);
+
+            Assert.That (card, Is.Not.Null);
+            Assert.That(card, Is.EqualTo(dummyCard));
+        }
+
+        [Test]
+        public void GetCard_InvalidDuId_ReturnsNull()
+        {
+            var cp = new CardProcessor (_container);
+
+            A.CallTo (() => _mgr.GetById (VALID_GUID)).Returns (null);
+
+            var card = cp.GetCard (VALID_GUID);
+
+            Assert.That (card, Is.Null);
+        }
+
     }
 }
 

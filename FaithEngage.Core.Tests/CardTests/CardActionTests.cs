@@ -5,10 +5,7 @@ namespace FaithEngage.Core.Cards
 	[TestFixture]
 	public class CardActionTests
     {
-		[Test]
-		public void TestingThisOut(){
-			throw new NotImplementedException ();
-		}
+		
     }
 }
 
