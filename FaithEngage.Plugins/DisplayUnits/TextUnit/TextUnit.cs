@@ -19,14 +19,14 @@ namespace FaithEngage.Plugins.DisplayUnits.TextUnitPlugin
         public TextUnit (Dictionary<string, string> attributes) : base (attributes)
         {
             SetAttributes (attributes);
-            Plugin = new TextUnitPlugin ();
+			_plugin = new TextUnitPlugin ();
         }
         
 
         public TextUnit (Guid id, Dictionary<string, string> attributes) : base (id, attributes)
         {
             SetAttributes (attributes);
-            Plugin = new TextUnitPlugin ();
+			_plugin = new TextUnitPlugin ();
         }
         
 
@@ -76,9 +76,11 @@ namespace FaithEngage.Plugins.DisplayUnits.TextUnitPlugin
             Text = text;
         }
             
-
+		private DisplayUnitPlugin _plugin;
         public override DisplayUnitPlugin Plugin {
-            get;
+			get{
+				return _plugin;
+			}
         }
 
         #endregion

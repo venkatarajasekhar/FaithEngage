@@ -45,7 +45,7 @@ namespace FaithEngage.Core.Tests
             var fac = new CardDtoFactory ();
             var dtos = fac.GetCards (dict);
 
-            Assert.That (dtos.Count, Is.EqualTo (5));
+			Assert.That (dtos.Length == 5);
             Assert.That (dtos.All (p => p.Title == "My Title"));
             Assert.That (dtos.All (p => p.Sections.All (q => q.HeadingText == "My Heading Text")));
             Assert.That (dtos.All (p => p.Sections.All (q => q.HtmlContents == "<p>This is my heading</p>")));
@@ -60,7 +60,7 @@ namespace FaithEngage.Core.Tests
             var cards = fac.GetCards (dict);
 
             Assert.That (cards, Is.Not.Null);
-            Assert.That (cards.Count, Is.EqualTo (0));
+			Assert.That (cards.Length == 0);
 		}
 
 		[Test]
@@ -74,7 +74,7 @@ namespace FaithEngage.Core.Tests
             var dtos = fac.GetCards (dict);
 
             Assert.That (dtos, Is.Not.Null);
-            Assert.That (dtos.Count, Is.EqualTo (4));
+			Assert.That (dtos.Length, Is.EqualTo (4));
 		}
 
         [Test]
