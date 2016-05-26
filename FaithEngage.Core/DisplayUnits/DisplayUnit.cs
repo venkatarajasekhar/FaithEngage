@@ -66,7 +66,6 @@ namespace FaithEngage.Core.DisplayUnits
             if (posSet && groupSet)
                 UnitGroup = new DisplayUnitGrouping (intPos, groupId);
 
-
             string pos;
             attributes.TryGetValue ("PositionInEvent", out pos);
             int position;
@@ -102,7 +101,7 @@ namespace FaithEngage.Core.DisplayUnits
         /// Each display unit type is responsible for providing its accompanying plugin.
         /// </summary>
         /// <value>The plugin.</value>
-        abstract public DisplayUnitPlugin Plugin { get; set;}
+        abstract public DisplayUnitPlugin Plugin { get;}
 
         /// <summary>
         /// Gets an ordered array of IRenderableCards that will be rendered.

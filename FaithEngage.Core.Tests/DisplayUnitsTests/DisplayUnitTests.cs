@@ -41,11 +41,8 @@ namespace FaithEngage.Core.DisplayUnits
             public override DisplayUnitPlugin Plugin {
                 get {
                     var plugin = A.Fake<DisplayUnitPlugin> ();
-                    A.CallTo (() => plugin.DisplayUnitType).Returns (typeof(dummyDisplayUnit));
+					A.CallTo (() => plugin.DisplayUnitType).Returns (typeof(dummyDisplayUnit));
                     return plugin;
-                }
-                set {
-                    throw new NotImplementedException ();
                 }
             }
             #endregion
@@ -57,17 +54,20 @@ namespace FaithEngage.Core.DisplayUnits
         {
             DICT = new Dictionary<string,string> () {
                 { "Name", TEST_NAME },
+				{"Description", "My Description"},
                 { "AssociatedEvent", TEST_GUID.ToString()},
-                { "DateCreated", DateTime.Now.ToShortDateString()}
-            };
+                { "DateCreated", DateTime.Now.ToShortDateString()},
+				{"GroupId", TEST_GUID.ToString()},
+				{"PositionInGroup", "3"}
+			};
         }
 
 
         [Test]
         public void Ctor_NoGuid_EmptyAttributes(){
-            var dummy = new dummyDisplayUnit (new Dictionary<string,string>());
+			var dummy = new dummyDisplayUnit (new Dictionary<string,string>());
             Assert.That(dummy.Id, Is.InstanceOf(typeof(Guid)));
-            Assert.That(dummy.Id.ToString(), Is.Not.StringContaining("00000000-0000-0000-0000-000000000000"));
+			Assert.That(dummy.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That (dummy.UnitGroup == null);
         }
 
@@ -78,7 +78,10 @@ namespace FaithEngage.Core.DisplayUnits
             Assert.That (dummy.Name == TEST_NAME);
             Assert.That (dummy.AssociatedEvent == TEST_GUID);
             Assert.That (dummy.DateCreated.Date == DateTime.Now.Date);
-            Assert.That (dummy.Description == null);
+            Assert.That (dummy.Description == "My Description");
+			Assert.That (dummy.UnitGroup, Is.Not.Null);
+			Assert.That (dummy.UnitGroup.Value.Id, Is.EqualTo (TEST_GUID));
+			Assert.That (dummy.UnitGroup.Value.Position, Is.EqualTo (3));
         }
 
         [Test]
@@ -86,6 +89,13 @@ namespace FaithEngage.Core.DisplayUnits
         {
             var dummy = new dummyDisplayUnit (TEST_GUID, DICT);
             Assert.That (dummy.Id == TEST_GUID);
+			Assert.That (dummy.Name == TEST_NAME);
+			Assert.That (dummy.AssociatedEvent == TEST_GUID);
+			Assert.That (dummy.DateCreated.Date == DateTime.Now.Date);
+			Assert.That (dummy.Description == "My Description");
+			Assert.That (dummy.UnitGroup, Is.Not.Null);
+			Assert.That (dummy.UnitGroup.Value.Id, Is.EqualTo (TEST_GUID));
+			Assert.That (dummy.UnitGroup.Value.Position, Is.EqualTo (3));
         }
 
         [Test]
@@ -112,6 +122,10 @@ namespace FaithEngage.Core.DisplayUnits
             Assert.That (dummy2, Is.InstanceOf (typeof(dummyDisplayUnit)));
             Assert.That (dummy2.Id != dummy.Id);
             Assert.That (dummy2.PositionInEvent == dummy.PositionInEvent + 1);
+			Assert.That (dummy.AssociatedEvent, Is.EqualTo (dummy2.AssociatedEvent));
+			Assert.That (dummy.Description, Is.EqualTo (dummy2.Description));
+			Assert.That (dummy.Plugin.PluginId, Is.EqualTo (dummy2.Plugin.PluginId));
+			Assert.That (dummy.UnitGroup, Is.EqualTo (dummy2.UnitGroup));
         }
 
         [Test]
