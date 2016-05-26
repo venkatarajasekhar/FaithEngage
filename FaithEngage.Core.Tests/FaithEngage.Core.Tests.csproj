@@ -73,6 +73,7 @@
     <Compile Include="RepoManagersTests\DisplayUnitRepoManagerTests.cs" />
     <Compile Include="CardProcessorTests\CardProcessorTests.cs" />
     <Compile Include="CardTests\CardDtoFactoryTests.cs" />
+    <Compile Include="DisplayUnitsTests\DisplayUnitDTOTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">

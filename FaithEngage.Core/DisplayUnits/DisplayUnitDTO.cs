@@ -8,7 +8,11 @@ namespace FaithEngage.Core.DisplayUnits
     {
         public DisplayUnitDTO (Guid displayUnitId, Guid eventId)
         {
-            Id = displayUnitId;
+			if (displayUnitId.Equals (Guid.Empty))				
+				throw new EmptyGuidException ("Display unit id was not a valid id");
+			if (eventId.Equals (Guid.Empty))
+				throw new EmptyGuidException ("Event id was not a valid id");
+			Id = displayUnitId;
             AssociatedEvent = eventId;
             Attributes = new Dictionary<string,string> ();
         }
