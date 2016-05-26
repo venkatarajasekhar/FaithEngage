@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using FaithEngage.Core.Cards;
 using System.Collections.Generic;
 using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.Cards.Interfaces;
-
+using System.IO;
+using System.CodeDom;
 
 namespace FaithEngage.Core.Cards
 {
@@ -11,15 +13,35 @@ namespace FaithEngage.Core.Cards
     {
         public RenderableCardDTO[] GetCards(Dictionary<int,DisplayUnit> units)
         {
-            return units
-                .OrderBy (p => p.Key)
-                .Select (v => convert(v.Value.GetCard ()))
+            return getCards(units)
+                .Select (v => convert(v))
                 .ToArray();
         }
 
         public RenderableCardDTO GetCard(DisplayUnit unit)
         {
-            return convert (unit.GetCard());
+			IRenderableCard card;
+			try {
+				card = unit.GetCard ();
+			} catch{
+				return null;
+			}
+			return convert (card);
+        }
+
+        private IEnumerable<IRenderableCard> getCards(Dictionary<int,DisplayUnit> dict)
+        {
+            dict.OrderBy (p => p.Key);
+            foreach(var du in dict.Values)
+            {
+                IRenderableCard card;
+                try {
+                    card = du.GetCard();
+                }catch{
+                    continue;
+                }
+                yield return card;  
+            }
         }
 
         private RenderableCardDTO convert(IRenderableCard card)
