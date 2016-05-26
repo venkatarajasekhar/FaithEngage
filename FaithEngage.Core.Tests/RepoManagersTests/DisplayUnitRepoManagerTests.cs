@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Exceptions;
-using FaithEngage.Plugins.DisplayUnits.TextUnitPlugin;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.DisplayUnits;
 

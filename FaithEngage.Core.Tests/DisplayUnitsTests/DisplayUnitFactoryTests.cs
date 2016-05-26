@@ -6,7 +6,6 @@ using FakeItEasy;
 using NUnit.Framework;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.DisplayUnits;
-using System.Reflection;
 
 namespace FaithEngage.Core.DisplayUnits
 {
@@ -100,7 +99,7 @@ namespace FaithEngage.Core.DisplayUnits
             var factory = new DisplayUnitFactory (_container);
             var du = factory.InstantiateNew (VALID_STRING, dict);
 
-            //Assert.That (du, Is.InstanceOf (typeof(TextUnit)));
+			Assert.That (du, Is.InstanceOf (typeof(DummyDisplayUnit)));
             Assert.That (du.PositionInEvent == 1);
             Assert.That (du.DateCreated == DateTime.Now.Date);
         }

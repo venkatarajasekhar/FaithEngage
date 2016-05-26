@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using FakeItEasy;
 using FaithEngage.Core.Exceptions;
-using FaithEngage.Plugins.DisplayUnits.TextUnitPlugin;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.PluginManagers.PluginContainers;
 
