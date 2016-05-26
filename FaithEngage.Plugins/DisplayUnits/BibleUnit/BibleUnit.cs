@@ -44,9 +44,6 @@ namespace FaithEngage.Plugins.DisplayUnits.BibleUnitPlugin
             get {
                 throw new NotImplementedException ();
             }
-            set {
-                throw new NotImplementedException ();
-            }
         }
         #endregion        
               

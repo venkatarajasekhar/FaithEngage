@@ -79,7 +79,6 @@ namespace FaithEngage.Plugins.DisplayUnits.TextUnitPlugin
 
         public override DisplayUnitPlugin Plugin {
             get;
-            set;
         }
 
         #endregion
