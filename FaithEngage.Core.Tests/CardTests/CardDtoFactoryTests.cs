@@ -6,6 +6,7 @@ using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.Cards.Interfaces;
 using FaithEngage.Core.Cards;
 using System.Collections.Generic;
+using NUnit.Framework.Constraints;
 
 namespace FaithEngage.Core.Tests
 {
@@ -84,18 +85,19 @@ namespace FaithEngage.Core.Tests
 
             Assert.That (dto, Is.Not.Null);
             Assert.That (dto.Description == "My Description");
+			Assert.That (dto.OriginatingDisplayUnit, Is.EqualTo (du.Id));
+			Assert.That (dto.Sections.All (q => q.HeadingText == "My Heading Text"));
+			Assert.That (dto.Sections.All (q => q.HtmlContents == "<p>This is my heading</p>"));	
         }
 
         [Test]
-        public void GetCard_InvalidDU_ReturnsNull()
+		public void GetCard_EncountersException_ReturnsNull()
         {
-            
-        }
+			A.CallTo (() => du.GetCard()).Throws<Exception> ().Once();
+			var fac = new CardDtoFactory ();
+			var dto = fac.GetCard (du);
 
-        [Test]
-        public void GetCard_EncountersException_ReturnsNull()
-        {
-            
+			Assert.That (dto, Is.Null);
         }
 	}
 }

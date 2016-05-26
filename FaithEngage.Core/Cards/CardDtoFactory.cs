@@ -20,7 +20,13 @@ namespace FaithEngage.Core.Cards
 
         public RenderableCardDTO GetCard(DisplayUnit unit)
         {
-            return convert (unit.GetCard());
+			IRenderableCard card;
+			try {
+				card = unit.GetCard ();
+			} catch{
+				return null;
+			}
+			return convert (card);
         }
 
         private IEnumerable<IRenderableCard> getCards(Dictionary<int,DisplayUnit> dict)
