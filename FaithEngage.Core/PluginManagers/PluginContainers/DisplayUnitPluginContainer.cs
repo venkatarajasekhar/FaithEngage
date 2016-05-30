@@ -10,8 +10,8 @@ namespace FaithEngage.Core.PluginManagers.PluginContainers
     public class DisplayUnitPluginContainer : IDisplayUnitPluginContainer
     {
 
-        private readonly Dictionary<string,DisplayUnitPlugin> _registry = 
-            new Dictionary<string, DisplayUnitPlugin> ();
+        private readonly Dictionary<Guid,DisplayUnitPlugin> _registry = 
+            new Dictionary<Guid, DisplayUnitPlugin> ();
 
 
         public void Register(DisplayUnitPlugin plugin)
@@ -29,7 +29,7 @@ namespace FaithEngage.Core.PluginManagers.PluginContainers
             }
         }
 
-        public DisplayUnitPlugin Resolve(string PluginId)
+        public DisplayUnitPlugin Resolve(Guid PluginId)
         {
             DisplayUnitPlugin plugin;
             if(_registry.TryGetValue(PluginId, out plugin))

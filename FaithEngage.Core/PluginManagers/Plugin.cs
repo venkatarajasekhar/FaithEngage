@@ -14,10 +14,11 @@ namespace FaithEngage.Core.PluginManagers
         /// This is the full Assembly-qualified name of this plugin, used to uniquely identify each plugin.
         /// </summary>
         /// <value>The plugin identifier.</value>
-        public string PluginId 
-        { 
-            get 
-            {
+        public Guid PluginId { get; set; }
+
+        public string AssemblyQualifiedName
+        {
+            get{
                 return this.GetType ().AssemblyQualifiedName;
             }
         }

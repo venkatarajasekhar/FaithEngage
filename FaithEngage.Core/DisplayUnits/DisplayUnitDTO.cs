@@ -41,7 +41,7 @@ namespace FaithEngage.Core.DisplayUnits
             set;
         }
 
-        public string PluginId {
+        public Guid PluginId {
             get;
             set;
         }
