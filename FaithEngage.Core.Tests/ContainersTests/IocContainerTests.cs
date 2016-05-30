@@ -3,6 +3,7 @@ using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.Exceptions;
 using NUnit.Framework;
 using FaithEngage.Core.Tests;
+using System;
 
 namespace FaithEngage.Core.Containers
 {
@@ -25,7 +26,7 @@ namespace FaithEngage.Core.Containers
         }
 
         [Test]
-        public void Resolve_RegisteredType_Returns_ConcreteInstance()
+        public void Resolve_RegisteredType_ReturnsConcreteInstance()
         {
             var container = new IocContainer ();
             container.Register<IDummy,Dummy_NoParameters> ();
@@ -34,6 +35,30 @@ namespace FaithEngage.Core.Containers
 
             Assert.That (krp, Is.InstanceOf (typeof(Dummy_NoParameters)));
             Assert.That (krp, Is.InstanceOf (typeof(IDummy)));
+        }
+
+        [Test]
+        public void Resolve_RegisteredType_Transient_TwoDistinctInstances()
+        {
+            var container = new IocContainer ();
+            container.Register<IDummy,Dummy_NoParameters> (LifeCycle.Transient);
+
+            var dummy1 = container.Resolve<IDummy> ();
+            var dummy2 = container.Resolve<IDummy> ();
+
+            Assert.That (!Object.ReferenceEquals (dummy1, dummy2));
+        }
+
+        [Test]
+        public void Resolve_RegisteredType_SingleTon_SharedInstance ()
+        {
+            var container = new IocContainer ();
+            container.Register<IDummy, Dummy_NoParameters> (LifeCycle.Singleton);
+
+            var dummy1 = container.Resolve<IDummy> ();
+            var dummy2 = container.Resolve<IDummy> ();
+
+            Assert.That (Object.ReferenceEquals (dummy1, dummy2));
         }
 
         [Test]
@@ -46,7 +71,6 @@ namespace FaithEngage.Core.Containers
 
             Assert.That (dummy, Is.Not.Null);
             Assert.That (dummy, Is.InstanceOf<IDummy> ());
-
         }
 
         [Test]
@@ -65,9 +89,6 @@ namespace FaithEngage.Core.Containers
             var container = new IocContainer ();
             var notRef = container.Resolve<IDummy> ();
         }
-
-
-
     }
 }
 
