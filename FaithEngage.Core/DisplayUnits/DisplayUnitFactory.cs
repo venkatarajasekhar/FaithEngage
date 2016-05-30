@@ -75,7 +75,9 @@ namespace FaithEngage.Core.DisplayUnits
             unit.DateCreated = dto.DateCreated;
             unit.AssociatedEvent = dto.AssociatedEvent;
             unit.PositionInEvent = dto.PositionInEvent;
-            unit.UnitGroup = new DisplayUnitGrouping (dto.PositionInGroup, dto.GroupId);
+            if(dto.GroupId.HasValue && dto.PositionInGroup.HasValue){
+                unit.UnitGroup = new DisplayUnitGrouping (dto.PositionInGroup.Value, dto.GroupId.Value);
+            }
             return unit;
         }
 

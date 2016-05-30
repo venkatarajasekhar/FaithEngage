@@ -6,15 +6,20 @@ namespace FaithEngage.Core.DisplayUnits
 {
     public class DisplayUnitDTO
     {
-        public DisplayUnitDTO (Guid displayUnitId, Guid eventId)
+        public DisplayUnitDTO (Guid eventId, Guid? displayUnitId = null)
         {
 			if (displayUnitId.Equals (Guid.Empty))				
 				throw new EmptyGuidException ("Display unit id was not a valid id");
-			if (eventId.Equals (Guid.Empty))
-				throw new EmptyGuidException ("Event id was not a valid id");
-			Id = displayUnitId;
+            if (displayUnitId.HasValue && displayUnitId.Value != Guid.Empty){
+                Id = displayUnitId.Value;
+            }else{
+                Id = Guid.NewGuid();
+            }
+            if (eventId.Equals (Guid.Empty))
+                throw new EmptyGuidException ("Event id was not a valid id");
             AssociatedEvent = eventId;
             Attributes = new Dictionary<string,string> ();
+
         }
 
         public Guid Id {
@@ -65,8 +70,8 @@ namespace FaithEngage.Core.DisplayUnits
             }
         }
 
-        public int PositionInGroup{get;set;}
-        public Guid GroupId{get;set;}
+        public int? PositionInGroup{get;set;}
+        public Guid? GroupId{get;set;}
     }
 }
 

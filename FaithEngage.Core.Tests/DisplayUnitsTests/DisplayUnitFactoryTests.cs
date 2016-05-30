@@ -56,21 +56,27 @@ namespace FaithEngage.Core.DisplayUnits
         {
             _guid = Guid.NewGuid ();
 
-            _validDtoWithId = new DisplayUnitDTO (_guid, _guid);
-            _validDtoWithId.AssociatedEvent = _guid;
-            _validDtoWithId.PluginId = VALID_STRING;
-            _validDtoWithId.PositionInEvent = 1;
-            _validDtoWithId.Attributes = new Dictionary<string,string> (){{"Text", VALID_STRING}};
+            _validDtoWithId = new DisplayUnitDTO (_guid, _guid) {
+                DateCreated = DateTime.Now.Date,
+                Description = "My Description",
+                PositionInEvent = 2,
+                GroupId = _guid,
+                PositionInGroup = 5,
+                PluginId = VALID_STRING
+            };
 
-            _validDtoNoId = new DisplayUnitDTO (_guid, _guid);
-            _validDtoNoId.PluginId = VALID_STRING;
-            _validDtoNoId.PositionInEvent = 1;
-            _validDtoNoId.Attributes = new Dictionary<string,string> (){{"Text", VALID_STRING}};
+            _validDtoNoId = new DisplayUnitDTO (_guid) {
+                DateCreated = DateTime.Now.Date,
+                Description = "My Description",
+                PositionInEvent = 2,
+                GroupId = _guid,
+                PluginId = VALID_STRING
+            };
 
-            _invalidDto = new DisplayUnitDTO (_guid, _guid);
-            _invalidDto.PluginId = INVALID_STRING;
-            _invalidDto.PositionInEvent = 1;
-            _invalidDto.Attributes = new Dictionary<string,string> ();
+            _invalidDto = new DisplayUnitDTO (_guid) {
+                PluginId = INVALID_STRING,
+                PositionInEvent = 2,
+            };
 
 
             A.CallTo (() => _container.Resolve (VALID_STRING)).Returns (_plgin);
@@ -92,7 +98,6 @@ namespace FaithEngage.Core.DisplayUnits
         public void InstantiateNew_ValidPluginID_LoadedDict_ReturnsCorrectDisplayUnit()
         {
             var dict = new Dictionary<string,string> () {
-                { "Text", VALID_STRING },
                 { "PositionInEvent", "1" },
                 { "DateCreated", DateTime.Now.ToShortDateString() }
             };
@@ -118,10 +123,11 @@ namespace FaithEngage.Core.DisplayUnits
             var factory = new DisplayUnitFactory (_container);
             var du = factory.ConvertFromDto (_validDtoNoId);
 
-            //Assert.That (du, Is.InstanceOf (typeof(TextUnit)));
-            Assert.That (du.Id != Guid.Empty);
-            Assert.That (du.PositionInEvent == 1);
-            Assert.That (du.GetAttribute ("Text") == VALID_STRING);
+            Assert.That (du.Id, Is.Not.EqualTo(Guid.Empty));
+            Assert.That (du.PositionInEvent, Is.EqualTo(2));
+            Assert.That (du, Is.InstanceOf (typeof(DisplayUnit)));
+            Assert.That (du.AssociatedEvent, Is.EqualTo (_guid));
+            Assert.That (du.DateCreated, Is.EqualTo (DateTime.Now.Date));
         }
 
         [Test]
@@ -130,10 +136,11 @@ namespace FaithEngage.Core.DisplayUnits
             var factory = new DisplayUnitFactory (_container);
             var du = factory.ConvertFromDto (_validDtoWithId);
 
-            //Assert.That (du, Is.InstanceOf (typeof(TextUnit)));
-            Assert.That (du.Id == _guid);
-            Assert.That (du.PositionInEvent == 1);
-            Assert.That (du.GetAttribute ("Text") == VALID_STRING);
+            Assert.That (du.Id, Is.EqualTo(_guid));
+            Assert.That (du.PositionInEvent, Is.EqualTo(2));
+            Assert.That (du, Is.InstanceOf (typeof(DisplayUnit)));
+            Assert.That (du.AssociatedEvent, Is.EqualTo (_guid));
+            Assert.That (du.DateCreated, Is.EqualTo (DateTime.Now.Date));
         }
 
         [Test]
