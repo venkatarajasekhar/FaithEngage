@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Exceptions;
-using FaithEngage.Plugins.DisplayUnits.TextUnitPlugin;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.DisplayUnits;
+using System.Drawing.Design;
 
 namespace FaithEngage.Core.RepoManagers
 {
@@ -89,7 +89,7 @@ namespace FaithEngage.Core.RepoManagers
             A.CallTo (() => repo.GetByEvent (VALID_GUID, false)).Returns (dict);
             A.CallTo (() => _fctry.ConvertFromDto (null))
                 .WithAnyArguments()
-                .ReturnsLazily((DisplayUnitDTO d) => new TextUnit(d.Attributes));
+                .ReturnsLazily((DisplayUnitDTO d) => A.Fake<DisplayUnit>(p=> p.WithArgumentsForConstructor(new object[]{d.Attributes})));
             var mgr = new DisplayUnitsRepoManager (_fctry,repo);
             var duDict = mgr.GetByEvent (VALID_GUID, false);
 
@@ -137,7 +137,14 @@ namespace FaithEngage.Core.RepoManagers
             }
             var repo = A.Fake<IDisplayUnitsRepository> ();
             A.CallTo (() => repo.GetByEvent (VALID_GUID, false)).Returns (dict);
-            A.CallTo (() => _fctry.ConvertFromDto (_dto)).ReturnsLazily ((DisplayUnitDTO d) => new TextUnit(d.Attributes));
+            A.CallTo (() => _fctry.ConvertFromDto (_dto))
+                .ReturnsLazily (
+                    (DisplayUnitDTO d) => A.Fake<DisplayUnit>(
+                        p=> p.WithArgumentsForConstructor(
+                            new object[]{d.Attributes}
+                        )
+                    )
+                );
             A.CallTo (() => _fctry.ConvertFromDto (_dto)).Returns (null).Once();
             var mgr = new DisplayUnitsRepoManager (_fctry,repo);
             var duDict = mgr.GetByEvent (VALID_GUID, false);
@@ -156,13 +163,13 @@ namespace FaithEngage.Core.RepoManagers
         [Test]
         public void SaveManyToEvent_ValidUnits_ValidEventId_NoException()
         {
-            var unit = new TextUnit (new Dictionary<string,string> (){ {
-                    "Text",
-                    "My Text"
-                } });
+            var dict = new Dictionary<string,string> () {
+                {"AssociatedEvent",VALID_GUID.ToString ()}
+            };
             var i = 0;
-            var units = Enumerable.Repeat(0, 5).Select( u => new TextUnit(new Dictionary<string,string> (){ {"Text","My Text"} }))
-                .ToDictionary (p => i++, p => (DisplayUnit)p);
+            var units = Enumerable.Repeat(0, 5).Select( u => A.Fake<DisplayUnit>(
+                p=> p.WithArgumentsForConstructor(new object[]{dict})))
+                .ToDictionary (p => i++, p => p);
             Dictionary<int,DisplayUnitDTO> receivedUnits = null;
 
             var repo = A.Fake<IDisplayUnitsRepository> ();
@@ -174,10 +181,10 @@ namespace FaithEngage.Core.RepoManagers
 
             Assert.That (receivedUnits, Is.Not.Null);
             Assert.That (receivedUnits.Count == 5);
-            Assert.That (receivedUnits.All (p => p.Value.Attributes ["Text"] == "My Text"));
-            foreach(var key in receivedUnits.Keys)
+            Assert.That (receivedUnits.All (p => p.Value.AssociatedEvent == VALID_GUID));
+            foreach(var key in receivedUnits.Keys.ToArray())
             {
-                Assert.That (receivedUnits [key].PositionInEvent == key);
+                Assert.That (receivedUnits [key].PositionInEvent, Is.EqualTo(key));
             }
         }
 
@@ -185,12 +192,13 @@ namespace FaithEngage.Core.RepoManagers
         [ExpectedException(typeof(InvalidIdException))]
         public void SaveManyToEvent_ValidUnits_InvalidEventId_ThrowsInvalidIdException()
         {
-            var unit = new TextUnit (new Dictionary<string,string> (){ {
-                    "text",
-                    "My Text"
-                } });
+            var dict = new Dictionary<string,string> () {
+                {"AssociatedEvent",INVALID_GUID.ToString ()}
+            };
             var i = 0;
-            var units = Enumerable.Repeat (unit, 5).ToDictionary (p => i++, p => (DisplayUnit)p);
+            var units = Enumerable.Repeat(0, 5).Select( u => A.Fake<DisplayUnit>(
+                p=> p.WithArgumentsForConstructor(new object[]{dict})))
+                .ToDictionary (p => i++, p => p);
             var repo = A.Fake<IDisplayUnitsRepository> ();
 
             A.CallTo (() => repo.SaveManyToEvent (null, INVALID_GUID)).WithAnyArguments ().Throws<InvalidIdException> ();
@@ -203,12 +211,14 @@ namespace FaithEngage.Core.RepoManagers
         [ExpectedException(typeof(RepositoryException))]
         public void SaveManyToEvent_RepoThrowsException_ThrowsRepoException()
         {
-            var unit = new TextUnit (new Dictionary<string,string> (){ {
-                    "Text",
-                    "My Text"
-                } });
+
+            var dict = new Dictionary<string,string> () {
+                {"AssociatedEvent",INVALID_GUID.ToString ()}
+            };
             var i = 0;
-            var units = Enumerable.Repeat (unit, 5).ToDictionary (p => i++, p => (DisplayUnit)p);
+            var units = Enumerable.Repeat(0, 5).Select( u => A.Fake<DisplayUnit>(
+                p=> p.WithArgumentsForConstructor(new object[]{dict})))
+                .ToDictionary (p => i++, p => p);
             var repo = A.Fake<IDisplayUnitsRepository> ();
 
             A.CallTo (() => repo.SaveManyToEvent (null, INVALID_GUID)).WithAnyArguments ().Throws<RepositoryException> ();
@@ -276,8 +286,11 @@ namespace FaithEngage.Core.RepoManagers
         public void SaveOneToEvent_ValidDisplayUnit_SavesToRepo()
         {
             var unit = A.Fake<DisplayUnit> ();
-            unit.Description = "My Description";
-            unit.Name = "My Name";
+            unit.AssociatedEvent = VALID_GUID;
+            unit.Name = "My Unit";
+            unit.DateCreated = DateTime.Now.Date;
+            unit.PositionInEvent = 3;
+            unit.UnitGroup = new DisplayUnitGrouping? (new DisplayUnitGrouping (3, VALID_GUID));
 
             var repo = A.Fake<IDisplayUnitsRepository> ();
             DisplayUnitDTO receivedDto = null;
@@ -288,8 +301,12 @@ namespace FaithEngage.Core.RepoManagers
             mgr.SaveOneToEvent (unit);
 
             Assert.That (receivedDto, Is.Not.Null);
-            Assert.That (receivedDto.Description == "My Description");
-            Assert.That (receivedDto.Name == "My Name");
+            Assert.That (receivedDto.AssociatedEvent, Is.EqualTo (VALID_GUID));
+            Assert.That (receivedDto.Name, Is.EqualTo ("My Unit"));
+            Assert.That (receivedDto.DateCreated, Is.EqualTo (DateTime.Now.Date));
+            Assert.That (receivedDto.PositionInEvent, Is.EqualTo (3));
+            Assert.That (receivedDto.GroupId, Is.EqualTo (VALID_GUID));
+            Assert.That (receivedDto.PositionInGroup, Is.EqualTo (3));
         }
 
         [Test]
@@ -297,6 +314,7 @@ namespace FaithEngage.Core.RepoManagers
         public void SaveOneToEvent_InvalidEventID_RepoThrowsInvalidIdException_ThrowsSame()
         {
             var unit = A.Fake<DisplayUnit> ();
+            unit.AssociatedEvent = INVALID_GUID;
 
             var repo = A.Fake<IDisplayUnitsRepository> ();
             A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
@@ -312,6 +330,7 @@ namespace FaithEngage.Core.RepoManagers
         public void SaveOneToEvent_RepoThrowsRepoException_ThrowsRepoException()
         {
             var unit = A.Fake<DisplayUnit> ();
+            unit.AssociatedEvent = VALID_GUID;
 
             var repo = A.Fake<IDisplayUnitsRepository> ();
             A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
@@ -327,7 +346,9 @@ namespace FaithEngage.Core.RepoManagers
             var unit = A.Fake<DisplayUnit> ();
             unit.Description = "My Description";
             unit.Name = "My Name";
+            unit.AssociatedEvent = VALID_GUID;
 
+            A.CallTo (() => unit.Clone ()).Returns (unit);
             var repo = A.Fake<IDisplayUnitsRepository> ();
             DisplayUnitDTO receivedUnit = null;
             A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
@@ -344,6 +365,10 @@ namespace FaithEngage.Core.RepoManagers
         public void DuplicateToEvent_InvalidEventId_RepoThrowsInvalidIdException_ThrowsSame()
         {
             var unit = A.Fake<DisplayUnit> ();
+            unit.Description = "My Description";
+            unit.Name = "My Name";
+            unit.AssociatedEvent = INVALID_GUID;
+            A.CallTo (() => unit.Clone ()).Returns (unit);
 
             var repo = A.Fake<IDisplayUnitsRepository> ();
             A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
@@ -358,6 +383,10 @@ namespace FaithEngage.Core.RepoManagers
         public void DuplicateToEvent_RepoThrowsRepoException_ThrowsSame()
         {
             var unit = A.Fake<DisplayUnit> ();
+            unit.Description = "My Description";
+            unit.Name = "My Name";
+            unit.AssociatedEvent = INVALID_GUID;
+            A.CallTo (() => unit.Clone ()).Returns (unit);
 
             var repo = A.Fake<IDisplayUnitsRepository> ();
             A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
@@ -401,73 +430,6 @@ namespace FaithEngage.Core.RepoManagers
             var mgr = new DisplayUnitsRepoManager (_fctry,repo);
             mgr.Delete (INVALID_GUID);
         }
-
-
-
-//
-//        [Test]
-//        public void GetAll_ReturnsPopulatedList()
-//        {
-//            var dtos = Enumerable.Repeat<DisplayUnitDTO> (_dto, 5).ToList ();
-//
-//
-//            A.CallTo (() => _repo.GetAll ()).Returns (dtos);
-//            var units = _mgr.GetAll ();
-//
-//            Assert.That (units.Count == 5);
-//            Assert.That (units [0].Id, Is.EqualTo (VALID_GUID));
-//            Assert.That (units, Is.Not.Null);
-//        }
-//
-//        [Test]
-//        public void GetAll_NoneInDb_ReturnsEmptyList()
-//        {
-//           A.CallTo (() => _repo.GetAll ()).Returns (new List<DisplayUnitDTO> ());
-//            var units = _mgr.GetAll ();
-//
-//            Assert.That (units.Count == 0);
-//            Assert.That (units, Is.Empty);
-//        }
-//
-//        [Test]
-//        [ExpectedException("FaithEngage.Core.Exceptions.CouldNotAccessRepositoryException")]
-//        public void GetAll_RepositoryException_ThrowsCouldNotAccessRepositoryException()
-//        {
-//           A.CallTo (() => _repo.GetAll ()).Throws<Exception> ();
-//
-//            var units = _mgr.GetAll ();
-//        }
-//
-//        [Test]
-//        public void SaveNew_ValidBibleUnit_SavesToRepo()
-//        {
-//           var bu = new BibleUnit(VALID_ID, "1 John 1:9", _refProvider)
-//            {
-//                
-//            }
-//        }
-//
-//
-//
-//        [Test]
-//        public void SaveNew_ValidTextUnit_SavesToRepo()
-//        {
-//            var tu = new TextUnit (VALID_GUID, "This is the text for my TextUnit") {
-//                DateCreated = _dt,
-//                Description = "My description",
-//                Name = "My Text Unit"
-//            };
-//
-//            DisplayUnitDTO dto = null;
-//
-//            A.CallTo (_repo).Where(call=> call.Method.Name == "SaveNew").Invokes((DisplayUnitDTO unit) => dto=unit);
-//
-//            _mgr.SaveNew (tu);
-//            Assert.That (dto, Is.Not.Null);
-//            Assert.That (dto.Id, Is.EqualTo (tu.Id));
-//            Assert.That (dto.Attributes ["text"] == "This is the text for my TextUnit");
-//        }
-
     }
 }
 

@@ -177,7 +177,7 @@ namespace FaithEngage.Core.CardProcessor
             var card = A.Dummy<RenderableCardDTO> ();
             A.CallTo (() => _cardFactory.GetCard (A<DisplayUnit>.Ignored)).Returns (card);
             CardEventArgs args = null;
-            var dto = A.Dummy<DisplayUnitDTO> ();
+            var dto = new DisplayUnitDTO (VALID_GUID, VALID_GUID);
             var cp = new CardProcessor (_container);
             cp.onPushCard += (x) => args = x;
             cp.PushNewCard (dto);
@@ -194,8 +194,9 @@ namespace FaithEngage.Core.CardProcessor
             var factory = A.Fake<IDisplayUnitFactory> ();
             A.CallTo (() => _container.Resolve<IDisplayUnitFactory> ()).Returns (factory);
             A.CallTo (() => factory.ConvertFromDto (A<DisplayUnitDTO>.Ignored)).Returns (null);
+            var dto = new DisplayUnitDTO (INVALID_GUID, INVALID_GUID);
             var cp = new CardProcessor (_container);
-            cp.PushNewCard (A.Dummy<DisplayUnitDTO> ());
+            cp.PushNewCard (dto);
         }
 
         [Test]

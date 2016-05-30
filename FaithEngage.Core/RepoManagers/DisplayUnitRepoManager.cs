@@ -154,7 +154,7 @@ namespace FaithEngage.Core.RepoManagers
 
         private DisplayUnitDTO convertToDTO(DisplayUnit unit)
         {
-            var dto = new DisplayUnitDTO (unit.Id, unit.AssociatedEvent);
+            var dto = new DisplayUnitDTO (unit.AssociatedEvent, unit.Id);
             dto.Name = unit.Name;
             dto.DateCreated = unit.DateCreated;
             dto.Description = unit.Description;

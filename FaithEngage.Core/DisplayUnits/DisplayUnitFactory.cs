@@ -52,8 +52,10 @@ namespace FaithEngage.Core.DisplayUnits
 
         private DisplayUnit getDisplayUnit(string pluginId, Dictionary<string,string> attributes)
         {
-            var ctor = getCtor (pluginId, new Type[]{typeof(Dictionary<string,string>)});
-            var unit = ctor.Invoke (new object[]{ attributes }) as DisplayUnit;
+            //Get the constructor that accepts only a dictionary<string,string>.
+			var ctor = getCtor (pluginId, new Type[]{typeof(Dictionary<string,string>)});
+            //Invoke it with the attributes dictionary.
+			var unit = ctor.Invoke (new object[]{ attributes }) as DisplayUnit;
             return unit;
         }
 
@@ -73,7 +75,9 @@ namespace FaithEngage.Core.DisplayUnits
             unit.DateCreated = dto.DateCreated;
             unit.AssociatedEvent = dto.AssociatedEvent;
             unit.PositionInEvent = dto.PositionInEvent;
-            unit.UnitGroup = new DisplayUnitGrouping (dto.PositionInGroup, dto.GroupId);
+            if(dto.GroupId.HasValue && dto.PositionInGroup.HasValue){
+                unit.UnitGroup = new DisplayUnitGrouping (dto.PositionInGroup.Value, dto.GroupId.Value);
+            }
             return unit;
         }
 
