@@ -94,6 +94,9 @@
     <Compile Include="Cards\CardDtoFactory.cs" />
     <Compile Include="Cards\Interfaces\ICardDTOFactory.cs" />
     <Compile Include="Exceptions\CouldNotConvertDTOException.cs" />
+    <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginRepository.cs" />
+    <Compile Include="PluginManagers\DisplayUnitPlugins\Factories\DisplayUnitPluginDtoFactory.cs" />
+    <Compile Include="PluginManagers\DisplayUnitPlugins\Factories\DisplayUnitPluginFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -116,5 +119,7 @@
     <Folder Include="PluginManagers\DisplayUnitPlugins\" />
     <Folder Include="PluginManagers\PluginContainers\" />
     <Folder Include="Interfaces %28needs moving%29\" />
+    <Folder Include="PluginManagers\DisplayUnitPlugins\Interfaces\" />
+    <Folder Include="PluginManagers\DisplayUnitPlugins\Factories\" />
   </ItemGroup>
 </Project>

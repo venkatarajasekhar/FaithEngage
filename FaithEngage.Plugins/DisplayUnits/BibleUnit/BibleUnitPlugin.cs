@@ -13,22 +13,21 @@ namespace FaithEngage.Plugins.DisplayUnits.BibleUnitPlugin
                 return "Bible Unit Plugin";
             }
         }
-        public override string PluginVersion {
+        public override int[] PluginVersion {
             get {
-                return "0.0.1";
+                return new int[]{0,0,1};
             }
         }
         #endregion
 
         #region implemented abstract members of DisplayUnitPlugin
-        public override System.Collections.Generic.List<string> GetAttributes ()
+        public override System.Collections.Generic.List<string> GetAttributeNames ()
         {
             return new List<string> (){ "reference" };
         }
 
         public override Type DisplayUnitType {
             get;
-            set;
         }
 
         public override DisplayUnitEditorDefinition EditorDefinition {

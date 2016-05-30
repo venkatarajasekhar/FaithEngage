@@ -27,20 +27,19 @@ namespace FaithEngage.Plugins.DisplayUnits.TextUnitPlugin
                 return "Text Unit";
             }
         }
-        public override string PluginVersion {
+        public override int[] PluginVersion {
             get {
-                return "0.0.1";
+                return new int[]{0,0,1};
             }
         }
         #endregion
         #region implemented abstract members of DisplayUnitPlugin
-        public override List<string> GetAttributes ()
+        public override List<string> GetAttributeNames ()
         {
             return new List<string> (){ "Text" };
         }
         public override Type DisplayUnitType {
             get;
-            set;
         }
             
         public override DisplayUnitEditorDefinition EditorDefinition {

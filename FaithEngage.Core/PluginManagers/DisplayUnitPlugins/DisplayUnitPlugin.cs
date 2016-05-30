@@ -12,14 +12,14 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
         /// This is the Specific Type this plugin represents. 
         /// </summary>
         /// <value>The display type of the unit.</value>
-        abstract public Type DisplayUnitType { get; set;}
+        abstract public Type DisplayUnitType { get;}
 
         /// <summary>
         /// All display unit plugins must specify the names of the attributes they
         /// will use. These are used for DTO translation, instantiation, and Db storage.
         /// </summary>
         /// <returns>The attributes.</returns>
-        abstract public List<string> GetAttributes();
+        abstract public List<string> GetAttributeNames();
 
         /// <summary>
         /// Defines how the editor or this plugin type will function.

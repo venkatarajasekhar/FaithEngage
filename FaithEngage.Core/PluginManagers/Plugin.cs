@@ -16,14 +16,20 @@ namespace FaithEngage.Core.PluginManagers
         /// <value>The plugin identifier.</value>
         public Guid PluginId { get; set; }
 
-        public string AssemblyQualifiedName
+        public string FullName
         {
             get{
-                return this.GetType ().AssemblyQualifiedName;
+                return this.GetType ().FullName;
             }
         }
 
-        abstract public string PluginVersion{ get;}
+        public string AssemblyLocation{
+            get{
+                return this.GetType ().Assembly.Location;
+            }
+        }
+
+        abstract public int[] PluginVersion{ get;}
 
         protected Plugin(){}
 

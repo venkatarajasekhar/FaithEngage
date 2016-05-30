@@ -5,7 +5,7 @@ namespace FaithEngage.Core.DisplayUnitEditor
 {
     public class DisplayUnitEditorDefinition
     {
-                /// <summary>
+        /// <summary>
         /// True if card sections must be in ordered defined. False if they can be in any order.
         /// </summary>
         /// <value><c>true</c> if enforce section order; otherwise, <c>false</c>.</value>
