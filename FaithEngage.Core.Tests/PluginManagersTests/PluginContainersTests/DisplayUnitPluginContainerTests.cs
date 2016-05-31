@@ -63,6 +63,7 @@ namespace FaithEngage.Core.Tests
         public void init()
         {
             _plgn = A.Fake<DisplayUnitPlugin> ();
+			_plgn.PluginId = Guid.NewGuid ();
         }
 
         [Test]
@@ -110,7 +111,7 @@ namespace FaithEngage.Core.Tests
             pc.Register (_plgn);
 
 
-            var plugin = pc.Resolve (_plgn.PluginId);
+			var plugin = pc.Resolve (_plgn.PluginId.Value);
 
             Assert.That (plugin, Is.Not.Null);
             Assert.That (plugin, Is.EqualTo (_plgn));
@@ -124,7 +125,7 @@ namespace FaithEngage.Core.Tests
             A.CallTo (() => _plgn.DisplayUnitType).Returns (typeof(dummy_DisplayUnit));
 
             var pc = new DisplayUnitPluginContainer ();
-            var plugin = pc.Resolve (_plgn.PluginId);
+            var plugin = pc.Resolve (_plgn.PluginId.Value);
 
             Assert.That (plugin, Is.Null);
         }

@@ -23,7 +23,7 @@ namespace FaithEngage.Core.PluginManagers.PluginContainers
             if (!plugin.DisplayUnitType.IsSubclassOf(typeof(DisplayUnit)))
                 throw new NotDisplayUnitException (plugin.DisplayUnitType, "DisplayUnitType is not derived from DisplayUnit");
             try {
-                _registry.Add (plugin.PluginId, plugin);
+				_registry.Add (plugin.PluginId.Value, plugin);
             } catch (ArgumentException) {
                 throw new PluginAlreadyRegisteredException ();
             }

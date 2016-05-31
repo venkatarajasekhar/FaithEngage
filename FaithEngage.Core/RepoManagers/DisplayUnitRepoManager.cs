@@ -158,7 +158,7 @@ namespace FaithEngage.Core.RepoManagers
             dto.Name = unit.Name;
             dto.DateCreated = unit.DateCreated;
             dto.Description = unit.Description;
-            dto.PluginId = unit.Plugin.PluginId;
+			dto.PluginId = unit.Plugin.PluginId.Value;
             dto.PositionInEvent = unit.PositionInEvent;
             dto.Attributes = unit.GetAttributes ();
             if(unit.UnitGroup.HasValue)

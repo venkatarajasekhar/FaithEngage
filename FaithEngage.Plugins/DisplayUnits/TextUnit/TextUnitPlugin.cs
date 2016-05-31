@@ -18,7 +18,6 @@ namespace FaithEngage.Plugins.DisplayUnits.TextUnitPlugin
             var secs = new CardSectionDefinition[] { secDef };
             def.CardSectionDefinitions = secs;
             EditorDefinition = def;
-            DisplayUnitType = typeof(TextUnit);
         }
 
         #region implemented abstract members of Plugin
@@ -38,8 +37,10 @@ namespace FaithEngage.Plugins.DisplayUnits.TextUnitPlugin
         {
             return new List<string> (){ "Text" };
         }
+
+		private Type _duType = typeof(TextUnit);
         public override Type DisplayUnitType {
-            get;
+			get{ return _duType; }
         }
             
         public override DisplayUnitEditorDefinition EditorDefinition {

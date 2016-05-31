@@ -1,12 +1,13 @@
 ﻿using System;
-using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using System.Reflection;
+using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 
-namespace FaithEngage.Core
+
+namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 {
-    public class DisplayUnitPluginFactory
+    public class DisplayUnitPluginFactory : IDisplayUnitPluginFactory
     {
-        DisplayUnitPlugin LoadPluginFromDto(DisplayUnitPluginDTO dto)
+        public DisplayUnitPlugin LoadPluginFromDto(DisplayUnitPluginDTO dto)
         {
             var assembly = Assembly.LoadFrom (dto.AssemblyLocation);
             var type = assembly.GetType (dto.FullName);

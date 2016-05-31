@@ -97,6 +97,10 @@
     <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginRepository.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\Factories\DisplayUnitPluginDtoFactory.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\Factories\DisplayUnitPluginFactory.cs" />
+    <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginRepoManager.cs" />
+    <Compile Include="RepoManagers\DisplayUnitPluginRepoManager.cs" />
+    <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginFactory.cs" />
+    <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginDtoFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

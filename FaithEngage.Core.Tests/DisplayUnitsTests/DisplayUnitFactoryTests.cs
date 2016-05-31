@@ -47,7 +47,7 @@ namespace FaithEngage.Core.DisplayUnits
 
 			public override DisplayUnitPlugin Plugin {
 				get {
-					throw new NotImplementedException ();
+					return A.Fake<DisplayUnitPlugin> ();
 				}
 			}
 		}

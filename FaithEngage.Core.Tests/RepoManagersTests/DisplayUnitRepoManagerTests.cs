@@ -8,7 +8,7 @@ using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.DisplayUnits;
-using System.Drawing.Design;
+using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 
 namespace FaithEngage.Core.RepoManagers
 {
@@ -21,6 +21,8 @@ namespace FaithEngage.Core.RepoManagers
         private DisplayUnitDTO _dto;
         private DateTime _dt = DateTime.Now;
         private IDisplayUnitFactory _fctry;
+		private DisplayUnitPlugin _plugin;
+
 
         [TestFixtureSetUp]
         public void init()
@@ -29,6 +31,9 @@ namespace FaithEngage.Core.RepoManagers
             VALID_GUID = Guid.NewGuid ();
             INVALID_GUID = Guid.NewGuid ();
             _fctry = A.Fake<IDisplayUnitFactory> ();
+			_plugin = A.Fake<DisplayUnitPlugin> ();
+			_plugin.PluginId = VALID_GUID;
+
 
             _dto = new DisplayUnitDTO (VALID_GUID, VALID_GUID) {
                 DateCreated = _dt,
@@ -170,6 +175,10 @@ namespace FaithEngage.Core.RepoManagers
             var units = Enumerable.Repeat(0, 5).Select( u => A.Fake<DisplayUnit>(
                 p=> p.WithArgumentsForConstructor(new object[]{dict})))
                 .ToDictionary (p => i++, p => p);
+			foreach (var unit in units) 
+			{
+				A.CallTo (() => unit.Value.Plugin).Returns (_plugin);
+			}
             Dictionary<int,DisplayUnitDTO> receivedUnits = null;
 
             var repo = A.Fake<IDisplayUnitsRepository> ();
@@ -199,6 +208,10 @@ namespace FaithEngage.Core.RepoManagers
             var units = Enumerable.Repeat(0, 5).Select( u => A.Fake<DisplayUnit>(
                 p=> p.WithArgumentsForConstructor(new object[]{dict})))
                 .ToDictionary (p => i++, p => p);
+			foreach (var unit in units) 
+			{
+				A.CallTo (() => unit.Value.Plugin).Returns (_plugin);
+			}
             var repo = A.Fake<IDisplayUnitsRepository> ();
 
             A.CallTo (() => repo.SaveManyToEvent (null, INVALID_GUID)).WithAnyArguments ().Throws<InvalidIdException> ();
@@ -219,6 +232,10 @@ namespace FaithEngage.Core.RepoManagers
             var units = Enumerable.Repeat(0, 5).Select( u => A.Fake<DisplayUnit>(
                 p=> p.WithArgumentsForConstructor(new object[]{dict})))
                 .ToDictionary (p => i++, p => p);
+			foreach (var unit in units) 
+			{
+				A.CallTo (() => unit.Value.Plugin).Returns (_plugin);
+			}
             var repo = A.Fake<IDisplayUnitsRepository> ();
 
             A.CallTo (() => repo.SaveManyToEvent (null, INVALID_GUID)).WithAnyArguments ().Throws<RepositoryException> ();
@@ -291,7 +308,7 @@ namespace FaithEngage.Core.RepoManagers
             unit.DateCreated = DateTime.Now.Date;
             unit.PositionInEvent = 3;
             unit.UnitGroup = new DisplayUnitGrouping? (new DisplayUnitGrouping (3, VALID_GUID));
-
+			A.CallTo (() => unit.Plugin).Returns (_plugin);
             var repo = A.Fake<IDisplayUnitsRepository> ();
             DisplayUnitDTO receivedDto = null;
             A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
@@ -315,7 +332,7 @@ namespace FaithEngage.Core.RepoManagers
         {
             var unit = A.Fake<DisplayUnit> ();
             unit.AssociatedEvent = INVALID_GUID;
-
+			A.CallTo (() => unit.Plugin).Returns (_plugin);
             var repo = A.Fake<IDisplayUnitsRepository> ();
             A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
                 .Throws<InvalidIdException> ();
@@ -331,7 +348,7 @@ namespace FaithEngage.Core.RepoManagers
         {
             var unit = A.Fake<DisplayUnit> ();
             unit.AssociatedEvent = VALID_GUID;
-
+			A.CallTo (() => unit.Plugin).Returns (_plugin);
             var repo = A.Fake<IDisplayUnitsRepository> ();
             A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
                 .Throws<RepositoryException> ();
@@ -347,7 +364,7 @@ namespace FaithEngage.Core.RepoManagers
             unit.Description = "My Description";
             unit.Name = "My Name";
             unit.AssociatedEvent = VALID_GUID;
-
+			A.CallTo (() => unit.Plugin).Returns (_plugin);
             A.CallTo (() => unit.Clone ()).Returns (unit);
             var repo = A.Fake<IDisplayUnitsRepository> ();
             DisplayUnitDTO receivedUnit = null;
@@ -368,6 +385,7 @@ namespace FaithEngage.Core.RepoManagers
             unit.Description = "My Description";
             unit.Name = "My Name";
             unit.AssociatedEvent = INVALID_GUID;
+			A.CallTo (() => unit.Plugin).Returns (_plugin);
             A.CallTo (() => unit.Clone ()).Returns (unit);
 
             var repo = A.Fake<IDisplayUnitsRepository> ();
@@ -386,7 +404,8 @@ namespace FaithEngage.Core.RepoManagers
             unit.Description = "My Description";
             unit.Name = "My Name";
             unit.AssociatedEvent = INVALID_GUID;
-            A.CallTo (() => unit.Clone ()).Returns (unit);
+			A.CallTo (() => unit.Plugin).Returns (_plugin);
+			A.CallTo (() => unit.Clone ()).Returns (unit);
 
             var repo = A.Fake<IDisplayUnitsRepository> ();
             A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))

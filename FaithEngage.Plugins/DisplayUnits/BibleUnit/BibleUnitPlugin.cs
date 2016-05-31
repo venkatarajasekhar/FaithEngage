@@ -26,8 +26,9 @@ namespace FaithEngage.Plugins.DisplayUnits.BibleUnitPlugin
             return new List<string> (){ "reference" };
         }
 
+		private Type _duType = typeof(BibleUnit);
         public override Type DisplayUnitType {
-            get;
+			get{ return _duType; }
         }
 
         public override DisplayUnitEditorDefinition EditorDefinition {
