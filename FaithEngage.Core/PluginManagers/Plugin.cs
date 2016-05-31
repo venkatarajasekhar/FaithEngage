@@ -23,7 +23,7 @@ namespace FaithEngage.Core.PluginManagers
             }
         }
 
-        public string AssemblyLocation{
+        public virtual string AssemblyLocation{
             get{
                 return this.GetType ().Assembly.Location;
             }

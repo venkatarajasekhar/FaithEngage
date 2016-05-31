@@ -58,6 +58,7 @@
     <Folder Include="PluginManagersTests\DisplayUnitPluginsTests\" />
     <Folder Include="PluginManagersTests\PluginContainersTests\" />
     <Folder Include="RepoManagersTests\" />
+    <Folder Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DummyTypes\Dummies.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="CardProcessorTests\CardProcessorTests.cs" />
     <Compile Include="CardTests\CardDtoFactoryTests.cs" />
     <Compile Include="DisplayUnitsTests\DisplayUnitDTOTests.cs" />
+    <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\DisplayUnitPluginDtoFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">
