@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Exceptions;
+using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 
 namespace FaithEngage.Core.DisplayUnits
 {
@@ -13,7 +14,7 @@ namespace FaithEngage.Core.DisplayUnits
         {
             _container = plginCtr;
         }
-        public DisplayUnit InstantiateNew (string pluginId, Dictionary<string, string> attributes)
+        public DisplayUnit InstantiateNew (Guid pluginId, Dictionary<string, string> attributes)
         {
             return getDisplayUnit (pluginId, attributes);
         }
@@ -37,7 +38,7 @@ namespace FaithEngage.Core.DisplayUnits
             }
         }
 
-        private DisplayUnit getDisplayUnit(string pluginId, Guid Id, Dictionary<string,string> attributes)
+        private DisplayUnit getDisplayUnit(Guid pluginId, Guid Id, Dictionary<string,string> attributes)
         {
             
             var types = new Type[]
@@ -50,7 +51,7 @@ namespace FaithEngage.Core.DisplayUnits
             return unit;
         }
 
-        private DisplayUnit getDisplayUnit(string pluginId, Dictionary<string,string> attributes)
+        private DisplayUnit getDisplayUnit(Guid pluginId, Dictionary<string,string> attributes)
         {
             //Get the constructor that accepts only a dictionary<string,string>.
 			var ctor = getCtor (pluginId, new Type[]{typeof(Dictionary<string,string>)});
@@ -59,7 +60,7 @@ namespace FaithEngage.Core.DisplayUnits
             return unit;
         }
 
-        private ConstructorInfo getCtor(string pluginId, Type[] paramTypes)
+        private ConstructorInfo getCtor(Guid pluginId, Type[] paramTypes)
         {
             var plugin = _container.Resolve (pluginId);
             if (plugin == null)
@@ -75,6 +76,7 @@ namespace FaithEngage.Core.DisplayUnits
             unit.DateCreated = dto.DateCreated;
             unit.AssociatedEvent = dto.AssociatedEvent;
             unit.PositionInEvent = dto.PositionInEvent;
+			unit.Plugin.PluginId = dto.PluginId;
             if(dto.GroupId.HasValue && dto.PositionInGroup.HasValue){
                 unit.UnitGroup = new DisplayUnitGrouping (dto.PositionInGroup.Value, dto.GroupId.Value);
             }

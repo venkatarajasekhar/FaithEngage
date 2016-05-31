@@ -5,7 +5,7 @@ namespace FaithEngage.Core.DisplayUnits.Interfaces
 {
     public interface IDisplayUnitFactory
     {
-        DisplayUnit InstantiateNew (string PluginId, Dictionary<string,string> attributes);
+        DisplayUnit InstantiateNew (Guid PluginId, Dictionary<string,string> attributes);
         DisplayUnit ConvertFromDto(DisplayUnitDTO dto);
     }
 }

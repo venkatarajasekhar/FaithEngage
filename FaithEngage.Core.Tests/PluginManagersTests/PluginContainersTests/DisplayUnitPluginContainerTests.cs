@@ -13,6 +13,8 @@ namespace FaithEngage.Core.Tests
     public class DisplayUnitPluginContainerTests
     {
         private DisplayUnitPlugin _plgn;
+		private Guid VALID_GUID = Guid.NewGuid();
+		private Guid INVALID_GUID = Guid.NewGuid();
 
         private class dummy_NotDisplayUnit
         {
@@ -59,7 +61,7 @@ namespace FaithEngage.Core.Tests
             #endregion
         }
 
-        [TestFixtureSetUp]
+		[SetUp]
         public void init()
         {
             _plgn = A.Fake<DisplayUnitPlugin> ();
@@ -68,16 +70,37 @@ namespace FaithEngage.Core.Tests
         [Test]
         public void Register_ValidPlugin_NoExceptions()
         {
-            A.CallTo (() => _plgn.DisplayUnitType).Returns (typeof(dummy_DisplayUnit));
+			_plgn.PluginId = VALID_GUID;
+			A.CallTo (() => _plgn.DisplayUnitType).Returns (typeof(dummy_DisplayUnit));
             var pcontainer = new DisplayUnitPluginContainer ();
             pcontainer.Register (_plgn);
         }
+
+		[Test]
+		[ExpectedException(typeof(PluginHasInvalidIdException))]
+		public void Register_NullPluginId_ThrowsPluginHasInvalidIdException()
+		{
+			A.CallTo (() => _plgn.DisplayUnitType).Returns (typeof(dummy_DisplayUnit));
+			var pcontainer = new DisplayUnitPluginContainer ();
+			pcontainer.Register (_plgn);
+		}
+
+		[Test]
+		[ExpectedException(typeof(PluginHasInvalidIdException))]
+		public void Register_PluginIdIEmptyGuid_ThrowsPluginHasInvalidIdException()
+		{
+			_plgn.PluginId = Guid.Empty;
+			A.CallTo (() => _plgn.DisplayUnitType).Returns (typeof(dummy_DisplayUnit));
+			var pcontainer = new DisplayUnitPluginContainer ();
+			pcontainer.Register (_plgn);
+		}
 
         [Test]
         [ExpectedException(typeof(PluginHasInvalidConstructorsException))]
         public void Register_PluginWithInvalidConstructors_ThrowsException()
         {
-            A.CallTo (() => _plgn.DisplayUnitType).Returns (typeof(Dummy_NoParameters));
+			_plgn.PluginId = VALID_GUID;
+			A.CallTo (() => _plgn.DisplayUnitType).Returns (typeof(Dummy_NoParameters));
             var pc = new DisplayUnitPluginContainer ();
             pc.Register (_plgn);
         }
@@ -86,15 +109,18 @@ namespace FaithEngage.Core.Tests
         [ExpectedException(typeof(NotDisplayUnitException))]
         public void Register_PluginWithInvalidDisplayUnitType_ThrowsException()
         {
-            A.CallTo (() => _plgn.DisplayUnitType).Returns (typeof(dummy_NotDisplayUnit));
+			_plgn.PluginId = VALID_GUID;
+			A.CallTo (() => _plgn.DisplayUnitType).Returns (typeof(dummy_NotDisplayUnit));
             var pc = new DisplayUnitPluginContainer ();
             pc.Register (_plgn);
         }
             
         [Test]
         [ExpectedException(typeof(PluginAlreadyRegisteredException))]
-        public void Register_SamePluginIDTwice_ThrowsException(){
-            A.CallTo (() => _plgn.DisplayUnitType).Returns (typeof(dummy_DisplayUnit));
+        public void Register_SamePluginIDTwice_ThrowsException()
+		{
+			_plgn.PluginId = VALID_GUID;
+			A.CallTo (() => _plgn.DisplayUnitType).Returns (typeof(dummy_DisplayUnit));
             var pc = new DisplayUnitPluginContainer ();
             pc.Register (_plgn);
             pc.Register (_plgn);
@@ -105,12 +131,12 @@ namespace FaithEngage.Core.Tests
         {
             A.CallTo (() => _plgn.DisplayUnitType).Returns (typeof(dummy_DisplayUnit));
             A.CallTo (() => _plgn.PluginName).Returns ("Test");
-
+			_plgn.PluginId = VALID_GUID;
             var pc = new DisplayUnitPluginContainer ();
             pc.Register (_plgn);
 
 
-            var plugin = pc.Resolve (_plgn.PluginId);
+			var plugin = pc.Resolve (_plgn.PluginId.Value);
 
             Assert.That (plugin, Is.Not.Null);
             Assert.That (plugin, Is.EqualTo (_plgn));
@@ -122,9 +148,8 @@ namespace FaithEngage.Core.Tests
         public void Resolve_InvalidId_ReturnsNull()
         {
             A.CallTo (() => _plgn.DisplayUnitType).Returns (typeof(dummy_DisplayUnit));
-
             var pc = new DisplayUnitPluginContainer ();
-            var plugin = pc.Resolve (_plgn.PluginId);
+			var plugin = pc.Resolve (INVALID_GUID);
 
             Assert.That (plugin, Is.Null);
         }
