@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Exceptions;
 using FakeItEasy;
 using NUnit.Framework;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.DisplayUnits;
+using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 
 namespace FaithEngage.Core.DisplayUnits
 {

@@ -5,10 +5,11 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces
 {
 	public interface IDisplayUnitPluginRepoManager
 	{
-		void RegisterNew (DisplayUnitPlugin plugin);
+		Guid RegisterNew (DisplayUnitPlugin plugin);
 		void UpdatePlugin (DisplayUnitPlugin plugin);
 		void UninstallPlugin(Guid id);
-		List<DisplayUnitPlugin> GetAll();
+		IEnumerable<DisplayUnitPlugin> GetAll();
+		DisplayUnitPlugin GetById(Guid id);
 	}
 }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Exceptions;
+using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 
 namespace FaithEngage.Core.DisplayUnits
 {

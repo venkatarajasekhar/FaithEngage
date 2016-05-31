@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.DisplayUnits;
+using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 
 namespace FaithEngage.Core.PluginManagers.PluginContainers
 {
@@ -16,7 +16,9 @@ namespace FaithEngage.Core.PluginManagers.PluginContainers
 
         public void Register(DisplayUnitPlugin plugin)
         {
-            if (!hasProperConstructors (plugin))
+			if (!plugin.PluginId.HasValue || plugin.PluginId.Value == Guid.Empty)
+				throw new PluginHasInvalidIdException ("PluginId must be valid and not null.");
+			if (!hasProperConstructors (plugin))
                 throw new PluginHasInvalidConstructorsException (
                     "Plugin DisplayUnit type needs to support the " +
                     "the constructor signatures of the DisplayUnit base class.");
