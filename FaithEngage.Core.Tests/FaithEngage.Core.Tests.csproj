@@ -76,6 +76,7 @@
     <Compile Include="CardTests\CardDtoFactoryTests.cs" />
     <Compile Include="DisplayUnitsTests\DisplayUnitDTOTests.cs" />
     <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\DisplayUnitPluginDtoFactoryTests.cs" />
+    <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\DisplayUnitPluginTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">
