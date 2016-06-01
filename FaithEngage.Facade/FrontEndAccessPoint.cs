@@ -49,7 +49,9 @@ namespace FaithEngage.Facade
 			if(!_auth.AuthenticateUserToViewEvent(user,evnt)){
 				throw new AuthenticationException("User " + username + " is not authorized to view eventId " + eventId.ToString());
 			}
-			OnUserJoinEvent (new UserEventArgs (){ User = user, Event = evnt });
+			if (OnUserJoinEvent != null) {
+			}
+				OnUserJoinEvent(new UserEventArgs (){ User = user, Event = evnt });
 			return _cp.GetLiveCardsByEvent (eventId);
 		}
 
