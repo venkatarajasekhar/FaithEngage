@@ -84,11 +84,30 @@ namespace FaithEngage.Core.Containers
 
         [Test]
         [ExpectedException("FaithEngage.Core.Exceptions.TypeNotRegisteredException")]
-        public void Resolve_NotRegisteredtype_TypeNotRegisteredException()
+        public void Resolve_NotRegisteredtypeWithUnregisteredDependencies_TypeNotRegisteredException()
         {
             var container = new IocContainer ();
             var notRef = container.Resolve<IDummy> ();
         }
+
+		[Test]
+		public void Resolve_UnregisteredConcreteType_RegisteredDependencies_ReturnsInstance()
+		{
+			var container = new IocContainer ();
+			container.Register<IDummy2,Dummy2_NoParameters> ();
+			var dummy2 = container.Resolve<Dummy_CtorHasDependencies> ();
+
+			Assert.That (dummy2, Is.Not.Null);
+		}
+
+		[Test]
+		public void Resolve_TypeDependsOnIContainer_Resolves()
+		{
+			var container = new IocContainer ();
+			var dummy = container.Resolve<Dummy_CtorDependsOnIContainer> ();
+
+			Assert.That (dummy, Is.Not.Null);
+		}
     }
 }
 

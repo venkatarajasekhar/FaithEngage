@@ -6,14 +6,22 @@ using System.Linq;
 namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 {
 	[TestFixture]
-	public class DisplayUnitPluginTests
+	public class DisplayUnitPluginFactoryTests
 	{
+		private DisplayUnitPlugin _plgin;
+
+		[TestFixtureSetUp]
+		public void init()
+		{
+			_plgin = new Dummy_PluginAssembly.DummyPlugin ();
+		}
+
 		[Test]
 		public void LoadPluginFromDto_ValidDto_ValidAssembly_ValidPlugin()
 		{
 			var dto = new DisplayUnitPluginDTO ();
-			dto.AssemblyLocation = "Dummy_PluginAssembly.dll";
-			dto.FullName = "Dummy_PluginAssembly.DummyPlugin";
+			dto.AssemblyLocation = _plgin.AssemblyLocation;
+			dto.FullName = _plgin.FullName;
 			dto.Id = Guid.NewGuid ();
 
 			var factory = new DisplayUnitPluginFactory ();
@@ -40,8 +48,8 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 		public void LoadPluginsFromDtos_ValidDtos_ValidPlugins()
 		{
 			var dto = new DisplayUnitPluginDTO ();
-			dto.AssemblyLocation = "Dummy_PluginAssembly.dll";
-			dto.FullName = "Dummy_PluginAssembly.DummyPlugin";
+			dto.AssemblyLocation = _plgin.AssemblyLocation;
+			dto.FullName = _plgin.FullName;
 			dto.Id = Guid.NewGuid ();
 
 			var dtos = Enumerable.Repeat (dto, 5);
@@ -57,8 +65,8 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 		public void LoadPluginsFromDtos_SomeInvalid_ValidPluginsLessInvalidOnes()
 		{
 			var dto = new DisplayUnitPluginDTO ();
-			dto.AssemblyLocation = "Dummy_PluginAssembly.dll";
-			dto.FullName = "Dummy_PluginAssembly.DummyPlugin";
+			dto.AssemblyLocation = _plgin.AssemblyLocation;
+			dto.FullName = _plgin.FullName;
 			dto.Id = Guid.NewGuid ();
 
 			var dtos = Enumerable.Repeat (dto, 3).ToList ();

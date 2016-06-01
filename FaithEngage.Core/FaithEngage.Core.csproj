@@ -50,13 +50,11 @@
     <Compile Include="Exceptions\NotDisplayUnitException.cs" />
     <Compile Include="DisplayUnits\Interfaces\IDisplayUnitPluginRepository.cs" />
     <Compile Include="DisplayUnits\Interfaces\IDisplayUnitsRepository.cs" />
-    <Compile Include="Events\Interfaces\IEvent.cs" />
     <Compile Include="DisplayUnits\Interfaces\IDisplayUnitsRepoManager.cs" />
     <Compile Include="Exceptions\NegativePositionException.cs" />
     <Compile Include="Exceptions\PluginHasInvalidConstructorsException.cs" />
     <Compile Include="DisplayUnits\Interfaces\IDisplayUnitFactory.cs" />
     <Compile Include="Cards\CardAction.cs" />
-    <Compile Include="Cards\CardActionResult.cs" />
     <Compile Include="Exceptions\InvalidAttributesException.cs" />
     <Compile Include="Cards\DefaultImplementations\RenderableCard.cs" />
     <Compile Include="Cards\DefaultImplementations\RenderableCardSection.cs" />
@@ -104,6 +102,24 @@
     <Compile Include="Bootstrappers\IBootstrapper.cs" />
     <Compile Include="Exceptions\PluginHasInvalidIdException.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginContainer.cs" />
+    <Compile Include="UserClasses\User.cs" />
+    <Compile Include="UserClasses\Organization.cs" />
+    <Compile Include="Events\EventSchedule.cs" />
+    <Compile Include="Events\Recurrance.cs" />
+    <Compile Include="UserClasses\UserPrivileges.cs" />
+    <Compile Include="UserClasses\Interfaces\IUserRepository.cs" />
+    <Compile Include="UserClasses\Interfaces\IOrganizationRepository.cs" />
+    <Compile Include="UserClasses\Interfaces\IUserRepoManager.cs" />
+    <Compile Include="UserClasses\Interfaces\IOrganizationRepoManager.cs" />
+    <Compile Include="RepoManagers\UserRepoManager.cs" />
+    <Compile Include="RepoManagers\OrganizationRepoManager.cs" />
+    <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\Interfaces\IEventRepository.cs" />
+    <Compile Include="Events\Interfaces\IEventRepoManager.cs" />
+    <Compile Include="Exceptions\AuthenticationException.cs" />
+    <Compile Include="ActionProcessors\CardActionProcessor.cs" />
+    <Compile Include="Cards\CardActionResultEventHandler.cs" />
+    <Compile Include="Cards\CardActionResultArgs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -120,7 +136,6 @@
     <Folder Include="CardProcessor\" />
     <Folder Include="EventProcessor\" />
     <Folder Include="DisplayUnitEditor\" />
-    <Folder Include="ActionProcessor\" />
     <Folder Include="RepoManagers\" />
     <Folder Include="PluginManagers\" />
     <Folder Include="PluginManagers\DisplayUnitPlugins\" />
@@ -129,5 +144,8 @@
     <Folder Include="PluginManagers\DisplayUnitPlugins\Factories\" />
     <Folder Include="Obsolete Interfaces %28needs moving%29\" />
     <Folder Include="Bootstrappers\" />
+    <Folder Include="UserClasses\" />
+    <Folder Include="UserClasses\Interfaces\" />
+    <Folder Include="ActionProcessors\" />
   </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@ using FaithEngage.Core.DisplayUnits;
 
 namespace FaithEngage.Core.Cards.DefaultImplementations
 {
-    public class RenderableCard : IRenderableCard
+	public class RenderableCard : IRenderableCard
     {
         #region IRenderableCard implementation
         public IRenderableCardSection[] Sections {
@@ -23,6 +23,11 @@ namespace FaithEngage.Core.Cards.DefaultImplementations
             get;
             set;
         }
+			
+		public IRenderableCard ReRender (CardActionResultArgs args)
+		{
+			return this;
+		}
         #endregion
         
     }

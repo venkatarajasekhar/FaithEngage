@@ -9,7 +9,7 @@ using System.CodeDom;
 
 namespace FaithEngage.Core.Cards
 {
-    public class CardDtoFactory : ICardDTOFactory
+	public class CardDtoFactory : ICardDTOFactory
     {
         public RenderableCardDTO[] GetCards(Dictionary<int,DisplayUnit> units)
         {
@@ -43,6 +43,15 @@ namespace FaithEngage.Core.Cards
                 yield return card;  
             }
         }
+
+		public RenderableCardDTO ConvertCard (IRenderableCard card)
+		{
+			try {
+				return convert (card);
+			} catch {
+				return null;	
+			}
+		}
 
         private RenderableCardDTO convert(IRenderableCard card)
         {

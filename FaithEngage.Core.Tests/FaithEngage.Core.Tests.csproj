@@ -76,7 +76,7 @@
     <Compile Include="CardTests\CardDtoFactoryTests.cs" />
     <Compile Include="DisplayUnitsTests\DisplayUnitDTOTests.cs" />
     <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\DisplayUnitPluginDtoFactoryTests.cs" />
-    <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\DisplayUnitPluginTests.cs" />
+    <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\DisplayUnitPluginFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">
@@ -93,6 +93,10 @@
     <ProjectReference Include="..\FaithEngage.Core\FaithEngage.Core.csproj">
       <Project>{F94B6862-B7CC-4507-BC82-9093F97CDEC2}</Project>
       <Name>FaithEngage.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dummy_PluginAssembly\Dummy_PluginAssembly.csproj">
+      <Project>{DBFA159F-5B91-4A4E-8456-B1CB32C903D6}</Project>
+      <Name>Dummy_PluginAssembly</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

@@ -64,9 +64,8 @@ namespace FaithEngage.Plugins.DisplayUnits.TextUnitPlugin
             return card;
         }
 
-        public override CardActionResult ExecuteCardAction (CardAction Action)
+        public override void ExecuteCardAction (CardAction Action)
         {
-            return null;
         }
 
         public override void SetAttributes (Dictionary<string, string> attributes)

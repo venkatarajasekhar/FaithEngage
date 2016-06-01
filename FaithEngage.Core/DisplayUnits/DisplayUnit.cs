@@ -115,10 +115,11 @@ namespace FaithEngage.Core.DisplayUnits
         /// it will be sent to this method. These calls will be made via a respons API.
         /// </summary>
         /// <param name="Action">Action.</param>
-        public virtual CardActionResult ExecuteCardAction (CardAction Action)
+        public virtual void ExecuteCardAction (CardAction Action)
         {
-            return null;
         }
+
+		public event CardActionResultEventHandler OnCardActionResult;
 
         public DisplayUnitGrouping? UnitGroup {get;set;}
 

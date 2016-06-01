@@ -3,6 +3,7 @@ using FaithEngage.Core.Interfaces;
 using FakeItEasy;
 using FaithEngage.Core.Tests;
 using NUnit.Framework;
+using FaithEngage.Core.Containers;
 
 namespace FaithEngage.Core.Tests
 {
@@ -64,5 +65,13 @@ namespace FaithEngage.Core.Tests
             
         }
     }
+
+	public class Dummy_CtorDependsOnIContainer : IDummy
+	{
+		public Dummy_CtorDependsOnIContainer (IContainer container)
+		{
+			
+		}
+	}
 }
 

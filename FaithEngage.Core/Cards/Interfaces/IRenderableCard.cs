@@ -8,6 +8,7 @@ namespace FaithEngage.Core.Cards.Interfaces
         string Title{ get; set;}
         string Description{get;set;}
         DisplayUnit OriginatingDisplayUnit{ get; set;}
+		IRenderableCard ReRender (CardActionResultArgs args);
     }
 }
 

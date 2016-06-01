@@ -26,6 +26,13 @@ namespace FaithEngage.Core.Containers
             _registry.Add (ro);
         }
 
+		private RegisteredObject registerSelf(Type typeToRegister)
+		{
+			var ro = new RegisteredObject (typeToRegister, typeToRegister, LifeCycle.Singleton);
+			_registry.Add (ro);
+			return ro;
+		}
+
         public TtypeToResolve Resolve<TtypeToResolve>()
         {
             return (TtypeToResolve)resolveObject (typeof(TtypeToResolve));
@@ -33,10 +40,16 @@ namespace FaithEngage.Core.Containers
 
         private object resolveObject(Type typeToResolve)
         {
-            var registeredObject = _registry.FirstOrDefault (o => o.AbtractType == typeToResolve);
-            if(registeredObject == null)
+			if (typeToResolve == typeof(IContainer))
+				return this;
+			var registeredObject = _registry.FirstOrDefault (o => o.AbtractType == typeToResolve);
+			if(registeredObject == null)
             {
-                throw new TypeNotRegisteredException (typeToResolve);
+				if (!typeToResolve.IsAbstract && !typeToResolve.IsInterface) {
+					registeredObject = registerSelf (typeToResolve);
+				} else {
+					throw new TypeNotRegisteredException (typeToResolve);
+				}
             }
             return getInstance (registeredObject);
         }
@@ -54,7 +67,7 @@ namespace FaithEngage.Core.Containers
 
         private IEnumerable<object> resolveConstructorParameters(RegisteredObject registeredObject)
         {
-            var constructorInfo = registeredObject.ConcreteType.GetConstructors ().First ();
+			var constructorInfo = registeredObject.ConcreteType.GetConstructors ().First ();
             foreach(var parameter in constructorInfo.GetParameters())
             {
                 yield return resolveObject (parameter.ParameterType);

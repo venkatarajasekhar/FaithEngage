@@ -32,7 +32,7 @@ namespace FaithEngage.Plugins.DisplayUnits.BibleUnitPlugin
         {
             throw new NotImplementedException ();
         }
-        public override CardActionResult ExecuteCardAction (CardAction Action)
+        public override void ExecuteCardAction (CardAction Action)
         {
             throw new NotImplementedException ();
         }

@@ -1,9 +1,10 @@
 ﻿using System;
-using FaithEngage.Core.Containers;
 using FaithEngage.Core.Cards;
 using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Exceptions;
+using FaithEngage.Core.Cards.Interfaces;
+using FaithEngage.Core.ActionProcessors;
 
 namespace FaithEngage.Core.CardProcessor
 {
@@ -15,19 +16,37 @@ namespace FaithEngage.Core.CardProcessor
     /// </summary>
     public class CardProcessor
     {
-        private readonly IContainer _container;
         private readonly IDisplayUnitsRepoManager _duRepoMgr;
         private readonly ICardDTOFactory _cardFactory;
+		private readonly CardActionProcessor _cap;
 
         public event PushPullEventHandler onPushCard;
         public event PushPullEventHandler onPullCard;
+		public event PushPullEventHandler onReRenderCard;
 
-        public CardProcessor (IContainer container)
+		public CardProcessor (IDisplayUnitsRepoManager duRepoMgr, ICardDTOFactory cardFactory, CardActionProcessor cap)
         {
-            _container = container;
-            _duRepoMgr = _container.Resolve<IDisplayUnitsRepoManager> ();
-            _cardFactory = _container.Resolve<ICardDTOFactory> ();
+			_duRepoMgr = duRepoMgr;
+			_cardFactory = cardFactory;
+			_cap = cap;
+			_cap.OnCardActionResult+= _cap_OnCardActionResult;
         }
+
+		void _cap_OnCardActionResult (DisplayUnit sender, CardActionResultArgs e)
+		{
+			if (!e.DestinationDisplayUnit.HasValue)
+				return;
+			var du = _duRepoMgr.GetById (e.DestinationDisplayUnit.Value);
+			if (du == null)
+				return;
+			var card = du.GetCard ();
+			var newCard = card.ReRender (e);
+			var dto = _cardFactory.ConvertCard (newCard);
+			if (dto == null)
+				return;
+			var args = createCardEventArgs (dto);
+			onReRenderCard (args);
+		}
 
         public RenderableCardDTO[] GetLiveCardsByEvent(Guid eventId)
         {
@@ -39,7 +58,6 @@ namespace FaithEngage.Core.CardProcessor
             } catch (Exception) {
                 throw;
             }
-
         }
 
         public RenderableCardDTO GetCard(Guid displayUnitId)
@@ -61,9 +79,8 @@ namespace FaithEngage.Core.CardProcessor
             pushCard (args);
         }
 
-        public void PushNewCard(DisplayUnitDTO newDto)
+		public void PushNewCard(DisplayUnitDTO newDto, IDisplayUnitFactory factory)
         {
-            var factory = _container.Resolve<IDisplayUnitFactory> ();
             var du = factory.ConvertFromDto (newDto);
             if(du == null)
                 throw new CouldNotConvertDTOException();
@@ -82,7 +99,12 @@ namespace FaithEngage.Core.CardProcessor
 			pullCard (args);
         }
 
-        private CardEventArgs createCardEventArgs (RenderableCardDTO card){
+		public void ExecuteCardAction(CardAction action)
+		{
+			_cap.ExecuteCardAction (action);
+		}
+
+		private CardEventArgs createCardEventArgs (RenderableCardDTO card){
             var args = createCardEventArgs (card.AssociatedEvent, card.OriginatingDisplayUnit);
             args.card = card;
             return args;

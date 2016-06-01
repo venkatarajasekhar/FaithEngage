@@ -3,17 +3,18 @@ using System.Collections.Generic;
 
 namespace FaithEngage.Core.Cards
 {
-    public class CardActionResult
+    public class CardActionResultArgs
     {
         public Dictionary<string,string> Responses {
             get;
             set;
         }
 
-        public Guid DestinationDisplayUnit {
+        public Guid? DestinationDisplayUnit {
             get;
             set;
         }
+			
     }
 }
 
