@@ -37,13 +37,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\FaithEngage.Core\FaithEngage.Core.csproj">
-      <Project>{F94B6862-B7CC-4507-BC82-9093F97CDEC2}</Project>
-      <Name>FaithEngage.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\OpenReference\OpenReference.csproj">
       <Project>{281CAAAB-13E3-46CD-B3AB-B5E702DD2430}</Project>
       <Name>OpenReference</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FaithEngage.Core\FaithEngage.Core.csproj">
+      <Project>{F94B6862-B7CC-4507-BC82-9093F97CDEC2}</Project>
+      <Name>FaithEngage.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
