@@ -14,7 +14,7 @@ namespace FaithEngage.Core.CardProcessor
     /// 
     /// Dependencies (injected through the IContainer): IDisplayUnitsRepoManager
     /// </summary>
-    public class CardProcessor
+	public class CardProcessor : ICardProcessor
     {
         private readonly IDisplayUnitsRepoManager _duRepoMgr;
         private readonly ICardDTOFactory _cardFactory;

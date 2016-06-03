@@ -120,6 +120,7 @@
     <Compile Include="ActionProcessors\CardActionProcessor.cs" />
     <Compile Include="Cards\CardActionResultEventHandler.cs" />
     <Compile Include="Cards\CardActionResultArgs.cs" />
+    <Compile Include="CardProcessor\ICardProcessor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

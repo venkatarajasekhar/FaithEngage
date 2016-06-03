@@ -6,14 +6,8 @@ using FaithEngage.Core.Events;
 
 namespace FaithEngage.Facade
 {
-	public class Authenticator
+	public class Authenticator : IAuthenticator
 	{
-		private readonly IContainer _container;
-		public Authenticator (IContainer container)
-		{
-			_container = container;
-		}
-
 		public bool AuthenticateUserToViewEvent(User user, Event evnt)
 		{
 			return orgCheck(user, evnt);

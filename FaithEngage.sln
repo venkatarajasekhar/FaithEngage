@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dummy_PluginAssembly", "Dum
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.Facade", "FaithEngage.Facade\FaithEngage.Facade.csproj", "{42B6D9A1-32DA-42D1-A970-6AC9225AD3A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.Facade.Tests", "FaithEngage.Facade.Tests\FaithEngage.Facade.Tests.csproj", "{067BF55C-D3E1-4ADF-AF21-B8B7EBA89967}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{0038148E-E713-49D9-BD75-BB5F3BB73316}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0038148E-E713-49D9-BD75-BB5F3BB73316}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0038148E-E713-49D9-BD75-BB5F3BB73316}.Release|Any CPU.Build.0 = Release|Any CPU
+		{067BF55C-D3E1-4ADF-AF21-B8B7EBA89967}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{067BF55C-D3E1-4ADF-AF21-B8B7EBA89967}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{067BF55C-D3E1-4ADF-AF21-B8B7EBA89967}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{067BF55C-D3E1-4ADF-AF21-B8B7EBA89967}.Release|Any CPU.Build.0 = Release|Any CPU
 		{147B18C6-44DD-4ED0-AAC6-1032E2934A38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{147B18C6-44DD-4ED0-AAC6-1032E2934A38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{147B18C6-44DD-4ED0-AAC6-1032E2934A38}.Release|Any CPU.ActiveCfg = Release|Any CPU
