@@ -121,6 +121,7 @@
     <Compile Include="Cards\CardActionResultEventHandler.cs" />
     <Compile Include="Cards\CardActionResultArgs.cs" />
     <Compile Include="CardProcessor\ICardProcessor.cs" />
+    <Compile Include="Exceptions\InvalidUsernameException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

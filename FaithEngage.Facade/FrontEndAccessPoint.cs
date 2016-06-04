@@ -47,14 +47,8 @@ namespace FaithEngage.Facade
 		{
 			var userManager = _container.Resolve<IUserRepoManager> ();
 			var eventManager = _container.Resolve<IEventRepoManager> ();
-            Event evnt;
-            User user;
-            try {
-                evnt = await Task<Event>.Run(() => eventManager.GetById (eventId));
-    			user = await Task<User>.Run(()=> userManager.GetByUsername (username));
-            } catch (Exception ex) {
-                throw ex;
-            }
+            var evnt = await Task<Event>.Run(() => eventManager.GetById (eventId));
+			var user = await Task<User>.Run(()=> userManager.GetByUsername (username));
 
             if(!_auth.AuthenticateUserToViewEvent(user,evnt)){
 				throw new AuthenticationException("User " + username + " is not authorized to view eventId " + eventId.ToString());

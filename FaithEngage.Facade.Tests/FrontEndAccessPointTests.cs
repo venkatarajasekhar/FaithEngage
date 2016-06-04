@@ -43,7 +43,7 @@ namespace FaithEngage.Facade.Tests
 		}
 
 		[Test]
-		public void SignInToLiveEvent_ValidIdAndUsername_Authenticated_Subscribed_ValidArrayOfDTOs ()
+		public void SignInToLiveEventAsync_ValidIdAndUsername_Authenticated_Subscribed_ValidArrayOfDTOs ()
 		{
 			var user = A.Dummy<User> ();
 			var evnt = A.Dummy<Event> ();
@@ -60,7 +60,7 @@ namespace FaithEngage.Facade.Tests
 		}
 
         [Test]
-        public void SignInToLiveEvent_ValidIdAndUserName_NotAuthenticated_Subscribed_ThrowsException()
+        public void SignInToLiveEventAsync_ValidIdAndUserName_NotAuthenticated_Subscribed_ThrowsException()
         {
             var user = A.Dummy<User>();
             var evnt = A.Dummy<Event>();
@@ -83,7 +83,7 @@ namespace FaithEngage.Facade.Tests
 
         [Test]
         [ExpectedException(typeof(InvalidIdException))]
-        public void SignInToLiveEvent_EventRepoThrowsException_ValidUserName_Subscribed_ThrowsException()
+        public void SignInToLiveEventAsync_EventRepoThrowsException_ValidUserName_Subscribed_ThrowsException()
         {
             var user = A.Dummy<User>();
             var evnt = A.Dummy<Event>();
@@ -100,9 +100,29 @@ namespace FaithEngage.Facade.Tests
             } catch (Exception ex) {
                 throw ex.InnerException;
             }
-
-
         }
+
+        [Test]
+        [ExpectedException(typeof(InvalidUsernameException))]
+        public void SignInToLiveEventAsync_UserRepoThrowsException_ValidEventId_Subscribed_ThrowsException()
+        {
+            var user = A.Dummy<User>();
+            var evnt = A.Dummy<Event>();
+            A.CallTo (() => userRepo.GetByUsername (INVALID_STRING)).Throws<InvalidUsernameException> ();
+            A.CallTo (() => eventRepo.GetById (VALID_GUID)).Returns (evnt);
+            A.CallTo (() => auth.AuthenticateUserToViewEvent (user, evnt)).Returns (false);
+            UserEventArgs args = null;
+
+            var feap = new FrontEndAccessPoint (container);
+            feap.OnUserJoinEvent += (UserEventArgs e) => args = e;
+            var task = feap.SignInToLiveEventAsync (VALID_GUID, INVALID_STRING);
+            try {
+                task.Wait();
+            } catch (Exception ex) {
+                throw ex.InnerException;
+            }
+        }
+
 
 
 	}
