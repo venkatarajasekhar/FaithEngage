@@ -43,30 +43,37 @@ namespace FaithEngage.Facade
 
 		public event UserEventHandler OnUserJoinEvent;
 
-		public RenderableCardDTO[] SignInToLiveEvent(Guid eventId, string username)
+		public async Task<RenderableCardDTO[]> SignInToLiveEventAsync(Guid eventId, string username)
 		{
 			var userManager = _container.Resolve<IUserRepoManager> ();
 			var eventManager = _container.Resolve<IEventRepoManager> ();
-			var evnt = Task<Event>.Run(() => eventManager.GetById (eventId));
-			var user = Task<User>.Run(()=> userManager.GetByUsername (username));
-			if(!_auth.AuthenticateUserToViewEvent(user.Result,evnt.Result)){
+            Event evnt;
+            User user;
+            try {
+                evnt = await Task<Event>.Run(() => eventManager.GetById (eventId));
+    			user = await Task<User>.Run(()=> userManager.GetByUsername (username));
+            } catch (Exception ex) {
+                throw ex;
+            }
+
+            if(!_auth.AuthenticateUserToViewEvent(user,evnt)){
 				throw new AuthenticationException("User " + username + " is not authorized to view eventId " + eventId.ToString());
 			}
 			if (OnUserJoinEvent != null) {
-				OnUserJoinEvent(new UserEventArgs (){ User = user.Result, Event = evnt.Result });
+                OnUserJoinEvent(new UserEventArgs (){ User = user, Event = evnt });
 			}	
-			return _cp.GetLiveCardsByEvent (eventId);
+            return await Task<RenderableCardDTO>.Run(()=> _cp.GetLiveCardsByEvent (eventId));
 		}
 
-		public void ExecuteCardAction(string actionName, Dictionary<string,string> parameters, Guid originatingDisplayUnit, string userName)
+		public async Task ExecuteCardActionAsync(string actionName, Dictionary<string,string> parameters, Guid originatingDisplayUnit, string userName)
 		{
 			var userManager = _container.Resolve<IUserRepoManager> ();
-			var user = userManager.GetByUsername (userName);
+            var user = await Task<User>.Run(()=> userManager.GetByUsername (userName));
 			var action = new CardAction () {
 				ActionName = actionName,
 				Parameters = parameters,
 				OriginatingDisplayUnit = originatingDisplayUnit,
-				User = user
+                User = user
 			};	
 			_cp.ExecuteCardAction (action);
 		}

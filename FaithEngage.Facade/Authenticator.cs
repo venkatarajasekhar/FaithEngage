@@ -4,7 +4,7 @@ using FaithEngage.Core.Containers;
 using FaithEngage.Core.UserClasses;
 using FaithEngage.Core.Events;
 
-namespace FaithEngage.Facade
+namespace FaithEngage.Facade.Interfaces
 {
 	public class Authenticator : IAuthenticator
 	{

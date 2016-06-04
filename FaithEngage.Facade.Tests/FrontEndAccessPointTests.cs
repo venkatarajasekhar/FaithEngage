@@ -9,10 +9,12 @@ using FaithEngage.Core.UserClasses;
 using FaithEngage.Core.Cards;
 using FaithEngage.Facade.Delegates;
 using FaithEngage.Core.Events;
+using FaithEngage.Facade.Interfaces;
+using FaithEngage.Core.Exceptions;
 
 namespace FaithEngage.Facade.Tests
 {
-	[TestFixture ()]
+	[TestFixture]
 	public class FrontEndAccessPointTests
 	{
 		private IContainer container;
@@ -40,7 +42,7 @@ namespace FaithEngage.Facade.Tests
 			A.CallTo (() => container.Resolve<IEventRepoManager> ()).Returns (eventRepo);
 		}
 
-		[Test ()]
+		[Test]
 		public void SignInToLiveEvent_ValidIdAndUsername_Authenticated_Subscribed_ValidArrayOfDTOs ()
 		{
 			var user = A.Dummy<User> ();
@@ -52,11 +54,57 @@ namespace FaithEngage.Facade.Tests
 
 			var feap = new FrontEndAccessPoint (container);
 			feap.OnUserJoinEvent += (UserEventArgs e) => args = e;
-			feap.SignInToLiveEvent (VALID_GUID, VALID_STRING);
-
+            var dtos = feap.SignInToLiveEventAsync (VALID_GUID, VALID_STRING).Result;
 			A.CallTo (() => processor.GetLiveCardsByEvent (A<Guid>.Ignored)).MustHaveHappened ();
 			Assert.That (args, Is.Not.Null);
 		}
+
+        [Test]
+        public void SignInToLiveEvent_ValidIdAndUserName_NotAuthenticated_Subscribed_ThrowsException()
+        {
+            var user = A.Dummy<User>();
+            var evnt = A.Dummy<Event>();
+            A.CallTo (() => userRepo.GetByUsername (A<string>.Ignored)).Returns (user);
+            A.CallTo (() => eventRepo.GetById (A<Guid>.Ignored)).Returns (evnt);
+            A.CallTo (() => auth.AuthenticateUserToViewEvent (user, evnt)).Returns (false);
+            UserEventArgs args = null;
+
+            var feap = new FrontEndAccessPoint (container);
+            feap.OnUserJoinEvent += (UserEventArgs e) => args = e;
+            var task = feap.SignInToLiveEventAsync (VALID_GUID, VALID_STRING);
+            Exception exc = null;
+            try {
+                task.Wait();
+            } catch (Exception ex) {
+                exc = ex.InnerException;
+            }
+            Assert.That(exc, Is.InstanceOf(typeof(AuthenticationException)));
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidIdException))]
+        public void SignInToLiveEvent_EventRepoThrowsException_ValidUserName_Subscribed_ThrowsException()
+        {
+            var user = A.Dummy<User>();
+            var evnt = A.Dummy<Event>();
+            A.CallTo (() => userRepo.GetByUsername (A<string>.Ignored)).Returns (user);
+            A.CallTo (() => eventRepo.GetById (INVALID_GUID)).Throws<InvalidIdException> ();
+            A.CallTo (() => auth.AuthenticateUserToViewEvent (user, evnt)).Returns (false);
+            UserEventArgs args = null;
+
+            var feap = new FrontEndAccessPoint (container);
+            feap.OnUserJoinEvent += (UserEventArgs e) => args = e;
+            var task = feap.SignInToLiveEventAsync (INVALID_GUID, VALID_STRING);
+            try {
+                task.Wait();
+            } catch (Exception ex) {
+                throw ex.InnerException;
+            }
+
+
+        }
+
+
 	}
 }
 
