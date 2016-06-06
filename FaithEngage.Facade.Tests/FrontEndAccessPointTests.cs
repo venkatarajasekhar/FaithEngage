@@ -219,6 +219,27 @@ namespace FaithEngage.Facade.Tests
 			Assert.That (action.Parameters, Is.EqualTo (paramsDict));
 			Assert.That (action.OriginatingDisplayUnit, Is.EqualTo (duId));
 			Assert.That (action.User, Is.EqualTo (user));
+			Assert.That (task.Exception, Is.Null);
+		}
+
+		[Test]
+		public void ExecuteCardActionAsync_userRepoThrowsException_Throws ()
+		{
+			A.CallTo (() => userRepo.GetByUsername (A<string>.Ignored)).Throws<Exception> ();
+			var actionName = VALID_STRING;
+			var paramsDict = new Dictionary<string,string> () {
+				{ "first", "First String" },
+				{ "second", "Second String" }
+			};
+			var duId = VALID_GUID;
+			var userName = VALID_STRING;
+			var user = A.Dummy<User> ();
+			var feap = new FrontEndAccessPoint (container);
+			feap.ExecuteCardActionAsync (actionName, paramsDict, duId, userName);
+			var task = feap.ExecuteCardActionAsync (actionName, paramsDict, duId, userName);
+
+			A.CallTo (() => processor.ExecuteCardAction (A<CardAction>.Ignored)).MustNotHaveHappened ();
+			Assert.That (task.Exception, Is.Not.Null);
 		}
 
 	}
