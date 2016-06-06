@@ -11,6 +11,7 @@ using FaithEngage.Facade.Delegates;
 using FaithEngage.Core.Events;
 using FaithEngage.Facade.Interfaces;
 using FaithEngage.Core.Exceptions;
+using System.Collections.Generic;
 
 namespace FaithEngage.Facade.Tests
 {
@@ -41,6 +42,53 @@ namespace FaithEngage.Facade.Tests
 			A.CallTo (() => container.Resolve<IUserRepoManager> ()).Returns (userRepo);
 			A.CallTo (() => container.Resolve<IEventRepoManager> ()).Returns (eventRepo);
 		}
+
+		[Test]
+		public void OnPushNewCard_EventPassesFrom_CardProcessor()
+		{
+			var feap = new FrontEndAccessPoint (container);
+			CardEventArgs ReceivedArgs = null;
+			CardEventArgs sentArgs = new CardEventArgs ();
+			sentArgs.DisplayUnitId = VALID_GUID;
+			sentArgs.EventId = VALID_GUID;
+			feap.OnPushNewCard += (CardEventArgs e) => ReceivedArgs = e;
+
+			processor.onPushCard += Raise.With<PushPullEventHandler> (sentArgs);
+
+			Assert.That(ReceivedArgs, Is.EqualTo(sentArgs));
+		}
+
+		[Test]
+		public void OnPullhCard_EventPassesFrom_CardProcessor()
+		{
+			var feap = new FrontEndAccessPoint (container);
+			CardEventArgs ReceivedArgs = null;
+			CardEventArgs sentArgs = new CardEventArgs ();
+			sentArgs.DisplayUnitId = VALID_GUID;
+			sentArgs.EventId = VALID_GUID;
+			feap.OnPullCard += (CardEventArgs e) => ReceivedArgs = e;
+
+			processor.onPullCard += Raise.With<PushPullEventHandler> (sentArgs);
+
+			Assert.That(ReceivedArgs, Is.EqualTo(sentArgs));
+		}
+
+		[Test]
+		public void OnReRenderCard_EventPassesFrom_CardProcessor()
+		{
+			var feap = new FrontEndAccessPoint (container);
+			CardEventArgs ReceivedArgs = null;
+			CardEventArgs sentArgs = new CardEventArgs ();
+			sentArgs.DisplayUnitId = VALID_GUID;
+			sentArgs.EventId = VALID_GUID;
+			feap.OnCardReRender += (CardEventArgs e) => ReceivedArgs = e;
+
+			processor.onReRenderCard += Raise.With<PushPullEventHandler> (sentArgs);
+
+			Assert.That(ReceivedArgs, Is.EqualTo(sentArgs));
+		}
+
+
 
 		[Test]
 		public void SignInToLiveEventAsync_ValidIdAndUsername_Authenticated_Subscribed_ValidArrayOfDTOs ()
@@ -123,7 +171,55 @@ namespace FaithEngage.Facade.Tests
             }
         }
 
+		[Test]
+		[ExpectedException(typeof(InvalidIdException))]
+		public void SignInToLiveEventAsync_CPThrowsException_Throws()
+		{
+			var user = A.Dummy<User>();
+			var evnt = A.Dummy<Event>();
+			A.CallTo (() => userRepo.GetByUsername (INVALID_STRING)).Returns (user);
+			A.CallTo (() => eventRepo.GetById (VALID_GUID)).Returns (evnt);
+			A.CallTo (() => auth.AuthenticateUserToViewEvent (user, evnt)).Returns (true);
+			A.CallTo (() => processor.GetLiveCardsByEvent (A<Guid>.Ignored)).Throws<InvalidIdException> ();
+			UserEventArgs args = null;
 
+			var feap = new FrontEndAccessPoint (container);
+			feap.OnUserJoinEvent += (UserEventArgs e) => args = e;
+			var task = feap.SignInToLiveEventAsync (VALID_GUID, INVALID_STRING);
+			try {
+				task.Wait();
+			} catch (Exception ex) {
+				throw ex.InnerException;
+			}
+		}
+
+		[Test]
+		public void ExecuteCardActionAsync_ValidParams_ExecutesCorrectly()
+		{
+			var actionName = VALID_STRING;
+			var paramsDict = new Dictionary<string,string> () {
+				{ "first", "First String" },
+				{ "second", "Second String" }
+			};
+			var duId = VALID_GUID;
+			var userName = VALID_STRING;
+			var user = A.Dummy<User> ();
+			CardAction action = null;
+
+			var feap = new FrontEndAccessPoint (container);
+			A.CallTo (() => userRepo.GetByUsername (VALID_STRING)).Returns (user);
+			A.CallTo (() => processor.ExecuteCardAction (A<CardAction>.Ignored))
+				.Invokes ((CardAction a) => action = a);
+
+			var task = feap.ExecuteCardActionAsync (actionName, paramsDict, duId, userName);
+			task.Wait ();
+			A.CallTo (() => processor.ExecuteCardAction (A<CardAction>.Ignored)).MustHaveHappened ();
+			Assert.That (action, Is.Not.Null);
+			Assert.That (action.ActionName, Is.EqualTo (actionName));
+			Assert.That (action.Parameters, Is.EqualTo (paramsDict));
+			Assert.That (action.OriginatingDisplayUnit, Is.EqualTo (duId));
+			Assert.That (action.User, Is.EqualTo (user));
+		}
 
 	}
 }
