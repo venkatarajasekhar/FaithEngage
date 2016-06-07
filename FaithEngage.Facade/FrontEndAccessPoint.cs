@@ -69,7 +69,7 @@ namespace FaithEngage.Facade
 				OriginatingDisplayUnit = originatingDisplayUnit,
                 User = user
 			};	
-			_cp.ExecuteCardAction (action);
+			_cp.ExecuteCardActionAsync (action);
 		}
 	}
 }

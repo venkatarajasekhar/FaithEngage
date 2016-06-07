@@ -2,6 +2,7 @@
 using FaithEngage.Core.Cards;
 using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.DisplayUnits.Interfaces;
+using System.Threading.Tasks;
 
 namespace FaithEngage.Core.CardProcessor
 {
@@ -19,7 +20,7 @@ namespace FaithEngage.Core.CardProcessor
 
 		void PushNewCard (DisplayUnitDTO newDto, IDisplayUnitFactory factory);
 		void PullCard (Guid displayUnitId);
-		void ExecuteCardAction (CardAction action);
+		void ExecuteCardActionAsync (CardAction action);
 	}
 }
 

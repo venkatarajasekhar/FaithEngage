@@ -5,6 +5,8 @@ using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.Cards.Interfaces;
 using FaithEngage.Core.ActionProcessors;
+using FaithEngage.Core.ActionProcessors.Interfaces;
+using System.Threading.Tasks;
 
 namespace FaithEngage.Core.CardProcessor
 {
@@ -18,13 +20,13 @@ namespace FaithEngage.Core.CardProcessor
     {
         private readonly IDisplayUnitsRepoManager _duRepoMgr;
         private readonly ICardDTOFactory _cardFactory;
-		private readonly CardActionProcessor _cap;
+		private readonly ICardActionProcessor _cap;
 
         public event PushPullEventHandler onPushCard;
         public event PushPullEventHandler onPullCard;
 		public event PushPullEventHandler onReRenderCard;
 
-		public CardProcessor (IDisplayUnitsRepoManager duRepoMgr, ICardDTOFactory cardFactory, CardActionProcessor cap)
+		public CardProcessor (IDisplayUnitsRepoManager duRepoMgr, ICardDTOFactory cardFactory, ICardActionProcessor cap)
         {
 			_duRepoMgr = duRepoMgr;
 			_cardFactory = cardFactory;
@@ -36,7 +38,9 @@ namespace FaithEngage.Core.CardProcessor
 		{
 			if (!e.DestinationDisplayUnit.HasValue)
 				return;
-			var du = _duRepoMgr.GetById (e.DestinationDisplayUnit.Value);
+			var du = (sender.Id == e.DestinationDisplayUnit) 
+				? sender 
+				: _duRepoMgr.GetById (e.DestinationDisplayUnit.Value);
 			if (du == null)
 				return;
 			var card = du.GetCard ();
@@ -99,9 +103,9 @@ namespace FaithEngage.Core.CardProcessor
 			pullCard (args);
         }
 
-		public void ExecuteCardAction(CardAction action)
+		public async void ExecuteCardActionAsync(CardAction action)
 		{
-			_cap.ExecuteCardAction (action);
+			await Task.Run(()=>_cap.ExecuteCardAction (action));
 		}
 
 		private CardEventArgs createCardEventArgs (RenderableCardDTO card){

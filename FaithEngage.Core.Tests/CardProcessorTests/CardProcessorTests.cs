@@ -8,7 +8,7 @@ using FaithEngage.Core.Cards;
 using System.Collections.Generic;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.Cards.Interfaces;
-using FaithEngage.Core.ActionProcessors;
+using FaithEngage.Core.ActionProcessors.Interfaces;
 
 namespace FaithEngage.Core.CardProcessor
 {
@@ -17,7 +17,7 @@ namespace FaithEngage.Core.CardProcessor
     {
         private IDisplayUnitsRepoManager _mgr;
         private ICardDTOFactory _cardFactory;
-		private CardActionProcessor _cap;
+		private ICardActionProcessor _cap;
         private Guid VALID_GUID = Guid.NewGuid();
         private Guid INVALID_GUID = Guid.NewGuid ();
 
@@ -27,7 +27,7 @@ namespace FaithEngage.Core.CardProcessor
         {
             _mgr = A.Fake<IDisplayUnitsRepoManager> ();
             _cardFactory = A.Fake<ICardDTOFactory> ();
-			_cap = new CardActionProcessor (_mgr);
+			_cap = A.Fake<ICardActionProcessor>();
         }
 
         [Test]
@@ -245,7 +245,17 @@ namespace FaithEngage.Core.CardProcessor
 			cp.PullCard (VALID_GUID);
 		}
 
-
+		[Test]
+		public void ExecuteCardAction_ExcecutesCorrectly()
+		{
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var action = new CardAction ();
+			CardAction receivedAction = null;
+			A.CallTo (() => _cap.ExecuteCardAction (action)).Invokes ((CardAction a) => receivedAction = a);
+			cp.ExecuteCardActionAsync (action);
+			A.CallTo (() => _cap.ExecuteCardAction (action)).MustHaveHappened ();
+			Assert.That (receivedAction, Is.EqualTo (action));
+		}
 
     }
 }

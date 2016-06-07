@@ -208,12 +208,12 @@ namespace FaithEngage.Facade.Tests
 
 			var feap = new FrontEndAccessPoint (container);
 			A.CallTo (() => userRepo.GetByUsername (VALID_STRING)).Returns (user);
-			A.CallTo (() => processor.ExecuteCardAction (A<CardAction>.Ignored))
+			A.CallTo (() => processor.ExecuteCardActionAsync (A<CardAction>.Ignored))
 				.Invokes ((CardAction a) => action = a);
 
 			var task = feap.ExecuteCardActionAsync (actionName, paramsDict, duId, userName);
 			task.Wait ();
-			A.CallTo (() => processor.ExecuteCardAction (A<CardAction>.Ignored)).MustHaveHappened ();
+			A.CallTo (() => processor.ExecuteCardActionAsync (A<CardAction>.Ignored)).MustHaveHappened ();
 			Assert.That (action, Is.Not.Null);
 			Assert.That (action.ActionName, Is.EqualTo (actionName));
 			Assert.That (action.Parameters, Is.EqualTo (paramsDict));
@@ -238,7 +238,7 @@ namespace FaithEngage.Facade.Tests
 			feap.ExecuteCardActionAsync (actionName, paramsDict, duId, userName);
 			var task = feap.ExecuteCardActionAsync (actionName, paramsDict, duId, userName);
 
-			A.CallTo (() => processor.ExecuteCardAction (A<CardAction>.Ignored)).MustNotHaveHappened ();
+			A.CallTo (() => processor.ExecuteCardActionAsync (A<CardAction>.Ignored)).MustNotHaveHappened ();
 			Assert.That (task.Exception, Is.Not.Null);
 		}
 
