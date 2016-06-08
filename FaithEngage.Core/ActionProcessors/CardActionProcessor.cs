@@ -23,6 +23,7 @@ namespace FaithEngage.Core.ActionProcessors
 			du.OnCardActionResult += Du_OnCardActionResult;
 			_awaitingResponse.Add (du);
 			du.ExecuteCardAction (action);
+			_repo.SaveOneToEvent(du);
 		}
 
 		void Du_OnCardActionResult (DisplayUnit sender, CardActionResultArgs e)

@@ -246,7 +246,7 @@ namespace FaithEngage.Core.CardProcessor
 		}
 
 		[Test]
-		public void ExecuteCardAction_ExcecutesCorrectly()
+		public void ExecuteCardActionAsync_ExcecutesCorrectly()
 		{
 			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
 			var action = new CardAction ();

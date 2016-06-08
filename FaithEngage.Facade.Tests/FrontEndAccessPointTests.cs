@@ -235,9 +235,7 @@ namespace FaithEngage.Facade.Tests
 			var userName = VALID_STRING;
 			var user = A.Dummy<User> ();
 			var feap = new FrontEndAccessPoint (container);
-			feap.ExecuteCardActionAsync (actionName, paramsDict, duId, userName);
 			var task = feap.ExecuteCardActionAsync (actionName, paramsDict, duId, userName);
-
 			A.CallTo (() => processor.ExecuteCardActionAsync (A<CardAction>.Ignored)).MustNotHaveHappened ();
 			Assert.That (task.Exception, Is.Not.Null);
 		}
