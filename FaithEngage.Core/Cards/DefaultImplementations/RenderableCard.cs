@@ -24,7 +24,7 @@ namespace FaithEngage.Core.Cards.DefaultImplementations
             set;
         }
 			
-		public IRenderableCard ReRender (CardActionResultArgs args)
+		virtual public IRenderableCard ReRender (CardActionResultArgs args)
 		{
 			return this;
 		}
