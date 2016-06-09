@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using FaithEngage.Core.Cards;
+using FaithEngage.Core.Cards.Interfaces;
 using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.DisplayUnits.Interfaces;
+using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FakeItEasy;
 using NUnit.Framework;
+using FaithEngage.Core.CardProcessor;
 
 namespace FaithEngage.Core.ActionProcessors
 {
 	[TestFixture]
 	public class CardActionProcessorTests
-	{
-		IDisplayUnitsRepoManager _repo;
-		Guid VALID_GUID = Guid.NewGuid();
-		[SetUp]
+    {
+        IDisplayUnitsRepoManager _repo;
+		public Guid VALID_GUID = Guid.NewGuid();
+		
+        [SetUp]
 		public void init()
 		{
 			_repo = A.Fake<IDisplayUnitsRepoManager>();
@@ -41,10 +45,15 @@ namespace FaithEngage.Core.ActionProcessors
 			cap.OnCardActionResult += (sender, e) => { receivedDu = sender; receivedArgs = e; };
 			cap.ExecuteCardAction(action);
 			du.OnCardActionResult += Raise.With<CardActionResultEventHandler>(du, sentArgs);
-
 			Assert.That(receivedAction, Is.EqualTo(action));
 			Assert.That(receivedDu, Is.EqualTo(du));
 			Assert.That(receivedArgs, Is.EqualTo(sentArgs));
 		}
+
+        [Test]
+        public void ExecuteCardAction_EncountersException_ThrowsException_NoEvent()
+        {
+            
+        }
 	}
 }

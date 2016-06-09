@@ -103,7 +103,7 @@ namespace FaithEngage.Core.CardProcessor
 			pullCard (args);
         }
 
-		public async void ExecuteCardActionAsync(CardAction action)
+		public async Task ExecuteCardActionAsync(CardAction action)
 		{
 			await Task.Run(()=>_cap.ExecuteCardAction (action));
 		}

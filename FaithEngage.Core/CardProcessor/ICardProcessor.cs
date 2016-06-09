@@ -20,7 +20,7 @@ namespace FaithEngage.Core.CardProcessor
 
 		void PushNewCard (DisplayUnitDTO newDto, IDisplayUnitFactory factory);
 		void PullCard (Guid displayUnitId);
-		void ExecuteCardActionAsync (CardAction action);
+		Task ExecuteCardActionAsync (CardAction action);
 	}
 }
 

@@ -119,7 +119,7 @@ namespace FaithEngage.Core.DisplayUnits
         {
         }
 
-		public event CardActionResultEventHandler OnCardActionResult;
+        public virtual event CardActionResultEventHandler OnCardActionResult;
 
         public DisplayUnitGrouping? UnitGroup {get;set;}
 

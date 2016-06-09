@@ -19,11 +19,11 @@ namespace FaithEngage.Core.ActionProcessors
 
 		public void ExecuteCardAction(CardAction action)
 		{
-			var du = _repo.GetById (action.OriginatingDisplayUnit);
-			du.OnCardActionResult += Du_OnCardActionResult;
-			_awaitingResponse.Add (du);
-			du.ExecuteCardAction (action);
-			_repo.SaveOneToEvent(du);
+            var du = _repo.GetById (action.OriginatingDisplayUnit);
+            du.OnCardActionResult += Du_OnCardActionResult;
+            _awaitingResponse.Add (du);
+            du.ExecuteCardAction (action);
+            _repo.SaveOneToEvent (du);			
 		}
 
 		void Du_OnCardActionResult (DisplayUnit sender, CardActionResultArgs e)
@@ -31,6 +31,11 @@ namespace FaithEngage.Core.ActionProcessors
 			OnCardActionResult (sender, e);
 			_awaitingResponse = _awaitingResponse.Where (x => x.Id != sender.Id).ToList ();
 		}
+
+        void removeDu(DisplayUnit du)
+        {
+            
+        }
 
 		public event CardActionResultEventHandler OnCardActionResult;
 

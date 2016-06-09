@@ -252,8 +252,9 @@ namespace FaithEngage.Core.CardProcessor
 			var action = new CardAction ();
 			CardAction receivedAction = null;
 			A.CallTo (() => _cap.ExecuteCardAction (action)).Invokes ((CardAction a) => receivedAction = a);
-			cp.ExecuteCardActionAsync (action);
-			A.CallTo (() => _cap.ExecuteCardAction (action)).MustHaveHappened ();
+			var task = cp.ExecuteCardActionAsync (action);
+            task.Wait ();
+            A.CallTo (() => _cap.ExecuteCardAction (action)).MustHaveHappened ();
 			Assert.That (receivedAction, Is.EqualTo (action));
 		}
 
