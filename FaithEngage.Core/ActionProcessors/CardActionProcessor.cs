@@ -32,11 +32,6 @@ namespace FaithEngage.Core.ActionProcessors
 			_awaitingResponse = _awaitingResponse.Where (x => x.Id != sender.Id).ToList ();
 		}
 
-        void removeDu(DisplayUnit du)
-        {
-            
-        }
-
 		public event CardActionResultEventHandler OnCardActionResult;
 
 	}
