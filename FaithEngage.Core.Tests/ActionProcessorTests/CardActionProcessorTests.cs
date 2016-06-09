@@ -53,7 +53,33 @@ namespace FaithEngage.Core.ActionProcessors
         [Test]
         public void ExecuteCardAction_EncountersException_ThrowsException_NoEvent()
         {
-            
+			Exception thrownEx = null;
+			var action = new CardAction();
+			A.CallTo(() => _repo.SaveOneToEvent(A<DisplayUnit>.Ignored)).Throws<Exception>();
+			var du = A.Fake<DisplayUnit>();
+			DisplayUnit receivedDu = null;
+			CardActionResultArgs receivedArgs = null;
+			CardActionResultArgs sentArgs = new CardActionResultArgs();
+			sentArgs.Responses = new Dictionary<string, string>()
+			{
+				{"Test1", "Hi!"}
+			};
+
+			var cap = new CardActionProcessor(_repo);
+			cap.OnCardActionResult += (sender, e) => { receivedDu = sender; receivedArgs = e; };
+			try
+			{
+				cap.ExecuteCardAction(action);
+			}
+			catch (Exception ex)
+			{
+				thrownEx = ex;
+			}
+			du.OnCardActionResult += Raise.With<CardActionResultEventHandler>(du, sentArgs);
+
+			Assert.That(receivedDu, Is.Null);
+			Assert.That(receivedArgs, Is.Null);
+			Assert.That(thrownEx, Is.Not.Null);
         }
 	}
 }

@@ -19,17 +19,35 @@ namespace FaithEngage.Core.ActionProcessors
 
 		public void ExecuteCardAction(CardAction action)
 		{
-            var du = _repo.GetById (action.OriginatingDisplayUnit);
-            du.OnCardActionResult += Du_OnCardActionResult;
-            _awaitingResponse.Add (du);
-            du.ExecuteCardAction (action);
-            _repo.SaveOneToEvent (du);			
+			DisplayUnit du = null;
+			try
+			{
+				du = _repo.GetById(action.OriginatingDisplayUnit);
+				du.OnCardActionResult += Du_OnCardActionResult;
+				_awaitingResponse.Add(du);
+				du.ExecuteCardAction(action);
+				_repo.SaveOneToEvent(du);
+			}
+			catch (Exception ex)
+			{
+				if (du != null)
+				{
+					du.OnCardActionResult -= Du_OnCardActionResult;
+					flushDisplayUnit(du);
+				}
+				throw ex;
+			}
 		}
 
 		void Du_OnCardActionResult (DisplayUnit sender, CardActionResultArgs e)
 		{
-			OnCardActionResult (sender, e);
-			_awaitingResponse = _awaitingResponse.Where (x => x.Id != sender.Id).ToList ();
+			flushDisplayUnit(sender);
+			OnCardActionResult?.Invoke(sender, e);
+		}
+
+		void flushDisplayUnit(DisplayUnit unit)
+		{
+			_awaitingResponse = _awaitingResponse.Where(x => x.Id != unit.Id).ToList();
 		}
 
 		public event CardActionResultEventHandler OnCardActionResult;
