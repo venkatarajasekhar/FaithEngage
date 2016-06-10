@@ -9,6 +9,7 @@ using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
+using FaithEngage.Core.RepoInterfaces;
 
 namespace FaithEngage.Core.RepoManagers
 {

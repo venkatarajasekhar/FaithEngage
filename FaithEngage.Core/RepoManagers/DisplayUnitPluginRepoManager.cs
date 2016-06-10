@@ -4,6 +4,7 @@ using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 using System.Collections.Generic;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.Exceptions;
+using FaithEngage.Core.RepoInterfaces;
 
 namespace FaithEngage.Core.RepoManagers
 {

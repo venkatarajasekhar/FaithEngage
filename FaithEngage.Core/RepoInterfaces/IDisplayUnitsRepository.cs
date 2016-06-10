@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using FaithEngage.Core.DisplayUnits;
 
-namespace FaithEngage.Core.Interfaces
+namespace FaithEngage.Core.RepoInterfaces
 {
     public interface IDisplayUnitsRepository
     {

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using FaithEngage.Core.Exceptions;
-using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 
-namespace FaithEngage.Core.PluginManagers.PluginContainers
+namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
 {
-    public class DisplayUnitPluginContainer : IDisplayUnitPluginContainer
+	public class DisplayUnitPluginContainer : IDisplayUnitPluginContainer
     {
 
         private readonly Dictionary<Guid,DisplayUnitPlugin> _registry = 

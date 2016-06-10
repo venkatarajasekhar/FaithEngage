@@ -2,14 +2,13 @@
 using NUnit.Framework;
 using FakeItEasy;
 using FaithEngage.Core.Exceptions;
-using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
-using FaithEngage.Core.PluginManagers.PluginContainers;
 using FaithEngage.Core.DisplayUnits;
 using System.Collections.Generic;
+using FaithEngage.Core.Tests;
 
-namespace FaithEngage.Core.Tests
+namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
 {
-    [TestFixture]
+	[TestFixture]
     public class DisplayUnitPluginContainerTests
     {
         private DisplayUnitPlugin _plgn;

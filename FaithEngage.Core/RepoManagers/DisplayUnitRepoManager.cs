@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Exceptions;
-using FaithEngage.Core.Interfaces;
 using FaithEngage.Core.DisplayUnits;
-
+using FaithEngage.Core.RepoInterfaces;
 
 namespace FaithEngage.Core.RepoManagers
 {
-    public class DisplayUnitsRepoManager : IDisplayUnitsRepoManager
+	public class DisplayUnitsRepoManager : IDisplayUnitsRepoManager
     {
         private readonly IDisplayUnitsRepository _duRepo;
         private readonly IDisplayUnitFactory _factory;

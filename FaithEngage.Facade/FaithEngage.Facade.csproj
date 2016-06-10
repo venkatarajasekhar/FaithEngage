@@ -38,6 +38,7 @@
     <Compile Include="Delegates\UserEventArgs.cs" />
     <Compile Include="Authenticator.cs" />
     <Compile Include="Interfaces\IAuthenticator.cs" />
+    <Compile Include="Bootloader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

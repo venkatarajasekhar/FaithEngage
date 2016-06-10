@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 
-namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces
+namespace FaithEngage.Core.RepoInterfaces
 {
     public interface IDisplayUnitPluginRepository
     {
