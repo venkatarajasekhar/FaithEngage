@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.ActionProcessors.Interfaces;
+using FaithEngage.Core.ActionProcessors;
 
 namespace FaithEngage.Core
 {
@@ -17,7 +18,7 @@ namespace FaithEngage.Core
 
         public void RegisterDependencies (IContainer container)
         {
-            container.Register<ICardActionProcessor, ICardActionProcessor> (LifeCycle.Singleton);
+            container.Register<ICardActionProcessor, CardActionProcessor> (LifeCycle.Singleton);
         }
     }
 }
