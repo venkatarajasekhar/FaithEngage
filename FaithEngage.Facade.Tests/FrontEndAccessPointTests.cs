@@ -12,6 +12,7 @@ using FaithEngage.Core.Events;
 using FaithEngage.Facade.Interfaces;
 using FaithEngage.Core.Exceptions;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FaithEngage.Facade.Tests
 {
@@ -231,13 +232,20 @@ namespace FaithEngage.Facade.Tests
 				{ "first", "First String" },
 				{ "second", "Second String" }
 			};
-			var duId = VALID_GUID;
+            Exception e = null;
+            var duId = VALID_GUID;
 			var userName = VALID_STRING;
 			var user = A.Dummy<User> ();
 			var feap = new FrontEndAccessPoint (container);
-			var task = feap.ExecuteCardActionAsync (actionName, paramsDict, duId, userName);
-			A.CallTo (() => processor.ExecuteCardActionAsync (A<CardAction>.Ignored)).MustNotHaveHappened ();
-			Assert.That (task.Exception, Is.Not.Null);
+            Task task;
+            try {
+                task = feap.ExecuteCardActionAsync (actionName, paramsDict, duId, userName);
+                task.Wait ();
+            } catch (Exception ex) {
+                e = ex;
+            }
+            A.CallTo (() => processor.ExecuteCardActionAsync (A<CardAction>.Ignored)).MustNotHaveHappened ();
+            Assert.That (e, Is.Not.Null);
 		}
 
 	}

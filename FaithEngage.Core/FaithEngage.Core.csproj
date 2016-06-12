@@ -123,7 +123,7 @@
     <Compile Include="RepoInterfaces\IDisplayUnitsRepository.cs" />
     <Compile Include="DisplayUnits\DisplayUnitBootstrapper.cs" />
     <Compile Include="Factories\IAppFactory.cs" />
-    <Compile Include="Factories\FEFactory.cs" />
+    <Compile Include="Factories\AppFactory.cs" />
     <Compile Include="CardProcessor\CardProcessorBootstrapper.cs" />
     <Compile Include="Cards\CardBootstrapper.cs" />
     <Compile Include="RepoInterfaces\IEventRepository.cs" />
@@ -132,6 +132,7 @@
     <Compile Include="ActionProcessors\ActionProcessorsBootstrapper.cs" />
     <Compile Include="RepoManagers\EventRepoManager.cs" />
     <Compile Include="Events\EventBootstrapper.cs" />
+    <Compile Include="Factories\FEFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using System;
+using FaithEngage.Core.Containers;
 
 namespace FaithEngage.Core.PluginManagers
 {
@@ -31,7 +32,8 @@ namespace FaithEngage.Core.PluginManagers
 
         abstract public int[] PluginVersion{ get;}
 
-        public IBootstrapper Bootstrapper { get; set;}
+        abstract public void Initialize (IContainer container);
+        abstract public void RegisterDependencies (IContainer container);
 
         protected Plugin(){}
 

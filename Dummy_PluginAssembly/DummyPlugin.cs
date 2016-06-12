@@ -2,7 +2,7 @@
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.DisplayUnits;
 using FakeItEasy;
-
+using FaithEngage.Core.Containers;
 
 namespace Dummy_PluginAssembly
 {
@@ -25,7 +25,18 @@ namespace Dummy_PluginAssembly
 		{
 			throw new NotImplementedException ();
 		}
-		public override Type DisplayUnitType {
+
+        public override void Initialize (IContainer container)
+        {
+            throw new NotImplementedException ();
+        }
+
+        public override void RegisterDependencies (IContainer container)
+        {
+            throw new NotImplementedException ();
+        }
+
+        public override Type DisplayUnitType {
 			get {
 				return typeof(DisplayUnit);
 			}

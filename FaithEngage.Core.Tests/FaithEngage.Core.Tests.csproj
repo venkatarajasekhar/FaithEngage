@@ -59,6 +59,8 @@
     <Folder Include="PluginManagersTests\PluginContainersTests\" />
     <Folder Include="RepoManagersTests\" />
     <Folder Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\" />
+    <Folder Include="BootstrappersTests\" />
+    <Folder Include="FactoriesTests\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DummyTypes\Dummies.cs" />
@@ -78,6 +80,8 @@
     <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\DisplayUnitPluginDtoFactoryTests.cs" />
     <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\DisplayUnitPluginFactoryTests.cs" />
     <Compile Include="ActionProcessorTests\CardActionProcessorTests.cs" />
+    <Compile Include="BootstrappersTests\FaithEngageBootLoaderTests.cs" />
+    <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\DisplayUnitPluginBootstrapperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">

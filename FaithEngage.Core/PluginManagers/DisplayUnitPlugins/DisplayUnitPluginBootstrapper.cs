@@ -7,15 +7,15 @@ using FaithEngage.Core.RepoManagers;
 
 namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
 {
-	internal class DisplayUnitPluginBootstrapper : IBootstrapper
+	public class DisplayUnitPluginBootstrapper : IBootstrapper
 	{
 		public void Execute(IContainer container)
 		{
 			var pluginContainer = container.Resolve<IDisplayUnitPluginContainer>();
 			var repoManager = container.Resolve<IDisplayUnitPluginRepoManager>();
 			foreach (var plugin in repoManager.GetAll()) {
-                plugin.Bootstrapper?.RegisterDependencies (container);
-                plugin.Bootstrapper?.Execute (container);
+                plugin.RegisterDependencies (container);
+                plugin.Initialize (container);
                 pluginContainer.Register (plugin);
 			}
 		}

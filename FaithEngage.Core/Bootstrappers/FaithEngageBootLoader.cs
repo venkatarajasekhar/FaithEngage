@@ -18,6 +18,7 @@ namespace FaithEngage.Core
 
 		public void RegisterDependencies(IContainer container)
 		{
+            container.Register<IAppFactory, AppFactory> (LifeCycle.Transient);
 		}
 
         public void LoadBootstrappers (IList<IBootstrapper> bootstrappers)
