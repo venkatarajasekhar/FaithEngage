@@ -13,15 +13,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.AppServices", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.AppServices.Tests", "FaithEngage.AppServices.Tests\FaithEngage.AppServices.Tests.csproj", "{2E90B37B-27A5-419A-B05D-071C55701A85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.Plugins", "FaithEngage.Plugins\FaithEngage.Plugins.csproj", "{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.Plugins.Tests", "FaithEngage.Plugins.Tests\FaithEngage.Plugins.Tests.csproj", "{B7CC4797-099B-4871-94BD-30BDD5BEAD41}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dummy_PluginAssembly", "Dummy_PluginAssembly\Dummy_PluginAssembly.csproj", "{DBFA159F-5B91-4A4E-8456-B1CB32C903D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.Facade", "FaithEngage.Facade\FaithEngage.Facade.csproj", "{42B6D9A1-32DA-42D1-A970-6AC9225AD3A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.Facade.Tests", "FaithEngage.Facade.Tests\FaithEngage.Facade.Tests.csproj", "{067BF55C-D3E1-4ADF-AF21-B8B7EBA89967}"
+EndProject
+Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "FaithEngage.Plugins", "FaithEngage.Plugins\FaithEngage.Plugins.csproj", "{23B7D89F-ED1D-431D-85D8-9973CB56005D}"
+EndProject
+Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "FaithEngage.Plugins.Tests", "FaithEngage.Plugins.Tests\FaithEngage.Plugins.Tests.csproj", "{BDFEAC13-B90E-4001-B3C3-990CF56C27A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,21 +57,21 @@ Global
 		{5EEEC5F2-370B-42BA-A6A1-5A43A601DE4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EEEC5F2-370B-42BA-A6A1-5A43A601DE4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EEEC5F2-370B-42BA-A6A1-5A43A601DE4C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B7CC4797-099B-4871-94BD-30BDD5BEAD41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7CC4797-099B-4871-94BD-30BDD5BEAD41}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7CC4797-099B-4871-94BD-30BDD5BEAD41}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7CC4797-099B-4871-94BD-30BDD5BEAD41}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DBFA159F-5B91-4A4E-8456-B1CB32C903D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DBFA159F-5B91-4A4E-8456-B1CB32C903D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBFA159F-5B91-4A4E-8456-B1CB32C903D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBFA159F-5B91-4A4E-8456-B1CB32C903D6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F94B6862-B7CC-4507-BC82-9093F97CDEC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F94B6862-B7CC-4507-BC82-9093F97CDEC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F94B6862-B7CC-4507-BC82-9093F97CDEC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F94B6862-B7CC-4507-BC82-9093F97CDEC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23B7D89F-ED1D-431D-85D8-9973CB56005D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23B7D89F-ED1D-431D-85D8-9973CB56005D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23B7D89F-ED1D-431D-85D8-9973CB56005D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23B7D89F-ED1D-431D-85D8-9973CB56005D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDFEAC13-B90E-4001-B3C3-990CF56C27A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDFEAC13-B90E-4001-B3C3-990CF56C27A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDFEAC13-B90E-4001-B3C3-990CF56C27A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDFEAC13-B90E-4001-B3C3-990CF56C27A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

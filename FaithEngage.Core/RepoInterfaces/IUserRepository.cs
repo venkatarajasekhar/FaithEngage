@@ -1,6 +1,7 @@
 ﻿using System;
+using FaithEngage.Core.UserClasses;
 
-namespace FaithEngage.Core.UserClasses.Interfaces
+namespace FaithEngage.Core.RepoInterfaces
 {
 	public interface IUserRepository
 	{

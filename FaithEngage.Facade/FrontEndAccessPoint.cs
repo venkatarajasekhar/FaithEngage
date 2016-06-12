@@ -19,7 +19,7 @@ namespace FaithEngage.Facade
 		private readonly IContainer _container;
 		private readonly IAuthenticator _auth;
 
-		public FrontEndAccessPoint (IContainer container)
+        public FrontEndAccessPoint (IContainer container)
 		{
 			_container = container;
 			_cp = _container.Resolve<ICardProcessor> ();

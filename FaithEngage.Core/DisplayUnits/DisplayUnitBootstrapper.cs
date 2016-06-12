@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.DisplayUnits.Interfaces;
+using FaithEngage.Core.RepoManagers;
 
 namespace FaithEngage.Core.DisplayUnits
 {
@@ -11,9 +13,14 @@ namespace FaithEngage.Core.DisplayUnits
 			
 		}
 
-		public void RegisterDependencies(IContainer container)
+        public void LoadBootstrappers (IList<IBootstrapper> bootstrappers)
+        {
+        }
+
+        public void RegisterDependencies(IContainer container)
 		{
-			container.Register<IDisplayUnitFactory, DisplayUnitFactory>(LifeCycle.Singleton);
+            container.Register<IDisplayUnitFactory, DisplayUnitFactory>(LifeCycle.Transient);
+            container.Register<IDisplayUnitsRepoManager, DisplayUnitsRepoManager> (LifeCycle.Transient);
 		}
 	}
 }

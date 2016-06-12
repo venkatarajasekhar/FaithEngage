@@ -1,9 +1,8 @@
 ﻿using System;
-using FaithEngage.Core.UserClasses;
 
-namespace FaithEngage.Core
+namespace FaithEngage.Core.UserClasses.Interfaces
 {
-	public interface IOrganizationRepoManager
+    public interface IOrganizationRepoManager
 	{
 		Organization GetById(Guid id);
 		void Update(Organization org);

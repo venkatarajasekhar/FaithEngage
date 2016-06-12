@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
@@ -13,11 +14,17 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
 			var pluginContainer = container.Resolve<IDisplayUnitPluginContainer>();
 			var repoManager = container.Resolve<IDisplayUnitPluginRepoManager>();
 			foreach (var plugin in repoManager.GetAll()) {
-				pluginContainer.Register (plugin);
+                plugin.Bootstrapper?.RegisterDependencies (container);
+                plugin.Bootstrapper?.Execute (container);
+                pluginContainer.Register (plugin);
 			}
 		}
 
-		public void RegisterDependencies(IContainer container)
+        public void LoadBootstrappers (IList<IBootstrapper> bootstrappers)
+        {
+        }
+
+        public void RegisterDependencies(IContainer container)
 		{
 			container.Register<IDisplayUnitPluginContainer, DisplayUnitPluginContainer>(LifeCycle.Singleton);
 			container.Register<IDisplayUnitPluginDtoFactory, DisplayUnitPluginDtoFactory>(LifeCycle.Transient);

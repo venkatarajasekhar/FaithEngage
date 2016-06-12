@@ -39,6 +39,8 @@
     <Compile Include="Authenticator.cs" />
     <Compile Include="Interfaces\IAuthenticator.cs" />
     <Compile Include="Bootloader.cs" />
+    <Compile Include="Initializer.cs" />
+    <Compile Include="Interfaces\IInitializer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

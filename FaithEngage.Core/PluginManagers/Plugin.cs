@@ -31,6 +31,8 @@ namespace FaithEngage.Core.PluginManagers
 
         abstract public int[] PluginVersion{ get;}
 
+        public IBootstrapper Bootstrapper { get; set;}
+
         protected Plugin(){}
 
     }

@@ -2,6 +2,7 @@
 using FaithEngage.Core.UserClasses.Interfaces;
 using FaithEngage.Core.UserClasses;
 using FaithEngage.Core.Exceptions;
+using FaithEngage.Core.RepoInterfaces;
 
 namespace FaithEngage.Core.RepoManagers
 {

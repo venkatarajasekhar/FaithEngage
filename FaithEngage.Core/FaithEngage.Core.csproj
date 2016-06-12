@@ -103,14 +103,11 @@
     <Compile Include="Events\EventSchedule.cs" />
     <Compile Include="Events\Recurrance.cs" />
     <Compile Include="UserClasses\UserPrivileges.cs" />
-    <Compile Include="UserClasses\Interfaces\IUserRepository.cs" />
-    <Compile Include="UserClasses\Interfaces\IOrganizationRepository.cs" />
     <Compile Include="UserClasses\Interfaces\IUserRepoManager.cs" />
     <Compile Include="UserClasses\Interfaces\IOrganizationRepoManager.cs" />
     <Compile Include="RepoManagers\UserRepoManager.cs" />
     <Compile Include="RepoManagers\OrganizationRepoManager.cs" />
     <Compile Include="Events\Event.cs" />
-    <Compile Include="Events\Interfaces\IEventRepository.cs" />
     <Compile Include="Events\Interfaces\IEventRepoManager.cs" />
     <Compile Include="Exceptions\AuthenticationException.cs" />
     <Compile Include="ActionProcessors\CardActionProcessor.cs" />
@@ -125,6 +122,16 @@
     <Compile Include="RepoInterfaces\IDisplayUnitPluginRepository.cs" />
     <Compile Include="RepoInterfaces\IDisplayUnitsRepository.cs" />
     <Compile Include="DisplayUnits\DisplayUnitBootstrapper.cs" />
+    <Compile Include="Factories\IAppFactory.cs" />
+    <Compile Include="Factories\FEFactory.cs" />
+    <Compile Include="CardProcessor\CardProcessorBootstrapper.cs" />
+    <Compile Include="Cards\CardBootstrapper.cs" />
+    <Compile Include="RepoInterfaces\IEventRepository.cs" />
+    <Compile Include="RepoInterfaces\IUserRepository.cs" />
+    <Compile Include="RepoInterfaces\IOrganizationRepository.cs" />
+    <Compile Include="ActionProcessors\ActionProcessorsBootstrapper.cs" />
+    <Compile Include="RepoManagers\EventRepoManager.cs" />
+    <Compile Include="Events\EventBootstrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

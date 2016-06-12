@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using FaithEngage.Core.Events;
 
-namespace FaithEngage.Core.Events.Interfaces
+namespace FaithEngage.Core.RepoInterfaces
 {
 	public interface IEventRepository
 	{
