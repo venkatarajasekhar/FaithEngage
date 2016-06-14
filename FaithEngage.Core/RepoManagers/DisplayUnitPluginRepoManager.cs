@@ -24,7 +24,7 @@ namespace FaithEngage.Core.RepoManagers
 		#region IDisplayUnitPluginRepoManager implementation
 		public Guid RegisterNew (DisplayUnitPlugin plugin)
 		{
-			var id = Guid.NewGuid ();
+			plugin.PluginId = Guid.NewGuid ();
 			var dto = _dtoFactory.ConvertFromPlugin (plugin);
 			return _repo.Register (dto);
 		}

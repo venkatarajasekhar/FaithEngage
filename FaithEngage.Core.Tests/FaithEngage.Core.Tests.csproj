@@ -82,6 +82,7 @@
     <Compile Include="ActionProcessorTests\CardActionProcessorTests.cs" />
     <Compile Include="BootstrappersTests\FaithEngageBootLoaderTests.cs" />
     <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\DisplayUnitPluginBootstrapperTests.cs" />
+    <Compile Include="RepoManagersTests\DisplayUnitPluginRepoManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">
