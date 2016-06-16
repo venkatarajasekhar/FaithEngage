@@ -133,6 +133,7 @@
     <Compile Include="RepoManagers\EventRepoManager.cs" />
     <Compile Include="Events\EventBootstrapper.cs" />
     <Compile Include="Factories\FEFactory.cs" />
+    <Compile Include="Exceptions\PluginIsMissingNecessaryInfoException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

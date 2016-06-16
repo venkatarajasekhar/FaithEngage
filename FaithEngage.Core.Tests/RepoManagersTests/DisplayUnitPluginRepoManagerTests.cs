@@ -1,11 +1,12 @@
 ﻿using System;
+using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 using FaithEngage.Core.RepoInterfaces;
 using FaithEngage.Core.RepoManagers;
 using FakeItEasy;
 using NUnit.Framework;
-namespace FaithEngage.Core.Tests
+namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
 {
 	[TestFixture]
 	public class DisplayUnitPluginRepoManagerTests
@@ -45,6 +46,15 @@ namespace FaithEngage.Core.Tests
 
 			Assert.That(id, Is.EqualTo(VALID_GUID));
 			Assert.That(_plgn.PluginId.HasValue);
+		}
+
+		[Test]
+		[ExpectedException(typeof(PluginIsMissingNecessaryInfoException))]
+		public void RegisterNew_InvalidPlugin_Throws()
+		{
+			A.CallTo(() => _dtoFac.ConvertFromPlugin(_plgn)).Throws<PluginIsMissingNecessaryInfoException>();
+			var mgr = new DisplayUnitPluginRepoManager(_repo, _fac, _dtoFac);
+			var id = mgr.RegisterNew(_plgn);
 		}
 	}
 }

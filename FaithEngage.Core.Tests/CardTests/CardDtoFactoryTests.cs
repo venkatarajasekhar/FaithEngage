@@ -4,11 +4,9 @@ using NUnit.Framework;
 using FakeItEasy;
 using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.Cards.Interfaces;
-using FaithEngage.Core.Cards;
 using System.Collections.Generic;
-using NUnit.Framework.Constraints;
 
-namespace FaithEngage.Core.Tests
+namespace FaithEngage.Core.Cards
 {
 	[TestFixture]
 	public class CardDtoFactoryTests

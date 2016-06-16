@@ -26,7 +26,25 @@ namespace FaithEngage.Core.RepoManagers
 		{
 			plugin.PluginId = Guid.NewGuid ();
 			var dto = _dtoFactory.ConvertFromPlugin (plugin);
-			return _repo.Register (dto);
+			Guid guid;
+			try
+			{
+				guid = _repo.Register(dto);
+			}
+			catch (PluginIsMissingNecessaryInfoException)
+			{
+				throw;
+			}
+			catch (PluginAlreadyRegisteredException)
+			{
+				throw;
+			}
+			catch (RepositoryException ex)
+			{
+				throw new RepositoryException("There was a problem registering this plugin.", ex);
+			}
+			return guid;
+
 		}
 		public void UpdatePlugin (DisplayUnitPlugin plugin)
 		{

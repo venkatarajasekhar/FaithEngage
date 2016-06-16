@@ -1,10 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
 using FakeItEasy;
-using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
-using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories;
 
-namespace FaithEngage.Core.Tests
+namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 {
 	[TestFixture]
 	public class DisplayUnitPluginDtoFactoryTests
@@ -33,6 +31,7 @@ namespace FaithEngage.Core.Tests
 		public void ConvertFromPlugin_ValidPluginWithoutId_ValidPlugin()
 		{
 			var plugin = A.Fake<DisplayUnitPlugin> ();
+
 			A.CallTo (() => plugin.AssemblyLocation).Returns (VALID_STRING);
 			A.CallTo (() => plugin.PluginName).Returns (VALID_STRING);
 			A.CallTo (() => plugin.PluginVersion).Returns (new int[]{ 1, 0, 0 });
