@@ -12,10 +12,12 @@ namespace FaithEngage.Core.RepoManagers
     {
         private readonly IDisplayUnitsRepository _duRepo;
         private readonly IDisplayUnitFactory _factory;
-        public DisplayUnitsRepoManager (IDisplayUnitFactory factory, IDisplayUnitsRepository repo)
+        private readonly IDisplayUnitDtoFactory _dtoFac;
+        public DisplayUnitsRepoManager (IDisplayUnitFactory factory, IDisplayUnitsRepository repo, IDisplayUnitDtoFactory dtoFactory)
         {
             _factory = factory;
             _duRepo = repo;
+            _dtoFac = dtoFactory;
         }
 
         public DisplayUnit GetById (Guid unitId)
@@ -61,7 +63,7 @@ namespace FaithEngage.Core.RepoManagers
                         select new
                         {
                             k = u.Key,
-                            v = convertToDTO(u.Value)
+                            v = _dtoFac.ConvertToDto(u.Value)
                         }).ToDictionary (p => p.k, p => p.v);
             try {
                 _duRepo.SaveManyToEvent (dict, eventId);
@@ -107,7 +109,7 @@ namespace FaithEngage.Core.RepoManagers
 
         public void SaveOneToEvent (DisplayUnit unit)
         {
-            var dto = convertToDTO (unit);
+            var dto = _dtoFac.ConvertToDto(unit);
             try{
                 _duRepo.SaveOneToEvent (dto);
             }catch(InvalidIdException){
@@ -130,7 +132,7 @@ namespace FaithEngage.Core.RepoManagers
 
         public void DuplicateToEvent (DisplayUnit unit)
         {
-            var dto = convertToDTO (unit.Clone ());
+            var dto = _dtoFac.ConvertToDto(unit.Clone ());
             try{
                 _duRepo.SaveOneToEvent (dto);
             }catch(InvalidIdException){
@@ -150,24 +152,6 @@ namespace FaithEngage.Core.RepoManagers
                 throw new RepositoryException("There was a problem deleting this Id.", ex);
             }
         }
-
-        private DisplayUnitDTO convertToDTO(DisplayUnit unit)
-        {
-            var dto = new DisplayUnitDTO (unit.AssociatedEvent, unit.Id);
-            dto.Name = unit.Name;
-            dto.DateCreated = unit.DateCreated;
-            dto.Description = unit.Description;
-			dto.PluginId = unit.Plugin.PluginId.Value;
-            dto.PositionInEvent = unit.PositionInEvent;
-            dto.Attributes = unit.GetAttributes ();
-            if(unit.UnitGroup.HasValue)
-            {
-                dto.PositionInGroup = unit.UnitGroup.Value.Position;
-                dto.GroupId = unit.UnitGroup.Value.Id;
-            }
-            return dto;
-        }
-
 
         public DisplayUnit PushDU (Guid id)
         {

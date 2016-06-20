@@ -39,7 +39,7 @@ namespace FaithEngage.Core.RepoManagers
 			{
 				throw;
 			}
-			catch (RepositoryException ex)
+            catch (Exception ex)
 			{
 				throw new RepositoryException("There was a problem registering this plugin.", ex);
 			}
@@ -52,21 +52,43 @@ namespace FaithEngage.Core.RepoManagers
 				throw new InvalidIdException ("PluginId must not be null");
 			}
 			var dto = _dtoFactory.ConvertFromPlugin (plugin);
-			_repo.Update (dto);
+			try {
+                _repo.Update (dto);
+            } catch (Exception ex) {
+                throw new RepositoryException ("There was a problem updating the plugin: " + plugin.PluginName, ex);
+            }
 		}
 		public void UninstallPlugin (Guid id)
 		{
-			_repo.Delete (id);
+            if (id == Guid.Empty) throw new InvalidIdException ("PluginId must not be an empty guid.");
+            try {
+                _repo.Delete (id);             
+            } catch (Exception ex) {
+                throw new RepositoryException ("There was a problem deleting the specified Id", ex); 
+            }
 		}
 		public IEnumerable<DisplayUnitPlugin> GetAll ()
 		{
-			var dtos = _repo.GetAll ();
+            List<DisplayUnitPluginDTO> dtos;
+            try {
+                dtos = _repo.GetAll ();
+            } catch (Exception ex) {
+                throw new RepositoryException ("There was a problem obtaining plugins from the repository.", ex);
+            }
 			return _factory.LoadPluginsFromDtos (dtos);
 		}
 
 		public DisplayUnitPlugin GetById(Guid id)
 		{
-			var dto = _repo.GetById (id);
+            DisplayUnitPluginDTO dto;
+            try {
+                if (id == Guid.Empty) throw new InvalidIdException ("Empty Guids are not valid Ids.");
+                dto = _repo.GetById (id);
+            } catch (InvalidIdException){
+                throw;
+            } catch (Exception ex) {
+                throw new RepositoryException ("There was a problem accessing the repository.", ex);
+            }
 			return _factory.LoadPluginFromDto (dto);
 		}
 		#endregion

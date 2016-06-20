@@ -83,6 +83,7 @@
     <Compile Include="BootstrappersTests\FaithEngageBootLoaderTests.cs" />
     <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\DisplayUnitPluginBootstrapperTests.cs" />
     <Compile Include="RepoManagersTests\DisplayUnitPluginRepoManagerTests.cs" />
+    <Compile Include="TestHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">

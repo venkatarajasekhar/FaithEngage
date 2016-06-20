@@ -6,6 +6,7 @@ using NUnit.Framework;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
+using FaithEngage.Core.DisplayUnits.Factories;
 
 namespace FaithEngage.Core.DisplayUnits
 {

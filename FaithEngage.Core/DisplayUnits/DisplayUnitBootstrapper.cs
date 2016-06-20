@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FaithEngage.Core.Containers;
+using FaithEngage.Core.DisplayUnits.Factories;
 using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.RepoManagers;
 
@@ -21,6 +22,7 @@ namespace FaithEngage.Core.DisplayUnits
 		{
             container.Register<IDisplayUnitFactory, DisplayUnitFactory>(LifeCycle.Transient);
             container.Register<IDisplayUnitsRepoManager, DisplayUnitsRepoManager> (LifeCycle.Transient);
+            container.Register<IDisplayUnitDtoFactory, DisplayUnitDtoFactory> (LifeCycle.Transient);
 		}
 	}
 }

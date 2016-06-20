@@ -5,7 +5,7 @@ using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 
-namespace FaithEngage.Core.DisplayUnits
+namespace FaithEngage.Core.DisplayUnits.Factories
 {
     public class DisplayUnitFactory : IDisplayUnitFactory
     {
