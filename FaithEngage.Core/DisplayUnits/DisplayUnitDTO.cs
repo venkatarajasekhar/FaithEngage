@@ -19,7 +19,6 @@ namespace FaithEngage.Core.DisplayUnits
                 throw new EmptyGuidException ("Event id was not a valid id");
             AssociatedEvent = eventId;
             Attributes = new Dictionary<string,string> ();
-
         }
 
         public Guid Id {

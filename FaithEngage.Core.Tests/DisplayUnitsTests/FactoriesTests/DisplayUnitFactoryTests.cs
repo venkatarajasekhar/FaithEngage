@@ -4,11 +4,9 @@ using FaithEngage.Core.Exceptions;
 using FakeItEasy;
 using NUnit.Framework;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
-using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
-using FaithEngage.Core.DisplayUnits.Factories;
 
-namespace FaithEngage.Core.DisplayUnits
+namespace FaithEngage.Core.DisplayUnits.Factories
 {
     [TestFixture]
     public class DisplayUnitFactoryTests

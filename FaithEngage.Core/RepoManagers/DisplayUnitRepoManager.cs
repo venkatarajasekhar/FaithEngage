@@ -55,6 +55,7 @@ namespace FaithEngage.Core.RepoManagers
 
         }
 
+		//TODO: Fix this to exclude null values from dto factory.
         public void SaveManyToEvent (Dictionary<int, DisplayUnit> unitsAtPositions, Guid eventId)
         {
             ensurePositions (unitsAtPositions);

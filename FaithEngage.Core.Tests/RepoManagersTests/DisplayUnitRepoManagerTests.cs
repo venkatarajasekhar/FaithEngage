@@ -181,18 +181,40 @@ namespace FaithEngage.Core.RepoManagers
                  duDto.PositionInEvent = u.PositionInEvent;
                  return duDto;
             });
-
-            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
-            mgr.SaveManyToEvent (units, VALID_GUID);
-
-            Assert.That (receivedUnits, Is.Not.Null);
-            Assert.That (receivedUnits.Count == 5);
-            Assert.That (receivedUnits.All (p => p.Value.AssociatedEvent == VALID_GUID));
-            foreach(var key in receivedUnits.Keys.ToArray())
-            {
-                Assert.That (receivedUnits [key].PositionInEvent, Is.EqualTo(key));
-            }
         }
+
+		[Test]
+		public void SaveManyToEvent_FactoryReturnsOneNull_SavesOneFewer()
+		{
+			var dict = new Dictionary<string, string>() {
+				{"AssociatedEvent",VALID_GUID.ToString ()}
+			};
+			var i = 0;
+			var units = Enumerable.Repeat(0, 5).Select(u => A.Fake<DisplayUnit>(
+			   p => p.WithArgumentsForConstructor(new object[] { dict })))
+				.ToDictionary(p => i++, p => p);
+			Dictionary<int, DisplayUnitDTO> receivedUnits = null;
+			A.CallTo(() => _repo.SaveManyToEvent(A<Dictionary<int, DisplayUnitDTO>>.Ignored, VALID_GUID))
+				.Invokes((Dictionary<int, DisplayUnitDTO> p, Guid g) => receivedUnits = p);
+			A.CallTo(() => _dtoFac.ConvertToDto(A<DisplayUnit>.Ignored))
+			 .ReturnsLazily((DisplayUnit u) =>
+			 {
+				 var duDto = new DisplayUnitDTO(u.AssociatedEvent, u.Id);
+				 duDto.PositionInEvent = u.PositionInEvent;
+				 return duDto;
+			 });
+			A.CallTo(() => _dtoFac.ConvertToDto(A<DisplayUnit>.Ignored)).Returns(null).Once();
+			var mgr = new DisplayUnitsRepoManager(_fctry, _repo, _dtoFac);
+			mgr.SaveManyToEvent(units, VALID_GUID);
+
+			Assert.That(receivedUnits, Is.Not.Null);
+			Assert.That(receivedUnits.Count == 4);
+			Assert.That(receivedUnits.All(p => p.Value.AssociatedEvent == VALID_GUID));
+			foreach (var key in receivedUnits.Keys.ToArray())
+			{
+				Assert.That(receivedUnits[key].PositionInEvent, Is.EqualTo(key));
+			}
+		}
 
         [Test]
         [ExpectedException(typeof(InvalidIdException))]
@@ -237,6 +259,7 @@ namespace FaithEngage.Core.RepoManagers
             var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             mgr.SaveManyToEvent (units, INVALID_GUID);
         }
+
 
         [Test]
         public void GetGroup_ValidEventId_ValidGroupId_ReturnsGroupDictionary()

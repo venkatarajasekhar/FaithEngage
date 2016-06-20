@@ -61,6 +61,8 @@
     <Folder Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\" />
     <Folder Include="BootstrappersTests\" />
     <Folder Include="FactoriesTests\" />
+    <Folder Include="DisplayUnitEditorTests\New Folder\" />
+    <Folder Include="DisplayUnitsTests\FactoriesTests\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DummyTypes\Dummies.cs" />
@@ -72,7 +74,6 @@
     <Compile Include="DisplayUnitsTests\DisplayUnitTests.cs" />
     <Compile Include="PluginManagersTests\PluginContainersTests\DisplayUnitPluginContainerTests.cs" />
     <Compile Include="DisplayUnitEditorTests\DisplayUnitEditorDefinitionTests.cs" />
-    <Compile Include="DisplayUnitsTests\DisplayUnitFactoryTests.cs" />
     <Compile Include="RepoManagersTests\DisplayUnitRepoManagerTests.cs" />
     <Compile Include="CardProcessorTests\CardProcessorTests.cs" />
     <Compile Include="CardTests\CardDtoFactoryTests.cs" />
@@ -84,6 +85,8 @@
     <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\DisplayUnitPluginBootstrapperTests.cs" />
     <Compile Include="RepoManagersTests\DisplayUnitPluginRepoManagerTests.cs" />
     <Compile Include="TestHelpers.cs" />
+    <Compile Include="DisplayUnitsTests\FactoriesTests\DisplayUnitFactoryTests.cs" />
+    <Compile Include="DisplayUnitsTests\FactoriesTests\DisplayUnitDtoFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">
