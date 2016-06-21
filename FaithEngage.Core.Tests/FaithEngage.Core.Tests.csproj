@@ -87,6 +87,7 @@
     <Compile Include="TestHelpers.cs" />
     <Compile Include="DisplayUnitsTests\FactoriesTests\DisplayUnitFactoryTests.cs" />
     <Compile Include="DisplayUnitsTests\FactoriesTests\DisplayUnitDtoFactoryTests.cs" />
+    <Compile Include="RepoManagersTests\EventRepoManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">

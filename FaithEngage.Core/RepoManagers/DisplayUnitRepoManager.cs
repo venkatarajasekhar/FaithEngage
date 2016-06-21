@@ -55,17 +55,16 @@ namespace FaithEngage.Core.RepoManagers
 
         }
 
-		//TODO: Fix this to exclude null values from dto factory.
         public void SaveManyToEvent (Dictionary<int, DisplayUnit> unitsAtPositions, Guid eventId)
         {
             ensurePositions (unitsAtPositions);
-            var dict = (
-                        from u in unitsAtPositions
-                        select new
-                        {
-                            k = u.Key,
-                            v = _dtoFac.ConvertToDto(u.Value)
-                        }).ToDictionary (p => p.k, p => p.v);
+			var dict = new Dictionary<int, DisplayUnitDTO>();
+			foreach (var u in unitsAtPositions)
+			{
+				var dto = _dtoFac.ConvertToDto(u.Value);
+				if (dto == null) continue;
+				dict.Add(u.Key, dto);
+			}
             try {
                 _duRepo.SaveManyToEvent (dict, eventId);
             }

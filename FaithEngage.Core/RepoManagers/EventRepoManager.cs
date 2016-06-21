@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FaithEngage.Core.Events;
 using FaithEngage.Core.Events.Interfaces;
+using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.RepoInterfaces;
 namespace FaithEngage.Core.RepoManagers
 {
@@ -14,12 +15,25 @@ namespace FaithEngage.Core.RepoManagers
         }
         public void DeleteEvent (Guid id)
         {
-            _repo.DeleteEvent (id);
+			try
+			{
+				_repo.DeleteEvent(id);
+			}
+			catch (InvalidIdException)
+			{
+				throw;
+			}
+			catch (Exception ex)
+			{
+				throw new RepositoryException("There was a problem deleting id " + id + " from the repository.", ex);
+			}
         }
 
         public List<Event> GetByDate (DateTime date, Guid orgId)
         {
-            return _repo.GetByDate (date, orgId);
+            var evnts = _repo.GetByDate (date, orgId);
+			if (evnts == null) return new List<Event>();
+			return evnts;
         }
 
         public Event GetById (Guid id)
