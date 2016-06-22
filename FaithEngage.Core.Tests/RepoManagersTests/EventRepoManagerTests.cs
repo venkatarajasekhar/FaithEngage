@@ -77,9 +77,93 @@ namespace FaithEngage.Core.Tests
 			Assert.That(evnts.Count, Is.EqualTo(0));
 		}
 
+		[Test]
+		public void GetByDate_InvalidId_ThrowsInvalidIdException()
+		{
+			A.CallTo(() => _repo.GetByDate(A<DateTime>.Ignored, A<Guid>.Ignored)).Throws<InvalidIdException>();
+			var e = TestHelpers.TryGetException(() => mgr.GetByDate(DateTime.Now.Date, INVALID_GUID));
 
+			Assert.That(e, Is.InstanceOf(typeof(InvalidIdException)));
+		}
 
+		[Test]
+		public void GetByDate_RepoThrowsException_ThrowsRepoException()
+		{
+			A.CallTo(() => _repo.GetByDate(A<DateTime>.Ignored, A<Guid>.Ignored)).Throws<Exception>();
+			var e = TestHelpers.TryGetException(() => mgr.GetByDate(DateTime.Now.Date, INVALID_GUID));
 
+			Assert.That(e, Is.InstanceOf(typeof(RepositoryException)));
+		}
+
+		[Test]
+		public void GetById_ValidId_ReturnsValidEvent()
+		{
+			var evnt = new Event()
+			{
+				AssociatedOrg = VALID_GUID,
+				EventDate = DateTime.Now.Date,
+				EventId = VALID_GUID,
+				Schedule = new EventSchedule()
+			};
+			A.CallTo(() => _repo.GetById(VALID_GUID)).Returns(evnt);
+			var receivedEvent = mgr.GetById(VALID_GUID);
+
+			Assert.That(receivedEvent, Is.EqualTo(evnt));
+		}
+
+		[Test]
+		public void GetById_InvalidId_ThrowsInvalidIdException()
+		{
+			A.CallTo(() => _repo.GetById(INVALID_GUID)).Throws<InvalidIdException>();
+			var e = TestHelpers.TryGetException(() => mgr.GetById(INVALID_GUID));
+
+			Assert.That(e, Is.InstanceOf(typeof(InvalidIdException)));
+		}
+
+		[Test]
+		public void GetById_RepoThrowsException_ThrowsRepoException()
+		{
+			A.CallTo(() => _repo.GetById(INVALID_GUID)).Throws<Exception>();
+			var e = TestHelpers.TryGetException(() => mgr.GetById(INVALID_GUID));
+
+			Assert.That(e, Is.InstanceOf(typeof(RepositoryException)));
+		}
+
+		[Test]
+		public void GetByOrgId_ValidId_ReturnsValidEvent()
+		{
+			var evnt = new Event()
+			{
+				AssociatedOrg = VALID_GUID,
+				EventDate = DateTime.Now.Date,
+				EventId = VALID_GUID,
+				Schedule = new EventSchedule()
+			};
+			var evnts = Enumerable.Repeat(evnt, 5).ToList();
+
+			A.CallTo(() => _repo.GetByOrgId(VALID_GUID)).Returns(evnts);
+			var receivedEvents = mgr.GetByOrgId(VALID_GUID);
+
+			Assert.That(receivedEvents, Is.EqualTo(evnts));
+		}
+
+		[Test]
+		public void GetByOrgId_InvalidId_ThrowsInvalidIdException()
+		{
+			A.CallTo(() => _repo.GetByOrgId(INVALID_GUID)).Throws<InvalidIdException>();
+			var e = TestHelpers.TryGetException(() => mgr.GetByOrgId(INVALID_GUID));
+
+			Assert.That(e, Is.InstanceOf(typeof(InvalidIdException)));
+		}
+
+		[Test]
+		public void GetByOrgId_RepoThrowsException_ThrowsRepoException()
+		{
+			A.CallTo(() => _repo.GetByOrgId(INVALID_GUID)).Throws<Exception>();
+			var e = TestHelpers.TryGetException(() => mgr.GetByOrgId(INVALID_GUID));
+
+			Assert.That(e, Is.InstanceOf(typeof(RepositoryException)));
+		}
 	}
 }
 

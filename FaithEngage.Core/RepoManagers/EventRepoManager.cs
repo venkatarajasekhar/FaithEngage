@@ -6,7 +6,7 @@ using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.RepoInterfaces;
 namespace FaithEngage.Core.RepoManagers
 {
-    public class EventRepoManager : IEventRepoManager
+	public class EventRepoManager : IEventRepoManager
     {
         private readonly IEventRepository _repo;
         public EventRepoManager (IEventRepository repo)
@@ -15,9 +15,62 @@ namespace FaithEngage.Core.RepoManagers
         }
         public void DeleteEvent (Guid id)
         {
+			execute(() => _repo.DeleteEvent(id));
+        }
+
+        public List<Event> GetByDate (DateTime date, Guid orgId)
+        {
+			var evnts = execute(() => _repo.GetByDate(date,orgId));
+			if (evnts == null) return new List<Event>();
+			return evnts;
+        }
+
+        public Event GetById (Guid id)
+        {
+			return execute(()=> _repo.GetById (id));
+        }
+
+        public List<Event> GetByOrgId (Guid orgId)
+        {
+			return execute(()=> _repo.GetByOrgId (orgId));
+        }
+
+        public Guid SaveEvent (Event eventToSave)
+        {
+			return execute(()=> _repo.SaveEvent (eventToSave));
+        }
+
+        public void UpdateEvent (Event eventToUpdate)
+        {
+            _repo.UpdateEvent (eventToUpdate);
+        }
+
+		private bool validateEvent(Event e)
+		{
 			try
 			{
-				_repo.DeleteEvent(id);
+				check(e.AssociatedOrg, p => (p != null && p != Guid.Empty));
+				check(e.Schedule, p => p != null);
+				check(e.Schedule.OrgId, p => p == e.AssociatedOrg);
+				check(e.Schedule.Id, p => (p != null && p != Guid.Empty));
+			}
+			catch (Exception ex)
+			{
+				return false;
+			}
+			return true;
+		}
+
+		private void check<T>(T val, Func<T, bool> test)
+		{
+			if (!test(val)) throw new Exception();
+		}
+
+		private void execute(Action cmd)
+		{
+			try
+			{
+				cmd();
 			}
 			catch (InvalidIdException)
 			{
@@ -25,36 +78,26 @@ namespace FaithEngage.Core.RepoManagers
 			}
 			catch (Exception ex)
 			{
-				throw new RepositoryException("There was a problem deleting id " + id + " from the repository.", ex);
+				throw new RepositoryException("There was a problem accessing the repository.", ex);
 			}
-        }
+		}
 
-        public List<Event> GetByDate (DateTime date, Guid orgId)
-        {
-            var evnts = _repo.GetByDate (date, orgId);
-			if (evnts == null) return new List<Event>();
-			return evnts;
-        }
+		private T execute<T>(Func<T> func)
+		{
+			try
+			{
+				return func();
+			}
+			catch (InvalidIdException)
+			{
+				throw;
+			}
+			catch (Exception ex)
+			{
+				throw new RepositoryException("There was a problem accessing the repository.", ex);
+			}
+		}
 
-        public Event GetById (Guid id)
-        {
-            return _repo.GetById (id);
-        }
-
-        public List<Event> GetByOrgId (Guid orgId)
-        {
-            return _repo.GetByOrgId (orgId);
-        }
-
-        public Guid SaveEvent (Event eventToSave)
-        {
-            return _repo.SaveEvent (eventToSave);
-        }
-
-        public void UpdateEvent (Event eventToUpdate)
-        {
-            _repo.UpdateEvent (eventToUpdate);
-        }
     }
 }
 
