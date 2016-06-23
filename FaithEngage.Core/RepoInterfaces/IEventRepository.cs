@@ -6,11 +6,11 @@ namespace FaithEngage.Core.RepoInterfaces
 {
 	public interface IEventRepository
 	{
-		Event GetById(Guid id);
-		List<Event> GetByDate (DateTime date, Guid orgId);
-		List<Event> GetByOrgId (Guid orgId);
-		Guid SaveEvent(Event eventToSave);
-		void UpdateEvent(Event eventToUpdate);
+		EventDTO GetById(Guid id);
+		List<EventDTO> GetByDate (DateTime date, Guid orgId);
+		List<EventDTO> GetByOrgId (Guid orgId);
+		Guid SaveEvent(EventDTO eventToSave);
+		void UpdateEvent(EventDTO eventToUpdate);
 		void DeleteEvent(Guid id);
 	}
 }

@@ -6,6 +6,7 @@ using FaithEngage.Core.RepoManagers;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.Events;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace FaithEngage.Core.Tests
 {
@@ -163,6 +164,88 @@ namespace FaithEngage.Core.Tests
 			var e = TestHelpers.TryGetException(() => mgr.GetByOrgId(INVALID_GUID));
 
 			Assert.That(e, Is.InstanceOf(typeof(RepositoryException)));
+		}
+		[Test]
+		public void SaveEvent_ValidEvent_SavesToRepo()
+		{
+			var evnt = new Event()
+			{
+				AssociatedOrg = VALID_GUID,
+				EventDate = DateTime.Now.Date,
+				EventId = VALID_GUID,
+				Schedule = new EventSchedule()
+				{
+					OrgId = VALID_GUID,
+					Id = VALID_GUID,
+					TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time")
+				}
+			};
+
+			mgr.SaveEvent(evnt);
+
+			A.CallTo(() => _repo.SaveEvent(evnt)).MustHaveHappened();
+		}
+
+		[Test]
+		public void SaveEvent_InvalidEvents_ThrowsInvalidEventExceptions()
+		{
+			var events = new List<Event>()
+			{
+				new Event()
+				{
+					AssociatedOrg = INVALID_GUID,
+					Schedule = new EventSchedule()
+					{
+						OrgId = VALID_GUID,
+						Id = VALID_GUID,
+						TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time")
+					}
+				},
+				new Event()
+				{
+					AssociatedOrg = VALID_GUID
+				},
+				new Event()
+				{
+					AssociatedOrg = VALID_GUID,
+					Schedule = new EventSchedule()
+					{
+						OrgId = INVALID_GUID,
+						Id = VALID_GUID,
+						TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time")
+					}
+				},
+				new Event()
+				{
+					AssociatedOrg = VALID_GUID,
+					Schedule = new EventSchedule()
+					{
+						OrgId = VALID_GUID,
+						Id = INVALID_GUID,
+						TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time")
+					}
+				},
+				new Event()
+				{
+					AssociatedOrg = VALID_GUID,
+					Schedule = new EventSchedule()
+					{
+						OrgId = VALID_GUID,
+						Id = VALID_GUID,
+					}
+				}
+			};
+
+			var list = new List<Exception>();
+			foreach (var evnt in events)
+			{
+				var e = TestHelpers.TryGetException(() => mgr.SaveEvent(evnt));
+				if (e != null) list.Add(e);
+			}
+
+			Assert.That(list.Count, Is.EqualTo(5));
+			list.ForEach(p => Assert.That(p, Is.InstanceOf(typeof(InvalidEventException))));
+			A.CallTo(()=>_repo.SaveEvent(A<Event>.Ignored)).MustNotHaveHappened();
 		}
 	}
 }

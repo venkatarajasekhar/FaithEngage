@@ -9,9 +9,15 @@ namespace FaithEngage.Core.RepoManagers
 	public class EventRepoManager : IEventRepoManager
     {
         private readonly IEventRepository _repo;
-        public EventRepoManager (IEventRepository repo)
+		private readonly IEventScheduleRepoManager _schedMgr;
+		private readonly IEventFactory _fac;
+		private readonly IEventScheduleDTOFactory _dtoFac;
+		public EventRepoManager (IEventRepository repo, IEventScheduleRepoManager schedMgr, IEventFactory fac, IEventScheduleDTOFactory dtoFac)
         {
             _repo = repo;
+			_schedMgr = schedMgr;
+			_fac = fac;
+			_dtoFac = dtoFac;
         }
         public void DeleteEvent (Guid id)
         {
@@ -37,6 +43,7 @@ namespace FaithEngage.Core.RepoManagers
 
         public Guid SaveEvent (Event eventToSave)
         {
+			if (!validateEvent(eventToSave)) throw new InvalidEventException() { InvalidEvent = eventToSave };
 			return execute(()=> _repo.SaveEvent (eventToSave));
         }
 
@@ -49,12 +56,13 @@ namespace FaithEngage.Core.RepoManagers
 		{
 			try
 			{
-				check(e.AssociatedOrg, p => (p != null && p != Guid.Empty));
+				check(e.AssociatedOrg, p => p != Guid.Empty);
 				check(e.Schedule, p => p != null);
 				check(e.Schedule.OrgId, p => p == e.AssociatedOrg);
-				check(e.Schedule.Id, p => (p != null && p != Guid.Empty));
+				check(e.Schedule.Id, p => p != Guid.Empty);
+				check(e.Schedule.TimeZone, p => p != null);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return false;
 			}

@@ -1,4 +1,5 @@
 ﻿using System;
+using FaithEngage.Core.Events.EventSchedules;
 
 namespace FaithEngage.Core.Events
 {
