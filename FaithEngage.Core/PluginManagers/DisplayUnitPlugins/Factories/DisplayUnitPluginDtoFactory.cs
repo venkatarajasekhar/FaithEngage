@@ -4,9 +4,9 @@ using FaithEngage.Core.Exceptions;
 
 namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 {
-	public class DisplayUnitPluginDtoFactory : IDisplayUnitPluginDtoFactory
+	public class DisplayUnitPluginDtoFactory : IConverterFactory<DisplayUnitPlugin,DisplayUnitPluginDTO>
     {
-        public DisplayUnitPluginDTO ConvertFromPlugin(DisplayUnitPlugin plugin)
+        public DisplayUnitPluginDTO Convert(DisplayUnitPlugin plugin)
         {
 			validate(plugin);
 			var dto = new DisplayUnitPluginDTO ();

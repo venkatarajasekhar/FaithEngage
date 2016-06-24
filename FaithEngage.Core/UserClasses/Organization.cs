@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FaithEngage.Core.Events;
+using FaithEngage.Core.Events.EventSchedules;
 
 namespace FaithEngage.Core.UserClasses
 {

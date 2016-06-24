@@ -14,7 +14,7 @@ namespace FaithEngage.Core.RepoManagers
 	{
 		private IDisplayUnitPluginRepository _repo;
 		private IDisplayUnitPluginFactory _fac;
-		private IDisplayUnitPluginDtoFactory _dtoFac;
+		private IConverterFactory<DisplayUnitPlugin,DisplayUnitPluginDTO> _dtoFac;
 		private const string VALID_STRING = "VALID";
 		private const string INVALID_STRING = "INVALID";
 		private Guid VALID_GUID = Guid.NewGuid();
@@ -26,7 +26,7 @@ namespace FaithEngage.Core.RepoManagers
 		{
 			_repo = A.Fake<IDisplayUnitPluginRepository>();
 			_fac = A.Fake<IDisplayUnitPluginFactory>();
-			_dtoFac = A.Fake<IDisplayUnitPluginDtoFactory>();
+			_dtoFac = A.Fake<IConverterFactory<DisplayUnitPlugin,DisplayUnitPluginDTO>>();
 			_plgn = A.Fake<DisplayUnitPlugin>();
             mgr = new DisplayUnitPluginRepoManager (_repo, _fac, _dtoFac);
 		}
@@ -41,7 +41,7 @@ namespace FaithEngage.Core.RepoManagers
 				Id = VALID_GUID,
 				PluginName = VALID_STRING
 			};
-			A.CallTo(() => _dtoFac.ConvertFromPlugin(_plgn)).Returns(dto);
+			A.CallTo(() => _dtoFac.Convert(_plgn)).Returns(dto);
 			A.CallTo(() => _repo.Register(A<DisplayUnitPluginDTO>.Ignored)).Returns(VALID_GUID);
 
 			var id = mgr.RegisterNew(_plgn);
@@ -53,7 +53,7 @@ namespace FaithEngage.Core.RepoManagers
 		[Test]
 		public void RegisterNew_InvalidPlugin_Throws()
 		{
-			A.CallTo(() => _dtoFac.ConvertFromPlugin(_plgn)).Throws<PluginIsMissingNecessaryInfoException>();
+			A.CallTo(() => _dtoFac.Convert(_plgn)).Throws<PluginIsMissingNecessaryInfoException>();
             var e = TestHelpers.TryGetException (() => mgr.RegisterNew (_plgn));
             Assert.That (e, Is.Not.Null);
             Assert.That (e, Is.InstanceOf (typeof (PluginIsMissingNecessaryInfoException)));
@@ -78,7 +78,7 @@ namespace FaithEngage.Core.RepoManagers
                 PluginName = VALID_STRING
             };
 
-            A.CallTo (() => _dtoFac.ConvertFromPlugin (_plgn)).Returns (dto);
+            A.CallTo (() => _dtoFac.Convert (_plgn)).Returns (dto);
             mgr.UpdatePlugin (_plgn);
             A.CallTo (() => _repo.Update (dto)).MustHaveHappened();
         }
@@ -95,7 +95,7 @@ namespace FaithEngage.Core.RepoManagers
         [Test]
         public void UpdatePlugin_InvalidPlugin_FactoryThrowsException_Throws()
         {
-            A.CallTo (() => _dtoFac.ConvertFromPlugin (_plgn)).Throws<PluginIsMissingNecessaryInfoException> ();
+            A.CallTo (() => _dtoFac.Convert (_plgn)).Throws<PluginIsMissingNecessaryInfoException> ();
             _plgn.PluginId = Guid.NewGuid ();
             var e = TestHelpers.TryGetException (() => mgr.UpdatePlugin (_plgn));
             Assert.That (e, Is.Not.Null);

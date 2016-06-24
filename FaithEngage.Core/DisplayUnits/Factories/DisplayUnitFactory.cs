@@ -19,7 +19,7 @@ namespace FaithEngage.Core.DisplayUnits.Factories
             return getDisplayUnit (pluginId, attributes);
         }
 
-        public DisplayUnit ConvertFromDto (DisplayUnitDTO dto)
+        public DisplayUnit Convert (DisplayUnitDTO dto)
         {
             try {
                 DisplayUnit unit;

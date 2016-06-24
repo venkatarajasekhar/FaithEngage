@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using FaithEngage.Core.Events.EventSchedules;
 
-namespace FaithEngage.Core
+namespace FaithEngage.Core.Events.EventSchedules.Interfaces
 {
 	public interface IEventScheduleRepoManager
 	{

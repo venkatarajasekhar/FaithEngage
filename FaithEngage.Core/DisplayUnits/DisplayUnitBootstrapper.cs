@@ -22,7 +22,7 @@ namespace FaithEngage.Core.DisplayUnits
 		{
             container.Register<IDisplayUnitFactory, DisplayUnitFactory>(LifeCycle.Transient);
             container.Register<IDisplayUnitsRepoManager, DisplayUnitsRepoManager> (LifeCycle.Transient);
-            container.Register<IDisplayUnitDtoFactory, DisplayUnitDtoFactory> (LifeCycle.Transient);
+            container.Register<IConverterFactory<DisplayUnit,DisplayUnitDTO>, DisplayUnitDtoFactory> (LifeCycle.Transient);
 		}
 	}
 }

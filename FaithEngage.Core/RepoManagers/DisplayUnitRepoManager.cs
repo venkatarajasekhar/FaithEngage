@@ -12,8 +12,8 @@ namespace FaithEngage.Core.RepoManagers
     {
         private readonly IDisplayUnitsRepository _duRepo;
         private readonly IDisplayUnitFactory _factory;
-        private readonly IDisplayUnitDtoFactory _dtoFac;
-        public DisplayUnitsRepoManager (IDisplayUnitFactory factory, IDisplayUnitsRepository repo, IDisplayUnitDtoFactory dtoFactory)
+        private readonly IConverterFactory<DisplayUnit,DisplayUnitDTO> _dtoFac;
+        public DisplayUnitsRepoManager (IDisplayUnitFactory factory, IDisplayUnitsRepository repo, IConverterFactory<DisplayUnit,DisplayUnitDTO> dtoFactory)
         {
             _factory = factory;
             _duRepo = repo;
@@ -26,7 +26,7 @@ namespace FaithEngage.Core.RepoManagers
                 DisplayUnit du;
                 var dto = _duRepo.GetById (unitId);
                 if(dto == null) return null;
-                du = _factory.ConvertFromDto(dto);
+				du = _factory.Convert(dto);
                 return du;
             } catch (RepositoryException ex) {
                 throw new RepositoryException ("There was a problem accessing the DisplayUnitRepository.", ex);
@@ -43,7 +43,7 @@ namespace FaithEngage.Core.RepoManagers
                     return null;
                 foreach(var key in dict.Keys)
                 {
-                    var du = _factory.ConvertFromDto (dict [key]);
+					var du = _factory.Convert (dict [key]);
                     if(du == null) continue;
                     returnDict.Add (key, du);
                 }
@@ -61,7 +61,7 @@ namespace FaithEngage.Core.RepoManagers
 			var dict = new Dictionary<int, DisplayUnitDTO>();
 			foreach (var u in unitsAtPositions)
 			{
-				var dto = _dtoFac.ConvertToDto(u.Value);
+				var dto = _dtoFac.Convert(u.Value);
 				if (dto == null) continue;
 				dict.Add(u.Key, dto);
 			}
@@ -94,7 +94,7 @@ namespace FaithEngage.Core.RepoManagers
                 if(dict == null) return null;
                 foreach(var key in dict.Keys)
                 {
-                    var du = _factory.ConvertFromDto (dict [key]);
+					var du = _factory.Convert (dict [key]);
                     returnDict.Add (key, du);
                 }
             } catch (InvalidIdException) {
@@ -109,7 +109,7 @@ namespace FaithEngage.Core.RepoManagers
 
         public void SaveOneToEvent (DisplayUnit unit)
         {
-            var dto = _dtoFac.ConvertToDto(unit);
+			var dto = _dtoFac.Convert(unit);
             try{
                 _duRepo.SaveOneToEvent (dto);
             }catch(InvalidIdException){
@@ -132,7 +132,7 @@ namespace FaithEngage.Core.RepoManagers
 
         public void DuplicateToEvent (DisplayUnit unit)
         {
-            var dto = _dtoFac.ConvertToDto(unit.Clone ());
+			var dto = _dtoFac.Convert(unit.Clone ());
             try{
                 _duRepo.SaveOneToEvent (dto);
             }catch(InvalidIdException){
@@ -157,7 +157,7 @@ namespace FaithEngage.Core.RepoManagers
         {
             try {
                 var dto = _duRepo.PushDU(id);
-                return _factory.ConvertFromDto(dto);
+				return _factory.Convert(dto);
             } catch (Exception ex) {
                 throw;
             }

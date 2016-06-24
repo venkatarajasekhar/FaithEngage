@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using FaithEngage.Core.Events;
+using FaithEngage.Core.Events.EventSchedules.Interfaces;
 using FaithEngage.Core.Events.Interfaces;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.RepoInterfaces;
+using System.Linq;
 namespace FaithEngage.Core.RepoManagers
 {
 	public class EventRepoManager : IEventRepoManager
     {
         private readonly IEventRepository _repo;
-		private readonly IEventScheduleRepoManager _schedMgr;
-		private readonly IEventFactory _fac;
-		private readonly IEventScheduleDTOFactory _dtoFac;
-		public EventRepoManager (IEventRepository repo, IEventScheduleRepoManager schedMgr, IEventFactory fac, IEventScheduleDTOFactory dtoFac)
+		private readonly IConverterFactory<EventDTO,Event> _fac;
+		private readonly IConverterFactory<Event,EventDTO> _dtoFac;
+		public EventRepoManager (IEventRepository repo, IConverterFactory<EventDTO, Event> fac, IConverterFactory<Event, EventDTO> dtoFac)
         {
             _repo = repo;
-			_schedMgr = schedMgr;
 			_fac = fac;
 			_dtoFac = dtoFac;
         }
@@ -24,22 +24,41 @@ namespace FaithEngage.Core.RepoManagers
 			execute(() => _repo.DeleteEvent(id));
         }
 
-        public List<Event> GetByDate (DateTime date, Guid orgId)
-        {
-			var evnts = execute(() => _repo.GetByDate(date,orgId));
-			if (evnts == null) return new List<Event>();
-			return evnts;
+		public List<Event> GetByDate(DateTime date, Guid orgId)
+		{
+			var dtos = execute(() => _repo.GetByDate(date, orgId));
+			if (dtos == null) return new List<Event>();
+			return getList<EventDTO, Event>(dtos, _fac);
         }
 
         public Event GetById (Guid id)
         {
-			return execute(()=> _repo.GetById (id));
+			var dto = execute(()=> _repo.GetById (id));
+			return _fac.Convert(dto);
         }
 
         public List<Event> GetByOrgId (Guid orgId)
         {
-			return execute(()=> _repo.GetByOrgId (orgId));
+			var dtos = execute(()=> _repo.GetByOrgId (orgId));
+			if (dtos == null) return new List<Event>();
+			return getList<EventDTO, Event>(dtos, _fac);
         }
+
+		private List<Tout> getList<Tin,Tout>(List<Tin> dtos, IConverterFactory<Tin,Tout> fac) where Tout: class
+		{
+			var events = dtos.Select(p =>
+			{
+				try
+				{
+					return fac.Convert(p);
+				}
+				catch (Exception)
+				{
+					return null;
+				}
+			}).Where(p => p != null).ToList();
+			return events;
+		}
 
         public Guid SaveEvent (Event eventToSave)
         {

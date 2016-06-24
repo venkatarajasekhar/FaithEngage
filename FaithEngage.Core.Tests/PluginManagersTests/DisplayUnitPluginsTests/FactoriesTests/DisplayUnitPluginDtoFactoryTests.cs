@@ -19,7 +19,7 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 			A.CallTo (() => plugin.PluginName).Returns (VALID_STRING);
 			A.CallTo (() => plugin.PluginVersion).Returns (new int[]{ 1, 0, 0 });
 			var fac = new DisplayUnitPluginDtoFactory ();
-			var dto = fac.ConvertFromPlugin (plugin);
+			var dto = fac.Convert (plugin);
 
 			Assert.That (dto.AssemblyLocation, Is.Not.Null);
 			Assert.That (dto.Id, Is.EqualTo (VALID_GUID));
@@ -36,7 +36,7 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 			A.CallTo (() => plugin.PluginName).Returns (VALID_STRING);
 			A.CallTo (() => plugin.PluginVersion).Returns (new int[]{ 1, 0, 0 });
 			var fac = new DisplayUnitPluginDtoFactory ();
-			var dto = fac.ConvertFromPlugin (plugin);
+			var dto = fac.Convert (plugin);
 
 			Assert.That (dto.AssemblyLocation, Is.Not.Null);
 			Assert.That (dto.Id, Is.Null);

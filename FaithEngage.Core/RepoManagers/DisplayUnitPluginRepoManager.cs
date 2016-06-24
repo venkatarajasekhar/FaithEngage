@@ -12,8 +12,8 @@ namespace FaithEngage.Core.RepoManagers
 	{
 		private readonly IDisplayUnitPluginRepository _repo;
 		private readonly IDisplayUnitPluginFactory _factory;
-		private readonly IDisplayUnitPluginDtoFactory _dtoFactory;
-		public DisplayUnitPluginRepoManager (IDisplayUnitPluginRepository repo, IDisplayUnitPluginFactory factory, IDisplayUnitPluginDtoFactory dtoFactory)
+		private readonly IConverterFactory<DisplayUnitPlugin,DisplayUnitPluginDTO> _dtoFactory;
+		public DisplayUnitPluginRepoManager (IDisplayUnitPluginRepository repo, IDisplayUnitPluginFactory factory, IConverterFactory<DisplayUnitPlugin, DisplayUnitPluginDTO> dtoFactory)
 		{
 			_repo = repo;
 			_factory = factory;
@@ -25,7 +25,7 @@ namespace FaithEngage.Core.RepoManagers
 		public Guid RegisterNew (DisplayUnitPlugin plugin)
 		{
 			plugin.PluginId = Guid.NewGuid ();
-			var dto = _dtoFactory.ConvertFromPlugin (plugin);
+			var dto = _dtoFactory.Convert (plugin);
 			Guid guid;
 			try
 			{
@@ -51,7 +51,7 @@ namespace FaithEngage.Core.RepoManagers
 			if (!plugin.PluginId.HasValue) {
 				throw new InvalidIdException ("PluginId must not be null");
 			}
-			var dto = _dtoFactory.ConvertFromPlugin (plugin);
+			var dto = _dtoFactory.Convert (plugin);
 			try {
                 _repo.Update (dto);
             } catch (Exception ex) {

@@ -8,7 +8,6 @@
     <RootNamespace>FaithEngage.Core</RootNamespace>
     <AssemblyName>FaithEngage.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <ApplicationManifest>IEventScheduleRepository.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -90,7 +89,6 @@
     <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginRepoManager.cs" />
     <Compile Include="RepoManagers\DisplayUnitPluginRepoManager.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginFactory.cs" />
-    <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginDtoFactory.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\DisplayUnitPluginBootstrapper.cs" />
     <Compile Include="Obsolete Interfaces %28needs moving%29\IReferenceProvider.cs" />
     <Compile Include="Obsolete Interfaces %28needs moving%29\IReference.cs" />
@@ -132,7 +130,6 @@
     <Compile Include="Events\EventBootstrapper.cs" />
     <Compile Include="Factories\FEFactory.cs" />
     <Compile Include="Exceptions\PluginIsMissingNecessaryInfoException.cs" />
-    <Compile Include="DisplayUnits\Interfaces\IDisplayUnitDtoFactory.cs" />
     <Compile Include="DisplayUnits\Factories\DisplayUnitFactory.cs" />
     <Compile Include="DisplayUnits\Factories\DisplayUnitDtoFactory.cs" />
     <Compile Include="Exceptions\InvalidEventException.cs" />
@@ -142,14 +139,13 @@
     <Compile Include="Events\EventDTO.cs" />
     <Compile Include="Events\EventSchedules\Interfaces\IEventScheduleRepoManager.cs" />
     <Compile Include="Events\EventSchedules\Recurrance.cs" />
-    <Compile Include="Events\EventFactory.cs" />
-    <Compile Include="Events\EventDTOFactory.cs" />
-    <Compile Include="Events\Interfaces\IEventFactory.cs" />
-    <Compile Include="Events\Interfaces\IEventDTOFactory.cs" />
-    <Compile Include="Events\EventSchedules\EventScheduleFactory.cs" />
-    <Compile Include="Events\EventSchedules\EventScheduleDTOFactory.cs" />
-    <Compile Include="Events\EventSchedules\Interfaces\IEventScheduleFactory.cs" />
-    <Compile Include="Events\EventSchedules\Interfaces\IEventScheduleDTOFactory.cs" />
+    <Compile Include="Events\Factories\EventDTOFactory.cs" />
+    <Compile Include="Events\Factories\EventFactory.cs" />
+    <Compile Include="Events\EventSchedules\EventScheduleBootstrapper.cs" />
+    <Compile Include="Events\EventSchedules\Factories\EventScheduleDTOFactory.cs" />
+    <Compile Include="Events\EventSchedules\Factories\EventScheduleFactory.cs" />
+    <Compile Include="Factories\IConverterFactory %28Tin,Tout%29.cs" />
+    <Compile Include="RepoManagers\EventScheduleRepoManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -181,5 +177,7 @@
     <Folder Include="DisplayUnits\Factories\" />
     <Folder Include="Events\EventSchedules\" />
     <Folder Include="Events\EventSchedules\Interfaces\" />
+    <Folder Include="Events\Factories\" />
+    <Folder Include="Events\EventSchedules\Factories\" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 ﻿using System;
-namespace FaithEngage.Core
+namespace FaithEngage.Core.Events.EventSchedules.Factories
 {
 	public class EventScheduleDTOFactory
 	{

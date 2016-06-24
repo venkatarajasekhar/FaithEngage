@@ -24,7 +24,7 @@ namespace FaithEngage.Core.RepoManagers
         private DateTime _dt = DateTime.Now;
         private IDisplayUnitFactory _fctry;
 		private DisplayUnitPlugin _plugin;
-        private IDisplayUnitDtoFactory _dtoFac;
+        private IConverterFactory<DisplayUnit,DisplayUnitDTO> _dtoFac;
         private IDisplayUnitsRepository _repo;
 
 
@@ -37,7 +37,7 @@ namespace FaithEngage.Core.RepoManagers
             _fctry = A.Fake<IDisplayUnitFactory> ();
 			_plugin = A.Fake<DisplayUnitPlugin> ();
 			_plugin.PluginId = VALID_GUID;
-            _dtoFac = A.Fake<IDisplayUnitDtoFactory> ();
+            _dtoFac = A.Fake<IConverterFactory<DisplayUnit,DisplayUnitDTO>> ();
             _repo = A.Fake<IDisplayUnitsRepository> ();
 
             _dto = new DisplayUnitDTO (VALID_GUID, VALID_GUID) {

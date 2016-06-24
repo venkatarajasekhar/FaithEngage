@@ -2,9 +2,9 @@
 using FaithEngage.Core.DisplayUnits.Interfaces;
 namespace FaithEngage.Core.DisplayUnits.Factories
 {
-    public class DisplayUnitDtoFactory : IDisplayUnitDtoFactory
+    public class DisplayUnitDtoFactory : IConverterFactory<DisplayUnit,DisplayUnitDTO>
     {
-        public DisplayUnitDTO ConvertToDto (DisplayUnit unit)
+        public DisplayUnitDTO Convert (DisplayUnit unit)
         {
 			try
 			{
