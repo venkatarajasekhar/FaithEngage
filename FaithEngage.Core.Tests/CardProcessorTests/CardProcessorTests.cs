@@ -192,7 +192,7 @@ namespace FaithEngage.Core.CardProcessor
         public void PushNewCard_InvalidDTO_CannotConvert_ThrowsException()
         {
             var factory = A.Fake<IDisplayUnitFactory> ();
-            A.CallTo (() => factory.ConvertFromDto (A<DisplayUnitDTO>.Ignored)).Returns (null);
+            A.CallTo (() => factory.Convert (A<DisplayUnitDTO>.Ignored)).Returns (null);
             var dto = new DisplayUnitDTO (INVALID_GUID, INVALID_GUID);
 			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
 			cp.PushNewCard (dto, factory);

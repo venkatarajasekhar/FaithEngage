@@ -85,7 +85,7 @@ namespace FaithEngage.Core.CardProcessor
 
 		public void PushNewCard(DisplayUnitDTO newDto, IDisplayUnitFactory factory)
         {
-            var du = factory.ConvertFromDto (newDto);
+            var du = factory.Convert (newDto);
             if(du == null)
                 throw new CouldNotConvertDTOException();
             _duRepoMgr.SaveDtoToEvent (newDto);

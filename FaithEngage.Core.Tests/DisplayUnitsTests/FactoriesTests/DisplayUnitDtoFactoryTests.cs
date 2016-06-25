@@ -44,7 +44,7 @@ namespace FaithEngage.Core.DisplayUnits.Factories
 			_du.PositionInEvent = 5;
 			_du.UnitGroup = new DisplayUnitGrouping(3, VALID_GUID);
 
-			var dto = _fac.ConvertToDto(_du);
+            var dto = _fac.Convert(_du);
 
 			Assert.That(dto, Is.Not.Null);
 			Assert.That(dto.AssociatedEvent, Is.EqualTo(VALID_GUID));
@@ -62,7 +62,7 @@ namespace FaithEngage.Core.DisplayUnits.Factories
 		[Test]
 		public void ConvertToDTO_EmptyDU_ReturnsNull()
 		{
-			var dto = _fac.ConvertToDto(_du);
+            var dto = _fac.Convert(_du);
 			Assert.That(dto, Is.Null);
 		}
 

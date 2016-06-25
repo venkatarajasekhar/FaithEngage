@@ -2,13 +2,14 @@
 using NUnit.Framework;
 using FakeItEasy;
 using FaithEngage.Core.RepoInterfaces;
-using FaithEngage.Core.RepoManagers;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.Events;
 using System.Linq;
 using System.Collections.Generic;
+using FaithEngage.Core.Events.EventSchedules;
+using FaithEngage.Core.Tests;
 
-namespace FaithEngage.Core.Tests
+namespace FaithEngage.Core.RepoManagers
 {
 	[TestFixture]
 	public class EventRepoManagerTests
@@ -18,12 +19,15 @@ namespace FaithEngage.Core.Tests
 		private Guid INVALID_GUID = Guid.Empty;
 		private const string VALID_STRING = "VALID STRING";
 		private EventRepoManager mgr;
-
+        private IConverterFactory<Event, EventDTO> _dtoFac;
+        private IConverterFactory<EventDTO, Event> _fac;
 		[SetUp]
 		public void init()
 		{
 			_repo = A.Fake<IEventRepository>();
-			mgr = new EventRepoManager(_repo);
+            _dtoFac = A.Fake<IConverterFactory<Event, EventDTO>> ();
+            _fac = A.Fake<IConverterFactory<EventDTO, Event>> ();
+            mgr = new EventRepoManager(_repo,_fac,_dtoFac);
 		}
 
 		[Test]
@@ -52,20 +56,18 @@ namespace FaithEngage.Core.Tests
 		[Test]
 		public void GetByDate_ValidDateAndOrgId_ReturnsValidList()
 		{
-			var evnt = new Event()
-			{
-				AssociatedOrg = VALID_GUID,
-				EventDate = DateTime.Now.Date,
-				EventId = VALID_GUID,
-				Schedule = new EventSchedule()
-			};
-			var events = Enumerable.Repeat(evnt, 5).ToList();
-			A.CallTo(() => _repo.GetByDate(A<DateTime>.Ignored, A<Guid>.Ignored)).Returns(events);
+            var dto = new EventDTO () { AssociatedOrg = VALID_GUID, EventDate = DateTime.Now.Date, EventId = VALID_GUID, EventScheduleId = VALID_GUID };
+
+            var dtos = Enumerable.Repeat (dto, 5).ToList ();
+            var evnt = new Event ();
+
+            A.CallTo (() => _fac.Convert (A<EventDTO>.Ignored)).Returns (evnt);
+            A.CallTo(() => _repo.GetByDate(A<DateTime>.Ignored, A<Guid>.Ignored)).Returns(dtos);
 
 			var evnts = mgr.GetByDate(DateTime.Now.Date, VALID_GUID);
 			Assert.That(evnts, Is.Not.Null);
 			Assert.That(evnts.Count, Is.EqualTo(5));
-			Assert.That(evnts.All(p => p.AssociatedOrg == VALID_GUID));
+            Assert.That(evnts.All(p => p.Equals(evnt)));
 		}
 
 		[Test]
@@ -96,18 +98,14 @@ namespace FaithEngage.Core.Tests
 			Assert.That(e, Is.InstanceOf(typeof(RepositoryException)));
 		}
 
-		[Test]
-		public void GetById_ValidId_ReturnsValidEvent()
-		{
-			var evnt = new Event()
-			{
-				AssociatedOrg = VALID_GUID,
-				EventDate = DateTime.Now.Date,
-				EventId = VALID_GUID,
-				Schedule = new EventSchedule()
-			};
-			A.CallTo(() => _repo.GetById(VALID_GUID)).Returns(evnt);
-			var receivedEvent = mgr.GetById(VALID_GUID);
+        [Test]
+        public void GetById_ValidId_ReturnsValidEvent ()
+        {
+            var dto = new EventDTO () { AssociatedOrg = VALID_GUID, EventDate = DateTime.Now.Date, EventId = VALID_GUID, EventScheduleId = VALID_GUID };
+            var evnt = new Event();
+            A.CallTo(() => _repo.GetById(VALID_GUID)).Returns(dto);
+            A.CallTo (() => _fac.Convert (dto)).Returns (evnt);
+            var receivedEvent = mgr.GetById(VALID_GUID);
 
 			Assert.That(receivedEvent, Is.EqualTo(evnt));
 		}
@@ -133,19 +131,14 @@ namespace FaithEngage.Core.Tests
 		[Test]
 		public void GetByOrgId_ValidId_ReturnsValidEvent()
 		{
-			var evnt = new Event()
-			{
-				AssociatedOrg = VALID_GUID,
-				EventDate = DateTime.Now.Date,
-				EventId = VALID_GUID,
-				Schedule = new EventSchedule()
-			};
-			var evnts = Enumerable.Repeat(evnt, 5).ToList();
-
-			A.CallTo(() => _repo.GetByOrgId(VALID_GUID)).Returns(evnts);
+			var dto = new EventDTO () { AssociatedOrg = VALID_GUID, EventDate = DateTime.Now.Date, EventId = VALID_GUID, EventScheduleId = VALID_GUID };
+			var dtos = Enumerable.Repeat(dto, 5).ToList();
+            var evnt = new Event ();
+			A.CallTo(() => _repo.GetByOrgId(VALID_GUID)).Returns(dtos);
+            A.CallTo (() => _fac.Convert (A<EventDTO>.Ignored)).Returns (evnt);
 			var receivedEvents = mgr.GetByOrgId(VALID_GUID);
 
-			Assert.That(receivedEvents, Is.EqualTo(evnts));
+            Assert.That(receivedEvents.All(p=> p.Equals(evnt)));
 		}
 
 		[Test]
@@ -168,22 +161,20 @@ namespace FaithEngage.Core.Tests
 		[Test]
 		public void SaveEvent_ValidEvent_SavesToRepo()
 		{
-			var evnt = new Event()
-			{
-				AssociatedOrg = VALID_GUID,
-				EventDate = DateTime.Now.Date,
-				EventId = VALID_GUID,
-				Schedule = new EventSchedule()
-				{
-					OrgId = VALID_GUID,
-					Id = VALID_GUID,
-					TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time")
+            var evnt = new Event () {
+                AssociatedOrg = VALID_GUID,
+                EventDate = DateTime.Now.Date,
+                EventId = VALID_GUID,
+                Schedule = new EventSchedule () {
+                    OrgId = VALID_GUID,
+                    Id = VALID_GUID,
+                    TimeZone = TimeZoneInfo.Local
 				}
 			};
 
 			mgr.SaveEvent(evnt);
 
-			A.CallTo(() => _repo.SaveEvent(evnt)).MustHaveHappened();
+            A.CallTo(() => _repo.SaveEvent(A<EventDTO>.Ignored)).MustHaveHappened();
 		}
 
 		[Test]
@@ -198,7 +189,7 @@ namespace FaithEngage.Core.Tests
 					{
 						OrgId = VALID_GUID,
 						Id = VALID_GUID,
-						TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time")
+						TimeZone = TimeZoneInfo.Local
 					}
 				},
 				new Event()
@@ -212,7 +203,7 @@ namespace FaithEngage.Core.Tests
 					{
 						OrgId = INVALID_GUID,
 						Id = VALID_GUID,
-						TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time")
+                        TimeZone = TimeZoneInfo.Local
 					}
 				},
 				new Event()
@@ -222,7 +213,7 @@ namespace FaithEngage.Core.Tests
 					{
 						OrgId = VALID_GUID,
 						Id = INVALID_GUID,
-						TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time")
+						TimeZone = TimeZoneInfo.Local
 					}
 				},
 				new Event()
@@ -245,7 +236,7 @@ namespace FaithEngage.Core.Tests
 
 			Assert.That(list.Count, Is.EqualTo(5));
 			list.ForEach(p => Assert.That(p, Is.InstanceOf(typeof(InvalidEventException))));
-			A.CallTo(()=>_repo.SaveEvent(A<Event>.Ignored)).MustNotHaveHappened();
+			A.CallTo(()=>_repo.SaveEvent(A<EventDTO>.Ignored)).MustNotHaveHappened();
 		}
 	}
 }

@@ -62,13 +62,15 @@ namespace FaithEngage.Core.RepoManagers
 
         public Guid SaveEvent (Event eventToSave)
         {
-			if (!validateEvent(eventToSave)) throw new InvalidEventException() { InvalidEvent = eventToSave };
-			return execute(()=> _repo.SaveEvent (eventToSave));
+            if (!validateEvent(eventToSave)) throw new InvalidEventException() { InvalidEvent = eventToSave };
+            var dto = _dtoFac.Convert (eventToSave);
+			return execute(()=> _repo.SaveEvent (dto));
         }
 
         public void UpdateEvent (Event eventToUpdate)
         {
-            _repo.UpdateEvent (eventToUpdate);
+            var dto = _dtoFac.Convert (eventToUpdate);
+            _repo.UpdateEvent (dto);
         }
 
 		private bool validateEvent(Event e)

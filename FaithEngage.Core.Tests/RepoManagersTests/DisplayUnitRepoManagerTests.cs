@@ -56,7 +56,7 @@ namespace FaithEngage.Core.RepoManagers
         public void GetById_ValidId_DisplayUnit()
         {
             A.CallTo (() => _repo.GetById (VALID_GUID)).Returns (_dto);
-            A.CallTo (() => _fctry.ConvertFromDto (_dto)).Returns (A.Fake<DisplayUnit> ());
+            A.CallTo (() => _fctry.Convert (_dto)).Returns (A.Fake<DisplayUnit> ());
             var mgr = new DisplayUnitsRepoManager(_fctry,_repo,_dtoFac);
             var du = mgr.GetById (VALID_GUID);
 
@@ -92,7 +92,7 @@ namespace FaithEngage.Core.RepoManagers
                 dict.Add (i, new DisplayUnitDTO(VALID_GUID, VALID_GUID));
             }
             A.CallTo (() => _repo.GetByEvent (VALID_GUID, false)).Returns (dict);
-            A.CallTo (() => _fctry.ConvertFromDto (null))
+            A.CallTo (() => _fctry.Convert (null))
                 .WithAnyArguments()
                 .ReturnsLazily((DisplayUnitDTO d) => A.Fake<DisplayUnit>(p=> p.WithArgumentsForConstructor(new object[]{d.Attributes})));
             var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
@@ -139,7 +139,7 @@ namespace FaithEngage.Core.RepoManagers
                 dict.Add (i, dtos [i]);
             }
             A.CallTo (() => _repo.GetByEvent (VALID_GUID, false)).Returns (dict);
-            A.CallTo (() => _fctry.ConvertFromDto (_dto))
+            A.CallTo (() => _fctry.Convert (_dto))
                 .ReturnsLazily (
                     (DisplayUnitDTO d) => A.Fake<DisplayUnit>(
                         p=> p.WithArgumentsForConstructor(
@@ -147,7 +147,7 @@ namespace FaithEngage.Core.RepoManagers
                         )
                     )
                 );
-            A.CallTo (() => _fctry.ConvertFromDto (_dto)).Returns (null).Once();
+            A.CallTo (() => _fctry.Convert (_dto)).Returns (null).Once();
             var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             var duDict = mgr.GetByEvent (VALID_GUID, false);
 
@@ -175,7 +175,7 @@ namespace FaithEngage.Core.RepoManagers
             Dictionary<int,DisplayUnitDTO> receivedUnits = null;
             A.CallTo (() => _repo.SaveManyToEvent (A<Dictionary<int,DisplayUnitDTO>>.Ignored, VALID_GUID))
                 .Invokes ((Dictionary<int,DisplayUnitDTO> p, Guid g) => receivedUnits = p);
-            A.CallTo (() => _dtoFac.ConvertToDto (A<DisplayUnit>.Ignored))
+            A.CallTo (() => _dtoFac.Convert (A<DisplayUnit>.Ignored))
              .ReturnsLazily ((DisplayUnit u) => {
                  var duDto = new DisplayUnitDTO (u.AssociatedEvent, u.Id);
                  duDto.PositionInEvent = u.PositionInEvent;
@@ -196,14 +196,14 @@ namespace FaithEngage.Core.RepoManagers
 			Dictionary<int, DisplayUnitDTO> receivedUnits = null;
 			A.CallTo(() => _repo.SaveManyToEvent(A<Dictionary<int, DisplayUnitDTO>>.Ignored, VALID_GUID))
 				.Invokes((Dictionary<int, DisplayUnitDTO> p, Guid g) => receivedUnits = p);
-			A.CallTo(() => _dtoFac.ConvertToDto(A<DisplayUnit>.Ignored))
+            A.CallTo(() => _dtoFac.Convert(A<DisplayUnit>.Ignored))
 			 .ReturnsLazily((DisplayUnit u) =>
 			 {
 				 var duDto = new DisplayUnitDTO(u.AssociatedEvent, u.Id);
 				 duDto.PositionInEvent = u.PositionInEvent;
 				 return duDto;
 			 });
-			A.CallTo(() => _dtoFac.ConvertToDto(A<DisplayUnit>.Ignored)).Returns(null).Once();
+            A.CallTo(() => _dtoFac.Convert(A<DisplayUnit>.Ignored)).Returns(null).Once();
 			var mgr = new DisplayUnitsRepoManager(_fctry, _repo, _dtoFac);
 			mgr.SaveManyToEvent(units, VALID_GUID);
 
@@ -267,7 +267,7 @@ namespace FaithEngage.Core.RepoManagers
             var i = 0;
             var dict = Enumerable.Repeat (_dto, 5).ToDictionary (p => i++, p => p);
 
-            A.CallTo (() => _fctry.ConvertFromDto (_dto)).ReturnsLazily ((DisplayUnitDTO d) => A.Fake<DisplayUnit> ());
+            A.CallTo (() => _fctry.Convert (_dto)).ReturnsLazily ((DisplayUnitDTO d) => A.Fake<DisplayUnit> ());
             A.CallTo (() => _repo.GetGroup (VALID_GUID, VALID_GUID)).Returns (dict);
 
             var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
@@ -319,7 +319,7 @@ namespace FaithEngage.Core.RepoManagers
             DisplayUnitDTO receivedDto = null;
             A.CallTo (() => _repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
                 .Invokes ((DisplayUnitDTO p) => receivedDto = p);
-            A.CallTo (() => _dtoFac.ConvertToDto (unit)).Returns (new DisplayUnitDTO (VALID_GUID, VALID_GUID));
+            A.CallTo (() => _dtoFac.Convert (unit)).Returns (new DisplayUnitDTO (VALID_GUID, VALID_GUID));
             var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             mgr.SaveOneToEvent (unit);
 
@@ -361,7 +361,7 @@ namespace FaithEngage.Core.RepoManagers
             var unit = A.Fake<DisplayUnit> ();
             var dto = new DisplayUnitDTO (VALID_GUID, VALID_GUID);
             A.CallTo (() => unit.Clone ()).Returns (unit);
-            A.CallTo (() => _dtoFac.ConvertToDto (unit)).Returns (dto);
+            A.CallTo (() => _dtoFac.Convert (unit)).Returns (dto);
             DisplayUnitDTO receivedUnit = null;
             A.CallTo (() => _repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
                 .Invokes ((DisplayUnitDTO d) => receivedUnit = d);

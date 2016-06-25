@@ -121,7 +121,7 @@ namespace FaithEngage.Core.DisplayUnits.Factories
         public void ConvertFromDto_ValidDtoWithoutId_NewDisplayUnit()
         {
             var factory = new DisplayUnitFactory (_container);
-            var du = factory.ConvertFromDto (_validDtoNoId);
+            var du = factory.Convert (_validDtoNoId);
 
             Assert.That (du.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That (du.PositionInEvent, Is.EqualTo(2));
@@ -134,7 +134,7 @@ namespace FaithEngage.Core.DisplayUnits.Factories
         public void ConvertFromDto_ValidDtoWithId_NewDisplayUnit()
         {
             var factory = new DisplayUnitFactory (_container);
-            var du = factory.ConvertFromDto (_validDtoWithId);
+            var du = factory.Convert (_validDtoWithId);
 
             Assert.That (du.Id, Is.EqualTo(VALID_GUID));
             Assert.That (du.PositionInEvent, Is.EqualTo(2));
@@ -147,7 +147,7 @@ namespace FaithEngage.Core.DisplayUnits.Factories
         public void ConvertFromDto_InvalidDTOPlugin_ReturnsNull()
         {
             var factory = new DisplayUnitFactory (_container);
-            var du = factory.ConvertFromDto (_invalidDto);
+            var du = factory.Convert (_invalidDto);
             Assert.That (du, Is.Null);
         }
 
