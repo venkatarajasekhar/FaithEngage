@@ -5,6 +5,7 @@ using FaithEngage.Core.DisplayUnits;
 using System.Collections.Generic;
 using FaithEngage.Core.Factories;
 using FaithEngage.Core.CardProcessor;
+using FaithEngage.Core.Events;
 
 namespace FaithEngage.Core
 {

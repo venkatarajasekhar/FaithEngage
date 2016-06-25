@@ -7,7 +7,12 @@ namespace FaithEngage.Core.Events.Factories
 	{
 		public EventDTO Convert(Event evnt)
 		{
-			throw new NotImplementedException();
+            var dto = new EventDTO ();
+            dto.AssociatedOrg = evnt.AssociatedOrg;
+            dto.EventDate = evnt.EventDate;
+            dto.EventId = evnt.EventId;
+            dto.EventScheduleId = evnt.Schedule.Id;
+            return dto;
 		}
 	}
 }

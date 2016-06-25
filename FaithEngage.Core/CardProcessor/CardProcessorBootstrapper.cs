@@ -15,7 +15,7 @@ namespace FaithEngage.Core.CardProcessor
 
         public void RegisterDependencies (IContainer container)
         {
-            container.Register<ICardProcessor, CardProcessor> (LifeCycle.Singleton);
+            container.Register<ICardProcessor, CardProcessor> ();
         }
     }
 }

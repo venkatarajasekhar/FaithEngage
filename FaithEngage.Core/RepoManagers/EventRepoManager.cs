@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using FaithEngage.Core.Events;
-using FaithEngage.Core.Events.EventSchedules.Interfaces;
 using FaithEngage.Core.Events.Interfaces;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.RepoInterfaces;
@@ -69,6 +68,7 @@ namespace FaithEngage.Core.RepoManagers
 
         public void UpdateEvent (Event eventToUpdate)
         {
+            if (!validateEvent (eventToUpdate)) throw new InvalidEventException () { InvalidEvent = eventToUpdate};
             var dto = _dtoFac.Convert (eventToUpdate);
             _repo.UpdateEvent (dto);
         }

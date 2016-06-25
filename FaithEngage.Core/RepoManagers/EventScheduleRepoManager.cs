@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FaithEngage.Core.Events.EventSchedules;
 using FaithEngage.Core.Events.EventSchedules.Interfaces;
 
-namespace FaithEngage.Core
+namespace FaithEngage.Core.RepoManagers
 {
 	public class EventScheduleRepoManager : IEventScheduleRepoManager
 	{

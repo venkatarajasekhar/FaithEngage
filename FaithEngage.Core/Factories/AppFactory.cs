@@ -4,6 +4,8 @@ using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Events.Interfaces;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 using FaithEngage.Core.UserClasses.Interfaces;
+using FaithEngage.Core.Events.EventSchedules.Interfaces;
+using FaithEngage.Core.CardProcessor;
 
 namespace FaithEngage.Core.Factories
 {
@@ -43,6 +45,18 @@ namespace FaithEngage.Core.Factories
         public IEventRepoManager EventRepo {
             get {
                 return _container.Resolve<IEventRepoManager> ();
+            }
+        }
+
+        public IEventScheduleRepoManager EventScheduleRepo{
+            get{
+                return _container.Resolve<IEventScheduleRepoManager> ();
+            }
+        }
+
+        public ICardProcessor CardProcessor{
+            get{
+                return _container.Resolve<ICardProcessor> ();
             }
         }
     }
