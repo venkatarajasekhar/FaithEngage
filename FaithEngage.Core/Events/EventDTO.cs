@@ -6,7 +6,7 @@ namespace FaithEngage.Core.Events
         public Guid EventId { get; set;}
         public Guid AssociatedOrg { get; set;}
         public Guid EventScheduleId { get; set;}
-        public DateTime EventDate { get; set;}
+        public DateTime? EventDate { get; set;}
 	}
 }
 

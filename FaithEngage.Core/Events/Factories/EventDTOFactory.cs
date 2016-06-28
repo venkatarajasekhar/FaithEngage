@@ -1,5 +1,4 @@
 ﻿using System;
-using FaithEngage.Core.Events.Interfaces;
 
 namespace FaithEngage.Core.Events.Factories
 {
@@ -11,7 +10,7 @@ namespace FaithEngage.Core.Events.Factories
             dto.AssociatedOrg = evnt.AssociatedOrg;
             dto.EventDate = evnt.EventDate;
             dto.EventId = evnt.EventId;
-            dto.EventScheduleId = evnt.Schedule.Id;
+            dto.EventScheduleId = (evnt.Schedule != null) ? evnt.Schedule.Id : Guid.Empty;
             return dto;
 		}
 	}

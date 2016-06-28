@@ -17,7 +17,7 @@ namespace FaithEngage.Core.Events
 
 		public EventSchedule Schedule{ get; set; }
 
-		public DateTime EventDate{ get; set; }
+		public DateTime? EventDate{ get; set; }
 	}
 }
 
