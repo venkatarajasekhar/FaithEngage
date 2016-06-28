@@ -3,6 +3,8 @@ using NUnit.Framework;
 using FaithEngage.Core.Events.EventSchedules.Interfaces;
 using FakeItEasy;
 using FaithEngage.Core.Events.EventSchedules;
+using FaithEngage.Core.Exceptions;
+using FaithEngage.Core.Tests;
 
 namespace FaithEngage.Core.Events.Factories
 {
@@ -39,6 +41,30 @@ namespace FaithEngage.Core.Events.Factories
             Assert.That (evnt.EventId, Is.EqualTo (VALID_GUID));
             Assert.That (evnt.Schedule, Is.EqualTo (sched));
         }
+
+		[Test]
+		public void Convert_DTOWithInvalidSchedId_ThrowsInvalidEventException()
+		{
+			var dto = new EventDTO();
+
+			A.CallTo(() => _schedMgr.GetById(A<Guid>.Ignored)).Throws<InvalidIdException>();
+
+			var e = TestHelpers.TryGetException(() => _fac.Convert(dto));
+
+			Assert.That(e, Is.InstanceOf(typeof(InvalidEventException)));
+		}
+
+		[Test]
+		public void Convert_SchedRepoThrowsException_ThrowsRepoException()
+		{
+			var dto = new EventDTO();
+
+			A.CallTo(() => _schedMgr.GetById(A<Guid>.Ignored)).Throws<Exception>();
+
+			var e = TestHelpers.TryGetException(() => _fac.Convert(dto));
+
+			Assert.That(e, Is.InstanceOf(typeof(RepositoryException)));
+		}
 
     }
 }

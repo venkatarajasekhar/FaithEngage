@@ -27,7 +27,7 @@ namespace FaithEngage.Core.Bootstrappers
             var feBooter = new FaithEngageBootLoader ();
             feBooter.RegisterDependencies (_container);
 
-            A.CallTo (() => _container.Register<IAppFactory, AppFactory> (LifeCycle.Transient)).MustHaveHappened();
+            A.CallTo (() => _container.Register<IAppFactory, AppFactory> ()).MustHaveHappened();
         }
 
         [Test]
