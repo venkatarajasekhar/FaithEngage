@@ -146,6 +146,7 @@
     <Compile Include="Events\EventSchedules\Factories\EventScheduleFactory.cs" />
     <Compile Include="Factories\IConverterFactory %28Tin,Tout%29.cs" />
     <Compile Include="RepoManagers\EventScheduleRepoManager.cs" />
+    <Compile Include="Exceptions\InvalidTimeZoneException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

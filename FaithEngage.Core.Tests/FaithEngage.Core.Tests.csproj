@@ -92,6 +92,7 @@
     <Compile Include="RepoManagersTests\EventRepoManagerTests.cs" />
     <Compile Include="EventsTests\FactoriesTests\EventDTOFactoryTests.cs" />
     <Compile Include="EventsTests\FactoriesTests\EventFactoryTests.cs" />
+    <Compile Include="EventsTests\EventSchedulesTests\EventScheduleFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">

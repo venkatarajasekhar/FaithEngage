@@ -14,23 +14,17 @@ namespace FaithEngage.Core.Events.EventSchedules
 			set;
 		}
 
-		private DateTime _utcStart;
+		private DateTimeOffset _utcStart;
 		public TimeSpan UTCStartTime {
 			get{
 				return _utcStart.TimeOfDay;
 			}
-			set{
-				_utcStart = new DateTime (value.Ticks).ToUniversalTime ();
-			}
 		}
 
-		private DateTime _utcEnd;
+		private DateTimeOffset _utcEnd;
 		public TimeSpan UTCEndTime {
 			get{
 				return _utcEnd.TimeOfDay;
-			}
-			set{
-				_utcEnd = new DateTime (value.Ticks).ToUniversalTime ();
 			}
 		}
 
@@ -53,8 +47,42 @@ namespace FaithEngage.Core.Events.EventSchedules
 			set;
 		}
 
-		public DateTime RecurringStart{ get; set; }
-		public DateTime RecurringEnd{ get; set; }
+		public DateTimeOffset RecurringStart{ get; set; }
+		public DateTimeOffset RecurringEnd{ get; set; }
+
+		public void SetUTCStartTime(DateTimeOffset startTime)
+		{
+			if (TimeZone == null) 
+				throw new InvalidTimeZoneException("You cannot set a start time without first setting the TimeZone");
+			if (TimeZone?.BaseUtcOffset == startTime.Offset)
+			{
+				_utcStart = startTime.UtcDateTime;
+			}
+			else {
+				throw new InvalidTimeZoneException("The offset for the passed in DateTimeOffset ("
+												   + startTime.Offset.TotalHours.ToString()
+												   + ") does not match the offset for the TimeZone ("
+												   + TimeZone.BaseUtcOffset.TotalHours.ToString());
+			}
+		}
+
+		public void SetUTCEndTime(DateTimeOffset endTime)
+		{
+			if (TimeZone == null)
+				throw new InvalidTimeZoneException("You cannot set a start time without first setting the TimeZone");
+			if (TimeZone?.BaseUtcOffset == endTime.Offset)
+			{
+				_utcEnd = endTime.UtcDateTime;
+			}
+			else {
+				throw new InvalidTimeZoneException("The offset for the passed in DateTimeOffset ("
+				                                   + endTime.Offset.TotalHours.ToString()
+												   + ") does not match the offset for the TimeZone ("
+												   + TimeZone.BaseUtcOffset.TotalHours.ToString());
+			}
+
+
+		}
 	}
 }
 
