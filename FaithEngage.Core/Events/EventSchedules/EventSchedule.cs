@@ -54,9 +54,12 @@ namespace FaithEngage.Core.Events.EventSchedules
 		{
 			if (TimeZone == null) 
 				throw new InvalidTimeZoneException("You cannot set a start time without first setting the TimeZone");
-			if (TimeZone?.BaseUtcOffset == startTime.Offset)
+            if(startTime.Offset == new TimeSpan(0)){
+                _utcStart = startTime;
+            }
+            else if (TimeZone?.BaseUtcOffset == startTime.Offset)
 			{
-				_utcStart = startTime.UtcDateTime;
+                _utcStart = startTime.ToUniversalTime ();
 			}
 			else {
 				throw new InvalidTimeZoneException("The offset for the passed in DateTimeOffset ("
@@ -70,9 +73,13 @@ namespace FaithEngage.Core.Events.EventSchedules
 		{
 			if (TimeZone == null)
 				throw new InvalidTimeZoneException("You cannot set a start time without first setting the TimeZone");
-			if (TimeZone?.BaseUtcOffset == endTime.Offset)
+            if(endTime.Offset == new TimeSpan(0))
+            {
+                _utcEnd = endTime;
+            }
+            else if (TimeZone?.BaseUtcOffset == endTime.Offset)
 			{
-				_utcEnd = endTime.UtcDateTime;
+                _utcEnd = endTime.ToUniversalTime ();
 			}
 			else {
 				throw new InvalidTimeZoneException("The offset for the passed in DateTimeOffset ("

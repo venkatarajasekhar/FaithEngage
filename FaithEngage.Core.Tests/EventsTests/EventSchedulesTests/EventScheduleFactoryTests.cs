@@ -17,21 +17,24 @@ namespace FaithEngage.Core.Events.EventSchedules.Factories
 		[Test]
 		public void Convert_ValidDTO_ValidEventSchedule()
 		{
-			//Create date times and make variables to test for time conversions.
 
-			var dto = new EventScheduleDTO()
-			{
-				Day = DayOfWeek.Sunday,
-				EventDescription = "TEST",
-				EventName = "TEST",
-				Id = VALID_GUID,
-				OrgId = VALID_GUID,
-				Recurrance = Recurrance.Weekly,
-				UTCRecurringEnd = DateTime.Parse("12/30/2016"),
-				UTCRecurringStart = DateTime.Parse("1/1/2016"),
-				TimeZoneId = TimeZoneInfo.Local.Id,
-				UTCEndTime = DateTime.Parse("10:00 am").ToUniversalTime().TimeOfDay,
-				UTCStartTime = DateTime.Parse("12:00 pm").ToUniversalTime().TimeOfDay
+            var startTime = new DateTimeOffset (DateTime.Parse ("10:00am"), TimeZoneInfo.Local.BaseUtcOffset);
+            var endTime = new DateTimeOffset (DateTime.Parse ("12:00pm"), TimeZoneInfo.Local.BaseUtcOffset);
+
+            var recurringStart = new DateTimeOffset (DateTime.Parse ("12/30/2016"), TimeZoneInfo.Local.BaseUtcOffset);
+            var recurringEnd = new DateTimeOffset (DateTime.Parse ("1/1/2016"), TimeZoneInfo.Local.BaseUtcOffset);
+            var dto = new EventScheduleDTO () {
+                Day = DayOfWeek.Sunday,
+                EventDescription = "TEST",
+                EventName = "TEST",
+                Id = VALID_GUID,
+                OrgId = VALID_GUID,
+                Recurrance = Recurrance.Weekly,
+                UTCRecurringEnd = recurringEnd.DateTime,
+                UTCRecurringStart = recurringStart.DateTime,
+                TimeZoneId = TimeZoneInfo.Local.Id,
+                UTCEndTime = startTime.UtcDateTime.TimeOfDay,
+                UTCStartTime = endTime.UtcDateTime.TimeOfDay,
 			};
 
 			var evnt = _fac.Convert(dto);
@@ -42,11 +45,11 @@ namespace FaithEngage.Core.Events.EventSchedules.Factories
 			Assert.That(evnt.Id, Is.EqualTo(VALID_GUID));
 			Assert.That(evnt.OrgId, Is.EqualTo(VALID_GUID));
 			Assert.That(evnt.Recurrance, Is.EqualTo(Recurrance.Weekly));
-			Assert.That(evnt.RecurringEnd, Is.EqualTo(DateTime.Parse("12/30/2016")));
-			Assert.That(evnt.RecurringStart, Is.EqualTo(DateTime.Parse("1/1/2016")));
+            Assert.That(evnt.RecurringEnd.ToUniversalTime(), Is.EqualTo(recurringEnd.ToUniversalTime()));
+            Assert.That(evnt.RecurringStart.ToUniversalTime(), Is.EqualTo(recurringStart.ToUniversalTime()));
 			Assert.That(evnt.TimeZone, Is.EqualTo(TimeZoneInfo.Local));
-			Assert.That(evnt.UTCEndTime, Is.EqualTo(dto.UTCEndTime));
-			Assert.That(evnt.UTCStartTime, Is.EqualTo(dto.UTCStartTime));
+			Assert.That(evnt.UTCEndTime, Is.EqualTo(startTime.ToUniversalTime ().TimeOfDay));
+			Assert.That(evnt.UTCStartTime, Is.EqualTo(endTime.ToUniversalTime ().TimeOfDay));
 		}
 	}
 }
