@@ -3,20 +3,19 @@ namespace FaithEngage.Core.Events.EventSchedules.Factories
 {
     public class EventScheduleDTOFactory : IConverterFactory<EventSchedule,EventScheduleDTO>
 	{
-        public EventScheduleDTO Convert (EventSchedule source)
+		public EventScheduleDTO Convert (EventSchedule evnt)
         {
             var dto = new EventScheduleDTO (); 
-            dto.Day = source.Day;
-            dto.EventDescription = source.EventDescription;
-            dto.EventName = source.EventName;
-            dto.Id = source.Id;
-            dto.OrgId = source.Id;
-            dto.Recurrance = source.Recurrance;
-			dto.UTCRecurringEnd = source.RecurringEnd.ToUniversalTime().DateTime;
-            dto.UTCRecurringStart = source.RecurringStart.ToUniversalTime().DateTime;
-            dto.UTCEndTime = source.UTCEndTime;
-            dto.UTCStartTime = source.UTCStartTime;
-			dto.TimeZoneId = source.TimeZone.Id;
+            dto.Day = evnt.Day;
+            dto.EventDescription = evnt.EventDescription;
+            dto.EventName = evnt.EventName;
+            dto.Id = evnt.Id;
+            dto.OrgId = evnt.Id;
+            dto.Recurrance = evnt.Recurrance;
+			dto.UTCRecurringEnd = evnt.RecurringEnd.ToUniversalTime().DateTime;
+            dto.UTCRecurringStart = evnt.RecurringStart.ToUniversalTime().DateTime;
+            dto.UTCEndTime = evnt.UTCEndTime;
+            dto.UTCStartTime = evnt.UTCStartTime;
             return dto;
         }
     }

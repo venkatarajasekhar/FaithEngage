@@ -81,7 +81,6 @@ namespace FaithEngage.Core.RepoManagers
 				check(e.Schedule, p => p != null);
 				check(e.Schedule.OrgId, p => p == e.AssociatedOrg);
 				check(e.Schedule.Id, p => p != Guid.Empty);
-				check(e.Schedule.TimeZone, p => p != null);
 			}
 			catch (Exception)
 			{

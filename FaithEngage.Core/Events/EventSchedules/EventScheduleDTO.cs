@@ -13,7 +13,6 @@ namespace FaithEngage.Core.Events.EventSchedules
         public Recurrance Recurrance { get; set;}
 		public DateTime UTCRecurringStart { get; set;}
 		public DateTime UTCRecurringEnd { get; set;}
-		public string TimeZoneId { get; set;}
 	}
 }
 

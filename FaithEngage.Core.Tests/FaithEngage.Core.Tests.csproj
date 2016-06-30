@@ -65,6 +65,7 @@
     <Folder Include="DisplayUnitsTests\FactoriesTests\" />
     <Folder Include="EventsTests\FactoriesTests\" />
     <Folder Include="EventsTests\EventSchedulesTests\" />
+    <Folder Include="EventsTests\EventSchedulesTests\FactoriesTests\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DummyTypes\Dummies.cs" />
@@ -92,7 +93,8 @@
     <Compile Include="RepoManagersTests\EventRepoManagerTests.cs" />
     <Compile Include="EventsTests\FactoriesTests\EventDTOFactoryTests.cs" />
     <Compile Include="EventsTests\FactoriesTests\EventFactoryTests.cs" />
-    <Compile Include="EventsTests\EventSchedulesTests\EventScheduleFactoryTests.cs" />
+    <Compile Include="EventsTests\EventSchedulesTests\FactoriesTests\EventScheduleFactoryTests.cs" />
+    <Compile Include="EventsTests\EventSchedulesTests\FactoriesTests\EventScheduleDTOFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">

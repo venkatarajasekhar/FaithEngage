@@ -28,8 +28,6 @@ namespace FaithEngage.Core.Events.EventSchedules
 			}
 		}
 
-		public TimeZoneInfo TimeZone { get; set; }
-
 		public string EventName {
 			get;
 			set;
@@ -52,43 +50,12 @@ namespace FaithEngage.Core.Events.EventSchedules
 
 		public void SetUTCStartTime(DateTimeOffset startTime)
 		{
-			if (TimeZone == null) 
-				throw new InvalidTimeZoneException("You cannot set a start time without first setting the TimeZone");
-            if(startTime.Offset == new TimeSpan(0)){
-                _utcStart = startTime;
-            }
-            else if (TimeZone?.BaseUtcOffset == startTime.Offset)
-			{
-                _utcStart = startTime.ToUniversalTime ();
-			}
-			else {
-				throw new InvalidTimeZoneException("The offset for the passed in DateTimeOffset ("
-												   + startTime.Offset.TotalHours.ToString()
-												   + ") does not match the offset for the TimeZone ("
-												   + TimeZone.BaseUtcOffset.TotalHours.ToString());
-			}
+            _utcStart = startTime.ToUniversalTime ();
 		}
 
 		public void SetUTCEndTime(DateTimeOffset endTime)
 		{
-			if (TimeZone == null)
-				throw new InvalidTimeZoneException("You cannot set a start time without first setting the TimeZone");
-            if(endTime.Offset == new TimeSpan(0))
-            {
-                _utcEnd = endTime;
-            }
-            else if (TimeZone?.BaseUtcOffset == endTime.Offset)
-			{
-                _utcEnd = endTime.ToUniversalTime ();
-			}
-			else {
-				throw new InvalidTimeZoneException("The offset for the passed in DateTimeOffset ("
-				                                   + endTime.Offset.TotalHours.ToString()
-												   + ") does not match the offset for the TimeZone ("
-												   + TimeZone.BaseUtcOffset.TotalHours.ToString());
-			}
-
-
+            _utcEnd = endTime.ToUniversalTime ();
 		}
 	}
 }

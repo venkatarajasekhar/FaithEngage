@@ -168,7 +168,6 @@ namespace FaithEngage.Core.RepoManagers
                 Schedule = new EventSchedule () {
                     OrgId = VALID_GUID,
                     Id = VALID_GUID,
-                    TimeZone = TimeZoneInfo.Local
 				}
 			};
             A.CallTo (() => _repo.SaveEvent (A<EventDTO>.Ignored)).Returns (VALID_GUID);
@@ -191,7 +190,6 @@ namespace FaithEngage.Core.RepoManagers
 					{
 						OrgId = VALID_GUID,
 						Id = VALID_GUID,
-						TimeZone = TimeZoneInfo.Local
 					}
 				},
 				new Event()
@@ -205,7 +203,6 @@ namespace FaithEngage.Core.RepoManagers
 					{
 						OrgId = INVALID_GUID,
 						Id = VALID_GUID,
-                        TimeZone = TimeZoneInfo.Local
 					}
 				},
 				new Event()
@@ -215,18 +212,8 @@ namespace FaithEngage.Core.RepoManagers
 					{
 						OrgId = VALID_GUID,
 						Id = INVALID_GUID,
-						TimeZone = TimeZoneInfo.Local
 					}
 				},
-				new Event()
-				{
-					AssociatedOrg = VALID_GUID,
-					Schedule = new EventSchedule()
-					{
-						OrgId = VALID_GUID,
-						Id = VALID_GUID,
-					}
-				}
 			};
 
 			var list = new List<Exception>();
@@ -236,7 +223,7 @@ namespace FaithEngage.Core.RepoManagers
 				if (e != null) list.Add(e);
 			}
 
-			Assert.That(list.Count, Is.EqualTo(5));
+			Assert.That(list.Count, Is.EqualTo(4));
 			list.ForEach(p => Assert.That(p, Is.InstanceOf(typeof(InvalidEventException))));
 			A.CallTo(()=>_repo.SaveEvent(A<EventDTO>.Ignored)).MustNotHaveHappened();
 		}
@@ -251,7 +238,6 @@ namespace FaithEngage.Core.RepoManagers
                 Schedule = new EventSchedule () {
                     OrgId = VALID_GUID,
                     Id = VALID_GUID,
-                    TimeZone = TimeZoneInfo.Local
                 }
             };
             var dto = new EventDTO ();
@@ -265,52 +251,40 @@ namespace FaithEngage.Core.RepoManagers
         [Test]
         public void UpdateEvent_InvalidEvents_ThrowsInvalidEventException ()
         {
-            var events = new List<Event> ()
-            {
-                new Event()
-                {
-                    AssociatedOrg = INVALID_GUID,
-                    Schedule = new EventSchedule()
-                    {
-                        OrgId = VALID_GUID,
-                        Id = VALID_GUID,
-                        TimeZone = TimeZoneInfo.Local
-                    }
-                },
-                new Event()
-                {
-                    AssociatedOrg = VALID_GUID
-                },
-                new Event()
-                {
-                    AssociatedOrg = VALID_GUID,
-                    Schedule = new EventSchedule()
-                    {
-                        OrgId = INVALID_GUID,
-                        Id = VALID_GUID,
-                        TimeZone = TimeZoneInfo.Local
-                    }
-                },
-                new Event()
-                {
-                    AssociatedOrg = VALID_GUID,
-                    Schedule = new EventSchedule()
-                    {
-                        OrgId = VALID_GUID,
-                        Id = INVALID_GUID,
-                        TimeZone = TimeZoneInfo.Local
-                    }
-                },
-                new Event()
-                {
-                    AssociatedOrg = VALID_GUID,
-                    Schedule = new EventSchedule()
-                    {
-                        OrgId = VALID_GUID,
-                        Id = VALID_GUID,
-                    }
-                }
-            };
+            var events = new List<Event>()
+			{
+				new Event()
+				{
+					AssociatedOrg = INVALID_GUID,
+					Schedule = new EventSchedule()
+					{
+						OrgId = VALID_GUID,
+						Id = VALID_GUID,
+					}
+				},
+				new Event()
+				{
+					AssociatedOrg = VALID_GUID
+				},
+				new Event()
+				{
+					AssociatedOrg = VALID_GUID,
+					Schedule = new EventSchedule()
+					{
+						OrgId = INVALID_GUID,
+						Id = VALID_GUID,
+					}
+				},
+				new Event()
+				{
+					AssociatedOrg = VALID_GUID,
+					Schedule = new EventSchedule()
+					{
+						OrgId = VALID_GUID,
+						Id = INVALID_GUID,
+					}
+				},
+			};
 
             var list = new List<Exception> ();
             foreach (var evnt in events) {
@@ -318,7 +292,7 @@ namespace FaithEngage.Core.RepoManagers
                 if (e != null) list.Add (e);
             }
 
-            Assert.That (list.Count, Is.EqualTo (5));
+            Assert.That (list.Count, Is.EqualTo (4));
             list.ForEach (p => Assert.That (p, Is.InstanceOf (typeof (InvalidEventException))));
             A.CallTo (() => _repo.SaveEvent (A<EventDTO>.Ignored)).MustNotHaveHappened ();
         }
