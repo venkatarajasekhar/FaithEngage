@@ -95,6 +95,7 @@
     <Compile Include="EventsTests\FactoriesTests\EventFactoryTests.cs" />
     <Compile Include="EventsTests\EventSchedulesTests\FactoriesTests\EventScheduleFactoryTests.cs" />
     <Compile Include="EventsTests\EventSchedulesTests\FactoriesTests\EventScheduleDTOFactoryTests.cs" />
+    <Compile Include="EventsTests\EventSchedulesTests\EventScheduleTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">

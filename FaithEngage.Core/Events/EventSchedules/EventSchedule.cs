@@ -17,14 +17,14 @@ namespace FaithEngage.Core.Events.EventSchedules
 		private DateTimeOffset _utcStart;
 		public TimeSpan UTCStartTime {
 			get{
-				return _utcStart.TimeOfDay;
+				return _utcStart.UtcDateTime.TimeOfDay;
 			}
 		}
 
 		private DateTimeOffset _utcEnd;
 		public TimeSpan UTCEndTime {
 			get{
-				return _utcEnd.TimeOfDay;
+				return _utcEnd.UtcDateTime.TimeOfDay;
 			}
 		}
 

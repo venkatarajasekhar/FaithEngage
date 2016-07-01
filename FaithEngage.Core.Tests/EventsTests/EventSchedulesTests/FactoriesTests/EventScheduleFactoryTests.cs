@@ -28,8 +28,8 @@ namespace FaithEngage.Core.Events.EventSchedules.Factories
                 Id = VALID_GUID,
                 OrgId = VALID_GUID,
                 Recurrance = Recurrance.Weekly,
-                UTCRecurringEnd = recurringEnd.DateTime,
-                UTCRecurringStart = recurringStart.DateTime,
+				UTCRecurringEnd = recurringEnd.UtcDateTime,
+				UTCRecurringStart = recurringStart.UtcDateTime,
                 UTCEndTime = startTime.UtcDateTime.TimeOfDay,
                 UTCStartTime = endTime.UtcDateTime.TimeOfDay,
 			};
@@ -44,8 +44,8 @@ namespace FaithEngage.Core.Events.EventSchedules.Factories
 			Assert.That(evnt.Recurrance, Is.EqualTo(Recurrance.Weekly));
             Assert.That(evnt.RecurringEnd.ToUniversalTime(), Is.EqualTo(recurringEnd.ToUniversalTime()));
             Assert.That(evnt.RecurringStart.ToUniversalTime(), Is.EqualTo(recurringStart.ToUniversalTime()));
-			Assert.That(evnt.UTCEndTime, Is.EqualTo(startTime.ToUniversalTime ().TimeOfDay));
-			Assert.That(evnt.UTCStartTime, Is.EqualTo(endTime.ToUniversalTime ().TimeOfDay));
+			Assert.That(evnt.UTCEndTime, Is.EqualTo(startTime.UtcDateTime.TimeOfDay));
+			Assert.That(evnt.UTCStartTime, Is.EqualTo(endTime.UtcDateTime.TimeOfDay));
 		}
 
 		[Test]

@@ -28,12 +28,35 @@ namespace FaithEngage.Core.Events.EventSchedules.Factories
 				EventName = "TEST",
 				Id = VALID_GUID,
 				OrgId = VALID_GUID,
-				Recurrance = Recurrance.Daily,
+				Recurrance = Recurrance.Weekly,
 				RecurringEnd = recurringEnd,
 				RecurringStart = recurringStart
 			};
 			sched.SetUTCEndTime(endTime);
 			sched.SetUTCStartTime(startTime);
+
+			var dto = _fac.Convert(sched);
+
+			Assert.That(dto.Day, Is.EqualTo(DayOfWeek.Monday));
+			Assert.That(dto.EventDescription, Is.EqualTo("TEST"));
+			Assert.That(dto.EventName, Is.EqualTo("TEST"));
+			Assert.That(dto.Id, Is.EqualTo(VALID_GUID));
+			Assert.That(dto.OrgId, Is.EqualTo(VALID_GUID));
+			Assert.That(dto.Recurrance, Is.EqualTo(Recurrance.Weekly));
+			Assert.That(dto.UTCEndTime, Is.EqualTo(endTime.UtcDateTime.TimeOfDay));
+			Assert.That(dto.UTCStartTime, Is.EqualTo(startTime.UtcDateTime.TimeOfDay));
+			Assert.That(dto.UTCRecurringEnd, Is.EqualTo(recurringEnd.UtcDateTime));
+			Assert.That(dto.UTCRecurringStart, Is.EqualTo(recurringStart.UtcDateTime));
+		}
+
+		[Test]
+		public void Convert_InvalidEventSchedule_EmptyDTO()
+		{
+			var sched = new EventSchedule();
+
+			var dto = _fac.Convert(sched);
+
+			Assert.That(dto, Is.Not.Null);
 		}
 	}
 }

@@ -25,8 +25,8 @@ namespace FaithEngage.Core.Events.EventSchedules.Factories
 			sched.SetUTCStartTime(startDtOffset);
 			sched.SetUTCEndTime(endDtOffset);
 
-            sched.RecurringEnd = new DateTimeOffset(dto.UTCRecurringEnd);
-			sched.RecurringStart = new DateTimeOffset(dto.UTCRecurringStart);
+			sched.RecurringEnd = new DateTimeOffset(dto.UTCRecurringEnd, new TimeSpan());
+			sched.RecurringStart = new DateTimeOffset(dto.UTCRecurringStart, new TimeSpan());
 
             return sched;
         }
