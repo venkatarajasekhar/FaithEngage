@@ -41,7 +41,6 @@ namespace FaithEngage.Core.DisplayUnits.Factories
 
 			public override void SetAttributes (Dictionary<string, string> attributes)
 			{
-				throw new NotImplementedException ();
 			}
 
 			public override DisplayUnitPlugin Plugin {
