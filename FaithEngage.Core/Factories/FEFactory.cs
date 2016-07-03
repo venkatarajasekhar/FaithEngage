@@ -1,7 +1,8 @@
 ﻿using System;
 using FaithEngage.Core.Containers;
+using FaithEngage.Core.Factories;
 
-namespace FaithEngage.Core.Factories
+namespace FaithEngage.Core
 {
     public class FEFactory
     {
@@ -12,10 +13,7 @@ namespace FaithEngage.Core.Factories
             _fac = container.Resolve<IAppFactory> ();
         }
 
-        public static IAppFactory Get()
-        {
-            return _fac;
-        }
+        public static IAppFactory Get{ get { return _fac;}}
     }
 }
 

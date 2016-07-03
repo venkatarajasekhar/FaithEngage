@@ -6,6 +6,8 @@ using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 using FaithEngage.Core.UserClasses.Interfaces;
 using FaithEngage.Core.Events.EventSchedules.Interfaces;
 using FaithEngage.Core.CardProcessor;
+using FaithEngage.Core.TemplatingService;
+using FaithEngage.Core.PluginManagers.Files.Interfaces;
 
 namespace FaithEngage.Core.Factories
 {
@@ -13,7 +15,7 @@ namespace FaithEngage.Core.Factories
     {
         private readonly IContainer _container;
 
-        private AppFactory(IContainer container)
+        public AppFactory(IContainer container)
         {
             _container = container;
         }
@@ -57,6 +59,18 @@ namespace FaithEngage.Core.Factories
         public ICardProcessor CardProcessor{
             get{
                 return _container.Resolve<ICardProcessor> ();
+            }
+        }
+
+        public ITemplatingService TemplatingService{
+            get{
+                return _container.Resolve<ITemplatingService> ();
+            }
+        }
+
+        public IPluginFileManager PluginFileManager{
+            get{
+                return _container.Resolve<IPluginFileManager> ();
             }
         }
     }

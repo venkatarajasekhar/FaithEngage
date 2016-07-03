@@ -33,14 +33,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DisplayUnits\FileUnit.cs" />
-    <Compile Include="DisplayUnits\BibleUnit\BibleUnit.cs" />
-    <Compile Include="DisplayUnits\BibleUnit\BibleUnitPlugin.cs" />
     <Compile Include="DisplayUnits\TextUnit\TextUnit.cs" />
     <Compile Include="DisplayUnits\TextUnit\TextUnitPlugin.cs" />
     <Compile Include="DisplayUnits\TextUnit\TextCard.cs" />
     <Compile Include="DisplayUnits\TextUnit\TextCardSection.cs" />
-    <Compile Include="DisplayUnits\ImageUnit\ImageUnit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -55,5 +51,11 @@
       <Project>{F94B6862-B7CC-4507-BC82-9093F97CDEC2}</Project>
       <Name>FaithEngage.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DisplayUnits\BibleUnit\BibleUnit.cs" />
+    <None Include="DisplayUnits\BibleUnit\BibleUnitPlugin.cs" />
+    <None Include="DisplayUnits\ImageUnit\ImageUnit.cs" />
+    <None Include="DisplayUnits\FileUnit.cs" />
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.DisplayUnitEditor;
+using FaithEngage.Core.Containers;
 
 namespace FaithEngage.Plugins.DisplayUnits.TextUnitPlugin
 {
@@ -9,7 +10,7 @@ namespace FaithEngage.Plugins.DisplayUnits.TextUnitPlugin
     {
         public TextUnitPlugin ()
         {
-            var def = new DisplayUnitEditorDefinition ();
+            var def = new IDisplayUnitEditorDefinition ();
             def.EnforceSectionOrder = false;
             var secDef = new CardSectionDefinition ("Text", EditorFieldType.HtmlTextArea,1, 1);
             secDef.EditorFieldType = EditorFieldType.HtmlTextArea;
@@ -38,12 +39,22 @@ namespace FaithEngage.Plugins.DisplayUnits.TextUnitPlugin
             return new List<string> (){ "Text" };
         }
 
-		private Type _duType = typeof(TextUnit);
+        public override void Initialize (IContainer container)
+        {
+            throw new NotImplementedException ();
+        }
+
+        public override void RegisterDependencies (IContainer container)
+        {
+            throw new NotImplementedException ();
+        }
+
+        private Type _duType = typeof(TextUnit);
         public override Type DisplayUnitType {
 			get{ return _duType; }
         }
             
-        public override DisplayUnitEditorDefinition EditorDefinition {
+        public override IDisplayUnitEditorDefinition EditorDefinition {
             get;
             set;
         }

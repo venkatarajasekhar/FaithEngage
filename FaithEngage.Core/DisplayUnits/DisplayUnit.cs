@@ -21,6 +21,7 @@ namespace FaithEngage.Core.DisplayUnits
         {
             this.Id = Guid.NewGuid ();
             tryApplyAttributes (attributes);
+            SetAttributes (attributes);
         }
 
         protected DisplayUnit(Guid id, Dictionary<string,string> attributes)
@@ -29,6 +30,7 @@ namespace FaithEngage.Core.DisplayUnits
                 throw new EmptyGuidException ();
             this.Id = id;
             tryApplyAttributes (attributes);
+            SetAttributes (attributes);
         }
 
         private void tryApplyAttributes(Dictionary<string,string> attributes)

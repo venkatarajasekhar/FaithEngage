@@ -6,27 +6,31 @@ using System.Collections.Generic;
 
 namespace FaithEngage.IntegrationTests
 {
-	[TestFixture]
+    [TestFixture]
 	public class BootstrappersTests
 	{
 		[Test]
 		public void TestBootLoader()
 		{
-			var initializer = new Initializer();
+			
+            var initializer = new Initializer();
 			var booter = initializer.GetBootstrapper();
-			var container = initializer.GetContainer();
+            var container = initializer.GetContainer ();
 
 			var booters = new List<IBootstrapper>();
-			booter.LoadBootstrappers(booters);
-
+            Console.WriteLine ("Loading Bootstrappers...");
+            booter.LoadBootstrappers(booters);
+            Console.WriteLine ("Registering Dependencies...");
 			foreach (var boot in booters)
 			{
-				boot.RegisterDependencies(container);
+                Console.WriteLine (boot);
+                boot.RegisterDependencies(container);
 			}
 
+            Console.WriteLine ("Executing Booters...");
 			foreach (var boot in booters)
 			{
-				boot.Execute(container);
+                boot.Execute (container);
 			}
 		}
 	}

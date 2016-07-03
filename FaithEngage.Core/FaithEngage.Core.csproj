@@ -29,6 +29,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.IO.Compression" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -40,7 +41,7 @@
     <Compile Include="Exceptions\InvalidFileTypeException.cs" />
     <Compile Include="Exceptions\UnregisteredDependencyException.cs" />
     <Compile Include="Exceptions\DependencyException.cs" />
-    <Compile Include="Exceptions\DependencyAlreadyRegisteredException.cs" />
+    <Compile Include="Exceptions\TypeNotRegisteredException.cs" />
     <Compile Include="Exceptions\InvalidTypeRelationshipException.cs" />
     <Compile Include="Exceptions\RegisteredObjectInstantiationException.cs" />
     <Compile Include="Exceptions\EmptyGuidException.cs" />
@@ -64,7 +65,7 @@
     <Compile Include="Cards\Interfaces\IRenderableCard.cs" />
     <Compile Include="Cards\Interfaces\IRenderableCardSection.cs" />
     <Compile Include="Cards\Interfaces\ICardEditorAction.cs" />
-    <Compile Include="DisplayUnitEditor\DisplayUnitEditorDefinition.cs" />
+    <Compile Include="DisplayUnitEditor\IDisplayUnitEditorDefinition.cs" />
     <Compile Include="RepoManagers\DisplayUnitRepoManager.cs" />
     <Compile Include="DisplayUnits\DisplayUnitGrouping.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\DisplayUnitPlugin.cs" />
@@ -72,8 +73,6 @@
     <Compile Include="DisplayUnits\DisplayUnitDTO.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\DisplayUnitPluginDTO.cs" />
     <Compile Include="Containers\IContainer.cs" />
-    <Compile Include="DisplayUnitEditor\CardSectionDefinition.cs" />
-    <Compile Include="DisplayUnitEditor\EditorFieldTypes.cs" />
     <Compile Include="Containers\LifeCycle.cs" />
     <Compile Include="PluginManagers\Plugin.cs" />
     <Compile Include="Cards\RenderableCardDTO.cs" />
@@ -147,6 +146,10 @@
     <Compile Include="Factories\IConverterFactory %28Tin,Tout%29.cs" />
     <Compile Include="RepoManagers\EventScheduleRepoManager.cs" />
     <Compile Include="Exceptions\InvalidTimeZoneException.cs" />
+    <Compile Include="TemplatingService\ITemplatingService.cs" />
+    <Compile Include="DisplayUnitEditor\DisplayUnitEditorContext.cs" />
+    <Compile Include="PluginManagers\Files\Interfaces\IPluginFileManager.cs" />
+    <Compile Include="PluginManagers\Files\PluginFileInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -180,5 +183,8 @@
     <Folder Include="Events\EventSchedules\Interfaces\" />
     <Folder Include="Events\Factories\" />
     <Folder Include="Events\EventSchedules\Factories\" />
+    <Folder Include="TemplatingService\" />
+    <Folder Include="PluginManagers\Interfaces\" />
+    <Folder Include="PluginManagers\Files\" />
   </ItemGroup>
 </Project>

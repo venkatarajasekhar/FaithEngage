@@ -3,6 +3,7 @@ using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.DisplayUnits;
 using FakeItEasy;
 using FaithEngage.Core.Containers;
+using FaithEngage.Core.DisplayUnitEditor;
 
 namespace Dummy_PluginAssembly
 {
@@ -36,12 +37,22 @@ namespace Dummy_PluginAssembly
             throw new NotImplementedException ();
         }
 
+        public override void Install (IContainer container)
+        {
+            throw new NotImplementedException ();
+        }
+
+        public override void Uninstall (IContainer container)
+        {
+            throw new NotImplementedException ();
+        }
+
         public override Type DisplayUnitType {
 			get {
 				return typeof(DisplayUnit);
 			}
 		}
-		public override FaithEngage.Core.DisplayUnitEditor.DisplayUnitEditorDefinition EditorDefinition {
+		public override IDisplayUnitEditorDefinition EditorDefinition {
 			get {
 				throw new NotImplementedException ();
 			}

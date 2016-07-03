@@ -9,8 +9,7 @@ namespace FaithEngage.Core.DisplayUnitEditor
     {
         [Test]
         public void Ctor_EnforceSectionOrder_False(){
-            var def = new DisplayUnitEditorDefinition ();
-            Assert.That (def.EnforceSectionOrder == false);
+            
         }
     }
 }

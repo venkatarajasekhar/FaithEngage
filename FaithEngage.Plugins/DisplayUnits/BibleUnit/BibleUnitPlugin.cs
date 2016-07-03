@@ -31,7 +31,7 @@ namespace FaithEngage.Plugins.DisplayUnits.BibleUnitPlugin
 			get{ return _duType; }
         }
 
-        public override DisplayUnitEditorDefinition EditorDefinition {
+        public override IDisplayUnitEditorDefinition EditorDefinition {
             get {
                 throw new NotImplementedException ();
             }
