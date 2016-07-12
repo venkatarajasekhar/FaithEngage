@@ -6,6 +6,8 @@ namespace FaithEngage.Core.Containers
         T Resolve<T>();
         void Register<Tabstract,Tconcrete>();
         void Register<Tabstract,Tconcrete> (LifeCycle lifecycle);
+		int DeRegister<T>();
+		void Replace<Tabstract, TnewConcrete>(LifeCycle lifecycle);
     }
 }
 

@@ -73,6 +73,21 @@ namespace FaithEngage.Core.Containers
                 yield return resolveObject (parameter.ParameterType);
             }
         }
-    }
+
+		public int DeRegister<T>()
+		{
+			int num = 0;
+			var typeToFind = typeof(T);
+			num = _registry.RemoveAll(p => p.AbtractType.FullName == typeToFind.FullName || p.ConcreteType.FullName == typeToFind.FullName);
+			return num;
+		}
+
+		public void Replace<Tabstract, TnewConcrete>(LifeCycle lifeCycle)
+		{
+			var num = DeRegister<Tabstract>();
+			if (num == 0) throw new TypeNotRegisteredException(typeof(Tabstract));
+			Register<Tabstract, TnewConcrete>(lifeCycle);
+		}
+	}
 }
 

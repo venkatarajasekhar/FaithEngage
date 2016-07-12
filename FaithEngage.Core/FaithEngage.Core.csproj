@@ -184,7 +184,6 @@
     <Folder Include="Events\Factories\" />
     <Folder Include="Events\EventSchedules\Factories\" />
     <Folder Include="TemplatingService\" />
-    <Folder Include="PluginManagers\Interfaces\" />
     <Folder Include="PluginManagers\Files\" />
   </ItemGroup>
 </Project>

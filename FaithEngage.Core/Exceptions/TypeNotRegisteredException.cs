@@ -4,7 +4,7 @@ namespace FaithEngage.Core.Exceptions
 {
     public class TypeNotRegisteredException : DependencyException
     {
-        public TypeNotRegisteredException (Type typeAtIssue) : base (typeAtIssue)
+		public TypeNotRegisteredException(Type typeAtIssue) : base(typeAtIssue, $"Type not registered: {typeAtIssue.FullName}")
         {
         }
         
