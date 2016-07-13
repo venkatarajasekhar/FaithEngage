@@ -3,9 +3,9 @@ namespace FaithEngage.Core.TemplatingService
 {
     public interface ITemplatingService
     {
-        string CompileHtmlFromTemplate (string template, dynamic model);
-        string RegisterTemplate (string template, string templateName);
-        string GetTemplate (string templateName);
+        string CompileHtmlFromTemplate (string template, object model);
+		string CompileHtmlFromTemplateKey(string templateKey, object model);
+        void RegisterTemplate (string template, string templateName);
     }
 }
 

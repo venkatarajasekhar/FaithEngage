@@ -8,6 +8,7 @@ using FaithEngage.Core.Events.EventSchedules.Interfaces;
 using FaithEngage.Core.CardProcessor;
 using FaithEngage.Core.TemplatingService;
 using FaithEngage.Core.PluginManagers.Files.Interfaces;
+using FaithEngage.Core.RepoInterfaces;
 
 namespace FaithEngage.Core.Factories
 {
@@ -73,6 +74,14 @@ namespace FaithEngage.Core.Factories
                 return _container.Resolve<IPluginFileManager> ();
             }
         }
+
+		public IConfigRepository ConfigManager
+		{
+			get
+			{
+				return _container.Resolve<IConfigRepository>();
+			}
+		}
     }
 }
 

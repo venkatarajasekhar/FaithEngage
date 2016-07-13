@@ -21,9 +21,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.Facade.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.IntegrationTests", "FaithEngage.IntegrationTests\FaithEngage.IntegrationTests.csproj", "{8BB2671C-0B5D-4CA8-B2E6-0419C058C11B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.Plugins", "FaithEngage.Plugins\FaithEngage.Plugins.csproj", "{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}"
+Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "FaithEngage.Plugins", "FaithEngage.Plugins\FaithEngage.Plugins.csproj", "{459B6478-EBCD-4805-9554-E38D8B73BE63}"
 EndProject
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "FaithEngage.Plugins.Tests", "FaithEngage.Plugins.Tests\FaithEngage.Plugins.Tests.csproj", "{728527A4-7786-46B1-B93C-382862846A94}"
+Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "FaithEngage.Plugins.Tests", "FaithEngage.Plugins.Tests\FaithEngage.Plugins.Tests.csproj", "{316DC699-08E0-44C4-9275-0828C7E0A961}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,13 +71,13 @@ Global
 		{8BB2671C-0B5D-4CA8-B2E6-0419C058C11B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BB2671C-0B5D-4CA8-B2E6-0419C058C11B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BB2671C-0B5D-4CA8-B2E6-0419C058C11B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{728527A4-7786-46B1-B93C-382862846A94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{728527A4-7786-46B1-B93C-382862846A94}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{728527A4-7786-46B1-B93C-382862846A94}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{728527A4-7786-46B1-B93C-382862846A94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{459B6478-EBCD-4805-9554-E38D8B73BE63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{459B6478-EBCD-4805-9554-E38D8B73BE63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{459B6478-EBCD-4805-9554-E38D8B73BE63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{459B6478-EBCD-4805-9554-E38D8B73BE63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{316DC699-08E0-44C4-9275-0828C7E0A961}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{316DC699-08E0-44C4-9275-0828C7E0A961}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{316DC699-08E0-44C4-9275-0828C7E0A961}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{316DC699-08E0-44C4-9275-0828C7E0A961}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

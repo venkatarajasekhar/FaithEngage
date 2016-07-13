@@ -6,6 +6,7 @@ using FaithEngage.Core.Events.EventSchedules.Interfaces;
 using FaithEngage.Core.CardProcessor;
 using FaithEngage.Core.TemplatingService;
 using FaithEngage.Core.PluginManagers.Files.Interfaces;
+using FaithEngage.Core.RepoInterfaces;
 
 namespace FaithEngage.Core.Factories
 {
@@ -20,6 +21,7 @@ namespace FaithEngage.Core.Factories
         ICardProcessor CardProcessor { get; }
         ITemplatingService TemplatingService{ get; }
         IPluginFileManager PluginFileManager{ get; }
+		IConfigRepository ConfigManager { get; }
     }
 }
 

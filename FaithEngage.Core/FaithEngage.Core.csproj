@@ -150,6 +150,7 @@
     <Compile Include="DisplayUnitEditor\DisplayUnitEditorContext.cs" />
     <Compile Include="PluginManagers\Files\Interfaces\IPluginFileManager.cs" />
     <Compile Include="PluginManagers\Files\PluginFileInfo.cs" />
+    <Compile Include="RepoInterfaces\IConfigRepository.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -185,5 +186,7 @@
     <Folder Include="Events\EventSchedules\Factories\" />
     <Folder Include="TemplatingService\" />
     <Folder Include="PluginManagers\Files\" />
+    <Folder Include="Config\" />
+    <Folder Include="Config\Interfaces\" />
   </ItemGroup>
 </Project>
