@@ -29,6 +29,9 @@ namespace FaithEngage.Core.Tests
         
     }
 
+	public class Dummy_NoParameters2 : IDummy
+	{ }
+
     public class Dummy_CtorThrowsException : IDummy
     {
         public Dummy_CtorThrowsException ()

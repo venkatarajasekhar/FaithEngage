@@ -26,6 +26,11 @@ namespace FaithEngage.Core.Containers
             _registry.Add (ro);
         }
 
+		public IRegistrationService GetRegistrationService()
+		{
+			return this.Resolve<IRegistrationService>();
+		}
+
 		private RegisteredObject registerSelf(Type typeToRegister)
 		{
 			var ro = new RegisteredObject (typeToRegister, typeToRegister, LifeCycle.Singleton);
@@ -84,8 +89,7 @@ namespace FaithEngage.Core.Containers
 
 		public void Replace<Tabstract, TnewConcrete>(LifeCycle lifeCycle)
 		{
-			var num = DeRegister<Tabstract>();
-			if (num == 0) throw new TypeNotRegisteredException(typeof(Tabstract));
+			DeRegister<Tabstract>();
 			Register<Tabstract, TnewConcrete>(lifeCycle);
 		}
 	}

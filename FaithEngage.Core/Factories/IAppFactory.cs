@@ -22,6 +22,8 @@ namespace FaithEngage.Core.Factories
         ITemplatingService TemplatingService{ get; }
         IPluginFileManager PluginFileManager{ get; }
 		IConfigRepository ConfigManager { get; }
+
+		T GetOther<T>();
     }
 }
 

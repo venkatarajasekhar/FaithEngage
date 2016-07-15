@@ -9,6 +9,7 @@ using FaithEngage.Core.CardProcessor;
 using FaithEngage.Core.TemplatingService;
 using FaithEngage.Core.PluginManagers.Files.Interfaces;
 using FaithEngage.Core.RepoInterfaces;
+using FaithEngage.Core.Exceptions;
 
 namespace FaithEngage.Core.Factories
 {
@@ -82,6 +83,12 @@ namespace FaithEngage.Core.Factories
 				return _container.Resolve<IConfigRepository>();
 			}
 		}
-    }
+
+		public T GetOther<T>()
+		{
+			if (typeof(T) == typeof(IContainer)) throw new FactoryException("Accessing the IContainer from the AppFactory is not permitted.");
+			return _container.Resolve<T>();
+		}
+	}
 }
 

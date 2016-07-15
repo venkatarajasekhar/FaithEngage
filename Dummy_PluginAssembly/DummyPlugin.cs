@@ -4,6 +4,7 @@ using FaithEngage.Core.DisplayUnits;
 using FakeItEasy;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.DisplayUnitEditor;
+using FaithEngage.Core.Factories;
 
 namespace Dummy_PluginAssembly
 {
@@ -27,22 +28,22 @@ namespace Dummy_PluginAssembly
 			throw new NotImplementedException ();
 		}
 
-        public override void Initialize (IContainer container)
+        public override void Initialize (IAppFactory container)
         {
             throw new NotImplementedException ();
         }
 
-        public override void RegisterDependencies (IContainer container)
+        public override void RegisterDependencies (IRegistrationService container)
         {
             throw new NotImplementedException ();
         }
 
-        public override void Install (IContainer container)
+        public override void Install (IAppFactory container)
         {
             throw new NotImplementedException ();
         }
 
-        public override void Uninstall (IContainer container)
+        public override void Uninstall (IAppFactory container)
         {
             throw new NotImplementedException ();
         }

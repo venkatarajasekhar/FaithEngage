@@ -39,13 +39,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DisplayUnits\TextUnit\TextUnit.cs" />
-    <Compile Include="DisplayUnits\TextUnit\TextUnitPlugin.cs" />
-    <Compile Include="DisplayUnits\TextUnit\TextCard.cs" />
-    <Compile Include="DisplayUnits\TextUnit\TextCardSection.cs" />
-    <Compile Include="BundledPluginsBootstrapper.cs" />
-    <Compile Include="RazorTemplating\RazorTemplatingBootstrapper.cs" />
     <Compile Include="RazorTemplating\RazorTemplatingService.cs" />
+    <Compile Include="RazorTemplating\RazorTemplatingPlugin.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -68,5 +63,9 @@
     <None Include="DisplayUnits\ImageUnit\ImageUnit.cs" />
     <None Include="DisplayUnits\FileUnit.cs" />
     <None Include="packages.config" />
+    <None Include="DisplayUnits\TextUnit\TextCard.cs" />
+    <None Include="DisplayUnits\TextUnit\TextCardSection.cs" />
+    <None Include="DisplayUnits\TextUnit\TextUnit.cs" />
+    <None Include="DisplayUnits\TextUnit\TextUnitPlugin.cs" />
   </ItemGroup>
 </Project>

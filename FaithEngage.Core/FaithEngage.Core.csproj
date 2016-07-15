@@ -127,7 +127,6 @@
     <Compile Include="ActionProcessors\ActionProcessorsBootstrapper.cs" />
     <Compile Include="RepoManagers\EventRepoManager.cs" />
     <Compile Include="Events\EventBootstrapper.cs" />
-    <Compile Include="Factories\FEFactory.cs" />
     <Compile Include="Exceptions\PluginIsMissingNecessaryInfoException.cs" />
     <Compile Include="DisplayUnits\Factories\DisplayUnitFactory.cs" />
     <Compile Include="DisplayUnits\Factories\DisplayUnitDtoFactory.cs" />
@@ -151,6 +150,10 @@
     <Compile Include="PluginManagers\Files\Interfaces\IPluginFileManager.cs" />
     <Compile Include="PluginManagers\Files\PluginFileInfo.cs" />
     <Compile Include="RepoInterfaces\IConfigRepository.cs" />
+    <Compile Include="FEFactory.cs" />
+    <Compile Include="Containers\RegistrationService.cs" />
+    <Compile Include="Exceptions\FactoryException.cs" />
+    <Compile Include="Containers\IRegistrationService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

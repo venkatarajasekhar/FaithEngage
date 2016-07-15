@@ -1,5 +1,6 @@
 ﻿using System;
 using FaithEngage.Core.Containers;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.PluginManagers
 {
@@ -32,10 +33,10 @@ namespace FaithEngage.Core.PluginManagers
 
         abstract public int[] PluginVersion{ get;}
 
-        abstract public void Initialize (IContainer container);
-        abstract public void Install (IContainer container);
-        abstract public void Uninstall (IContainer container);
-        abstract public void RegisterDependencies (IContainer container);
+        abstract public void Initialize (IAppFactory FEFactory);
+		abstract public void Install (IAppFactory FEFactory);
+		abstract public void Uninstall (IAppFactory FEFactory);
+		abstract public void RegisterDependencies (IRegistrationService regService);
 
         protected Plugin(){}
 
