@@ -92,6 +92,58 @@ namespace FaithEngage.Core.Containers
 			DeRegister<Tabstract>();
 			Register<Tabstract, TnewConcrete>(lifeCycle);
 		}
-	}
+
+        public bool CheckRegistered<Tabstract> ()
+        {
+            var type = typeof (Tabstract);
+            return _registry.Any (p => p.AbtractType == type);
+        }
+
+        public IList<Type> CheckAllDependencies ()
+        {
+            var list = new List<Type> ();
+            foreach(var obj in _registry)
+            {
+                checkDependencies (obj.ConcreteType, list);
+            }
+            return list;
+        }
+
+        private void checkDependencies(Type type, IList<Type> unregisteredTypes)
+        {
+            Type concreteType;
+            if(type.IsAbstract || type.IsInterface)
+            {
+                if (type == typeof (IContainer)) return;
+                var ro = _registry.FirstOrDefault (p => p.AbtractType == type);
+                concreteType = ro?.ConcreteType ?? null;
+                if(concreteType == null)
+                {
+                    if (unregisteredTypes.Contains (type)) return;
+                    unregisteredTypes.Add (type);
+                    return;
+                }
+            }
+            else
+            {
+                concreteType = type;
+            }
+
+            var ctor = concreteType.GetConstructors ().FirstOrDefault ();
+            if(ctor == null){
+                return;
+            }
+            var ctorParams = ctor.GetParameters ();
+            foreach(var p in ctorParams)
+            {
+                checkDependencies (p.ParameterType, unregisteredTypes);
+            }
+            if (unregisteredTypes.Contains (concreteType)) return;
+            if (_registry.Any (p => p.AbtractType == type || p.ConcreteType == concreteType)) return;
+            unregisteredTypes.Add (type);
+        }
+
+
+    }
 }
 

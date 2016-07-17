@@ -19,7 +19,10 @@ namespace FaithEngage.Core.PluginManagers.Files
             set;
         }
 
-        public FileInfo FileInfo{ get { return _fileInfo;}}
+        public FileInfo FileInfo{ 
+            get { return _fileInfo;} 
+            set { _fileInfo = value;}
+        }
     }
 }
 

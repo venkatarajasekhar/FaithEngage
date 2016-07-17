@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FaithEngage.Core.Containers;
 
 namespace FaithEngage.Core.CardProcessor
 {
     public class CardProcessorBootstrapper : IBootstrapper
     {
+
         public void Execute (IContainer container)
         {
         }

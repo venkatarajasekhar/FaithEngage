@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using FaithEngage.Core.Containers;
-using FaithEngage.Core.Cards.Interfaces;
+using FaithEngage.Core.PluginManagers.Files.Interfaces;
 
-namespace FaithEngage.Core.Cards
+namespace FaithEngage.Core.PluginManagers.Files
 {
-    public class CardBootstrapper : IBootstrapper
+    public class PluginFileBootstrapper : IBootstrapper
     {
-
         public void Execute (IContainer container)
         {
+            throw new NotImplementedException ();
         }
 
         public void LoadBootstrappers (IList<IBootstrapper> bootstrappers)
@@ -18,7 +18,7 @@ namespace FaithEngage.Core.Cards
 
         public void RegisterDependencies (IContainer container)
         {
-            container.Register<ICardDTOFactory, CardDtoFactory> (LifeCycle.Transient);
+            container.Register<IPluginFileManager, IPluginFileManager> (LifeCycle.Singleton);
         }
     }
 }

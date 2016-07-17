@@ -10,6 +10,7 @@ namespace FaithEngage.Core.Events
 {
     public class EventBootstrapper : IBootstrapper
     {
+
         public void Execute (IContainer container)
         {
         }

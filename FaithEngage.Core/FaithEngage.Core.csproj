@@ -30,6 +30,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -154,6 +155,14 @@
     <Compile Include="Containers\RegistrationService.cs" />
     <Compile Include="Exceptions\FactoryException.cs" />
     <Compile Include="Containers\IRegistrationService.cs" />
+    <Compile Include="PluginManagers\Interfaces\IPluginManager.cs" />
+    <Compile Include="PluginManagers\Files\PluginFileManager.cs" />
+    <Compile Include="Config\Interfaces\IConfigManager.cs" />
+    <Compile Include="RepoInterfaces\IPluginFileInfoRepository.cs" />
+    <Compile Include="PluginManagers\Files\PluginFileInfoDTO.cs" />
+    <Compile Include="PluginManagers\Files\Interfaces\IPluginFileInfoFactory.cs" />
+    <Compile Include="PluginManagers\Files\PluginFileBootstrapper.cs" />
+    <Compile Include="PluginManagers\PluginManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -191,5 +200,6 @@
     <Folder Include="PluginManagers\Files\" />
     <Folder Include="Config\" />
     <Folder Include="Config\Interfaces\" />
+    <Folder Include="PluginManagers\Interfaces\" />
   </ItemGroup>
 </Project>

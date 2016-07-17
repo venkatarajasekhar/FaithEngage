@@ -5,12 +5,13 @@ using FaithEngage.Core.Factories;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 using FaithEngage.Core.RepoManagers;
+using FaithEngage.Core.RepoInterfaces;
 
 namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
 {
 	public class DisplayUnitPluginBootstrapper : IBootstrapper
 	{
-		public void Execute(IContainer container)
+        public void Execute(IContainer container)
 		{
 			var pluginContainer = container.Resolve<IDisplayUnitPluginContainer>();
 			var repoManager = container.Resolve<IDisplayUnitPluginRepoManager>();

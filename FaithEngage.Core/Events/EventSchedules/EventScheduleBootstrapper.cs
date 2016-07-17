@@ -9,7 +9,8 @@ namespace FaithEngage.Core.Events.EventSchedules
 {
 	public class EventScheduleBootstrapper : IBootstrapper
 	{
-		public void Execute(IContainer container)
+
+        public void Execute(IContainer container)
 		{
 		}
 

@@ -4,6 +4,8 @@ using FaithEngage.Core.Factories;
 using FaithEngage.Core.PluginManagers;
 using FaithEngage.Core.TemplatingService;
 using FaithEngage.Plugins.RazorTemplating;
+using System.Reflection;
+using System.Linq;
 
 namespace FaithEngage.Plugins
 {
@@ -29,20 +31,20 @@ namespace FaithEngage.Plugins
 
 		public override void Initialize(IAppFactory FEFactory)
 		{
-			throw new NotImplementedException();
+            throw new NotImplementedException ();
 		}
 
-		public override void Install(IAppFactory container)
+		public override void Install(IAppFactory FEFactory)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void RegisterDependencies(IRegistrationService container)
+		public override void RegisterDependencies(IRegistrationService regService)
 		{
-			container.RegisterDependency<ITemplatingService, RazorTemplatingService>(LifeCycle.Singleton);
+			regService.RegisterDependency<ITemplatingService, RazorTemplatingService>(LifeCycle.Singleton);
 		}
 
-		public override void Uninstall(IAppFactory container)
+		public override void Uninstall(IAppFactory FEFactory)
 		{
 			throw new NotImplementedException();
 		}

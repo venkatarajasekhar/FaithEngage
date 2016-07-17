@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+
 namespace FaithEngage.Core.Containers
 {
     public interface IContainer
@@ -9,6 +11,8 @@ namespace FaithEngage.Core.Containers
 		int DeRegister<T>();
 		void Replace<Tabstract, TnewConcrete>(LifeCycle lifecycle);
 		IRegistrationService GetRegistrationService();
+        bool CheckRegistered<Tabstract> ();
+        IList<Type> CheckAllDependencies ();
     }
 }
 

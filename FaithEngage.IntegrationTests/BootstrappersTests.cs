@@ -71,6 +71,13 @@ namespace FaithEngage.IntegrationTests
 
 			container.Replace<IDisplayUnitPluginRepoManager, dummyPluginRepoMgr>(LifeCycle.Singleton);
 
+            Console.WriteLine ("Checking Dependencies");
+            var missingDeps = container.CheckAllDependencies ();
+            foreach(var dep in missingDeps)
+            {
+                Console.WriteLine($"--Missing Dependency: {dep.Name}");
+            }
+
             Console.WriteLine ("Executing Booters...");
 			foreach (var boot in booters)
 			{

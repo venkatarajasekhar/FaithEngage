@@ -4,7 +4,7 @@ namespace FaithEngage.Core.Containers
 	public class RegistrationService : IRegistrationService
 	{
 		private readonly IContainer _container;
-		internal RegistrationService(IContainer container)
+		public RegistrationService(IContainer container)
 		{
 			_container = container;
 		}
