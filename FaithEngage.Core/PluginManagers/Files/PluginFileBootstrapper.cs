@@ -9,7 +9,7 @@ namespace FaithEngage.Core.PluginManagers.Files
     {
         public void Execute (IContainer container)
         {
-            throw new NotImplementedException ();
+            
         }
 
         public void LoadBootstrappers (IList<IBootstrapper> bootstrappers)

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using FaithEngage.Core.Factories;
 using FaithEngage.Core.CardProcessor;
 using FaithEngage.Core.Events;
+using FaithEngage.Core.Cards;
 
 namespace FaithEngage.Core
 {
@@ -28,20 +29,23 @@ namespace FaithEngage.Core
             var pluginBooter = new PluginBootstrapper ();
             var duBooter = new DisplayUnitBootstrapper ();
             var actionBooter = new ActionProcessorsBootstrapper ();
-            var cardBooter = new CardProcessorBootstrapper ();
+			var cardProcBooter = new CardProcessorBootstrapper ();
+			var cardBooter = new CardBootstrapper();
             var eventBooter = new EventBootstrapper ();
 
             bootstrappers.Add (pluginBooter);
             bootstrappers.Add (duBooter);
             bootstrappers.Add (actionBooter);
-            bootstrappers.Add (cardBooter);
+            bootstrappers.Add (cardProcBooter);
             bootstrappers.Add (eventBooter);
+			bootstrappers.Add(cardBooter);
 
             pluginBooter.LoadBootstrappers (bootstrappers);
             duBooter.LoadBootstrappers (bootstrappers);
             actionBooter.LoadBootstrappers (bootstrappers);
-            cardBooter.LoadBootstrappers (bootstrappers);
+            cardProcBooter.LoadBootstrappers (bootstrappers);
             eventBooter.LoadBootstrappers (bootstrappers);
+			cardBooter.LoadBootstrappers(bootstrappers);
         }
     }
 }

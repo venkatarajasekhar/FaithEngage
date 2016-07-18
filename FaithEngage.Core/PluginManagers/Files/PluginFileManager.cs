@@ -11,7 +11,6 @@ namespace FaithEngage.Core.PluginManagers.Files
     public class PluginFileManager : IPluginFileManager
     {
         private readonly IPluginFileInfoRepository _repo;
-        private readonly IConfigManager _config;
         private readonly IConverterFactory<PluginFileInfo, PluginFileInfoDTO> _dtoFac;
         private readonly IPluginFileInfoFactory _factory;
 
@@ -19,7 +18,6 @@ namespace FaithEngage.Core.PluginManagers.Files
         private DirectoryInfo _pluginsFolder;
         public PluginFileManager (IConfigManager config, IPluginFileInfoRepository repo, IConverterFactory<PluginFileInfo, PluginFileInfoDTO> dtoFac, IPluginFileInfoFactory factory) 
         {
-            _config = config;
             _repo = repo;
             _dtoFac = dtoFac;
             _factory = factory;

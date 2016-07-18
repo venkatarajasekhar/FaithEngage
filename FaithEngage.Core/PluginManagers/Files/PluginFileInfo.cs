@@ -5,13 +5,20 @@ namespace FaithEngage.Core.PluginManagers.Files
     public class PluginFileInfo
     {
         private Guid _pluginId;
-        private FileInfo _fileInfo;
 
         public PluginFileInfo (Guid pluginId, FileInfo fileInfo)
         {
             _pluginId = pluginId;
-            _fileInfo = fileInfo;
+			FileInfo = fileInfo;
+			FileId = Guid.NewGuid();
         }
+
+		public PluginFileInfo(Guid pluginId, FileInfo fileInfo, Guid fileId)
+		{
+			FileId = fileId;
+			_pluginId = pluginId;
+			FileInfo = fileInfo;
+		}
 
         public Guid PluginId{ get { return _pluginId;}}
         public Guid FileId {
@@ -19,10 +26,7 @@ namespace FaithEngage.Core.PluginManagers.Files
             set;
         }
 
-        public FileInfo FileInfo{ 
-            get { return _fileInfo;} 
-            set { _fileInfo = value;}
-        }
+        public FileInfo FileInfo{ get; set; }
     }
 }
 

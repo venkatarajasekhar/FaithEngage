@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -163,6 +162,8 @@
     <Compile Include="PluginManagers\Files\Interfaces\IPluginFileInfoFactory.cs" />
     <Compile Include="PluginManagers\Files\PluginFileBootstrapper.cs" />
     <Compile Include="PluginManagers\PluginManager.cs" />
+    <Compile Include="PluginManagers\Files\Factories\PluginFileInfoFactory.cs" />
+    <Compile Include="PluginManagers\Files\Factories\PluginFileInfoDTOFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -201,5 +202,6 @@
     <Folder Include="Config\" />
     <Folder Include="Config\Interfaces\" />
     <Folder Include="PluginManagers\Interfaces\" />
+    <Folder Include="PluginManagers\Files\Factories\" />
   </ItemGroup>
 </Project>

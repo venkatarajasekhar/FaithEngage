@@ -17,13 +17,15 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
             var pinContainer = A.Fake<IDisplayUnitPluginContainer> ();
             var repoMgr = A.Fake<IDisplayUnitPluginRepoManager> ();
             var plugin = A.Fake<DisplayUnitPlugin> ();
+			var regService = A.Fake<IRegistrationService>();
             var container = A.Fake<IContainer> ();
+			var appFac = A.Fake<IAppFactory>();
             A.CallTo (() => repoMgr.GetAll ()).Returns (new List<DisplayUnitPlugin> () { plugin });
             A.CallTo (() => container.Resolve<IDisplayUnitPluginContainer> ()).Returns (pinContainer);
             A.CallTo(()=> container.Resolve<IDisplayUnitPluginRepoManager>()).Returns(repoMgr);
-			var regService = A.Fake<IRegistrationService>();
-            A.CallTo (() => container.GetRegistrationService ()).Returns (regService);
-			var appFac = A.Fake<IAppFactory>();
+			A.CallTo(() => container.GetRegistrationService()).Returns(regService);
+			A.CallTo(() => container.Resolve<IAppFactory>()).Returns(appFac);
+
             var pluginBooter = new DisplayUnitPluginBootstrapper ();
             pluginBooter.Execute (container);
 
