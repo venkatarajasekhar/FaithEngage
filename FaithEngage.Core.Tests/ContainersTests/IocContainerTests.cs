@@ -4,6 +4,7 @@ using FaithEngage.Core.Exceptions;
 using NUnit.Framework;
 using FaithEngage.Core.Tests;
 using System;
+using System.Collections.Generic;
 
 namespace FaithEngage.Core.Containers
 {
@@ -23,6 +24,15 @@ namespace FaithEngage.Core.Containers
         {
             var container = new IocContainer();
             container.Register<IDummy,DisplayUnit> ();
+        }
+
+        [Test]
+        public void GetRegistrationService_RegServiceIsRegistered_ValidRegistrationService()
+        {
+            var container = new IocContainer ();
+            var regService = container.GetRegistrationService ();
+            Assert.That (regService, Is.Not.Null);
+
         }
 
         [Test]
@@ -160,6 +170,32 @@ namespace FaithEngage.Core.Containers
 			var resolvedDummy = container.Resolve<IDummy>();
 			Assert.That(resolvedDummy, Is.InstanceOf<Dummy_NoParameters>());
 		}
+
+        [Test]
+        public void CheckRegistered_RegisteredDependency_True()
+        {
+            var container = new IocContainer ();
+            container.Register<IDummy, Dummy_NoParameters> (LifeCycle.Transient);
+            var registered = container.CheckRegistered<IDummy> ();
+            Assert.That (registered);
+        }
+
+        [Test]
+        public void CheckRegistered_NotRegistered_False ()
+        {
+            var container = new IocContainer ();
+            var registered = container.CheckRegistered<IDummy> ();
+            Assert.That (!registered);
+        }
+
+        [Test]
+        public void CheckDependencies_AddsUnregistedDepsToList()
+        {
+            var container = new IocContainer ();
+            container.Register<IDummy, Dummy_CtorHasDependencies> ();
+            var list = container.CheckAllDependencies ();
+            Assert.That (list.Count > 0);
+        }
 
     }
 }

@@ -28,7 +28,7 @@ namespace FaithEngage.Core.Containers
 
 		public IRegistrationService GetRegistrationService()
 		{
-			return this.Resolve<IRegistrationService>();
+            return new RegistrationService (this);
 		}
 
 		private RegisteredObject registerSelf(Type typeToRegister)
