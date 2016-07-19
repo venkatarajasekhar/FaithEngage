@@ -13,19 +13,16 @@ namespace FaithEngage.Core.PluginManagers.Files
         private readonly IPluginFileInfoRepository _repo;
         private readonly IConverterFactory<PluginFileInfo, PluginFileInfoDTO> _dtoFac;
         private readonly IPluginFileInfoFactory _factory;
-
-        private DirectoryInfo _tempFolder;
-        private DirectoryInfo _pluginsFolder;
-        public PluginFileManager (IConfigManager config, IPluginFileInfoRepository repo, IConverterFactory<PluginFileInfo, PluginFileInfoDTO> dtoFac, IPluginFileInfoFactory factory) 
+		private DirectoryInfo _tempFolder;
+		private DirectoryInfo _pluginsFolder;
+        public PluginFileManager (IPluginFileInfoRepository repo, IConverterFactory<PluginFileInfo, PluginFileInfoDTO> dtoFac, IPluginFileInfoFactory factory) 
         {
             _repo = repo;
             _dtoFac = dtoFac;
             _factory = factory;
 
-            _tempFolder = new DirectoryInfo (getOSSafePath(config.TempFolderPath));
-            if (!_tempFolder.Exists) _tempFolder.Create ();
-            _pluginsFolder = new DirectoryInfo (getOSSafePath(config.PluginsFolderPath));
-            if (!_pluginsFolder.Exists) _pluginsFolder.Create ();
+			_tempFolder = _factory.TempFolder;
+			_pluginsFolder = factory.PluginsFolder;
         }
 
         public void DeleteAllFilesForPlugin (Guid pluginId)
@@ -82,27 +79,9 @@ namespace FaithEngage.Core.PluginManagers.Files
         public void RenameFile (Guid fileId, string newRelativePath)
         {
             var file = GetFile (fileId);
-            var newFileName = Path.Combine (getBasePluginPath (file.PluginId), getOSSafePath (newRelativePath));
-            var oldFileName = file.FileInfo.FullName;
-            try {
-                file.FileInfo = file.FileInfo.CopyTo (newFileName);
-                File.Delete (oldFileName);
-                var dto = _dtoFac.Convert (file);
-                _repo.UpdateFile (dto);
-            } catch (Exception ex) {
-                //TODO: Come up with all the exception cases 
-            }
-
-        }
-
-        private string getBasePluginPath (Guid pluginId)
-        {
-            return Path.Combine (_pluginsFolder.FullName, pluginId.ToString ());
-        }
-
-        private string getOSSafePath(string unsafePath){
-            var segments = unsafePath.Split ('/', '\\');
-            return Path.Combine (segments);
+			var newFile = _factory.Rename(file, newRelativePath);
+			var dto = _dtoFac.Convert(newFile);
+			_repo.UpdateFile(dto);
         }
 
         public void StoreFilesForPlugin (IList<FileInfo> files, Guid pluginId, bool overWrite = false)
