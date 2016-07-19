@@ -27,8 +27,7 @@ namespace FaithEngage.Core.PluginManagers.Files
 
         public void DeleteAllFilesForPlugin (Guid pluginId)
         {
-            var folder = new DirectoryInfo (getBasePluginPath (pluginId));
-            folder.Delete (true);
+            Directory.Delete(_factory.GetBasePluginPath(pluginId));
             _repo.DeleteAllFilesForPlugin (pluginId);
 
             //Insert try/catch blocks for repo calls and delete method. 
@@ -88,11 +87,13 @@ namespace FaithEngage.Core.PluginManagers.Files
         {
             foreach(var file in files)
             {
-                var newPath = Path.Combine (getBasePluginPath (pluginId), file.Name);
-                var savedFile = file.CopyTo (newPath, overWrite);
-                var pfile = _factory.Create (savedFile, pluginId);
-                var dto = _dtoFac.Convert (pfile);
-                _repo.SaveFileInfo (dto);
+                if(file.Exists){
+                    var newPath = Path.Combine (_factory.GetBasePluginPath (pluginId), file.Name);
+                    var savedFile = file.CopyTo (newPath, overWrite);
+                    var pfile = _factory.Create (savedFile, pluginId);
+                    var dto = _dtoFac.Convert (pfile);
+                    _repo.SaveFileInfo (dto);
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FaithEngage.Core.Containers;
+using FaithEngage.Core.PluginManagers.Files.Factories;
 using FaithEngage.Core.PluginManagers.Files.Interfaces;
 
 namespace FaithEngage.Core.PluginManagers.Files
@@ -19,6 +20,8 @@ namespace FaithEngage.Core.PluginManagers.Files
         public void RegisterDependencies (IContainer container)
         {
             container.Register<IPluginFileManager, IPluginFileManager> (LifeCycle.Singleton);
+            container.Register<IConverterFactory<PluginFileInfo, PluginFileInfoDTO>, PluginFileInfoDTOFactory> (LifeCycle.Transient);
+            container.Register<IPluginFileInfoFactory, PluginFileInfoFactory> (LifeCycle.Transient);
         }
     }
 }

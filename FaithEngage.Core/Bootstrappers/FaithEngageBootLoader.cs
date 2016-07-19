@@ -7,6 +7,7 @@ using FaithEngage.Core.Factories;
 using FaithEngage.Core.CardProcessor;
 using FaithEngage.Core.Events;
 using FaithEngage.Core.Cards;
+using FaithEngage.Core.Userclasses;
 
 namespace FaithEngage.Core
 {
@@ -32,6 +33,7 @@ namespace FaithEngage.Core
 			var cardProcBooter = new CardProcessorBootstrapper ();
 			var cardBooter = new CardBootstrapper();
             var eventBooter = new EventBootstrapper ();
+            var userBooter = new UserClassBootstrapper ();
 
             bootstrappers.Add (pluginBooter);
             bootstrappers.Add (duBooter);
@@ -39,6 +41,7 @@ namespace FaithEngage.Core
             bootstrappers.Add (cardProcBooter);
             bootstrappers.Add (eventBooter);
 			bootstrappers.Add(cardBooter);
+            bootstrappers.Add (userBooter);
 
             pluginBooter.LoadBootstrappers (bootstrappers);
             duBooter.LoadBootstrappers (bootstrappers);
@@ -46,6 +49,7 @@ namespace FaithEngage.Core
             cardProcBooter.LoadBootstrappers (bootstrappers);
             eventBooter.LoadBootstrappers (bootstrappers);
 			cardBooter.LoadBootstrappers(bootstrappers);
+            userBooter.LoadBootstrappers (bootstrappers);
         }
     }
 }

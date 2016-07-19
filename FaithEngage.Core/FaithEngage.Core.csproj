@@ -164,6 +164,7 @@
     <Compile Include="PluginManagers\PluginManager.cs" />
     <Compile Include="PluginManagers\Files\Factories\PluginFileInfoFactory.cs" />
     <Compile Include="PluginManagers\Files\Factories\PluginFileInfoDTOFactory.cs" />
+    <Compile Include="UserClasses\UserClassBootstrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -25,7 +25,7 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
 		public PluginFileInfo Convert(PluginFileInfoDTO source)
 		{
 			var relPath = getOSSafePath(source.RelativePath);
-			var fullPath = Path.Combine(getBasePluginPath(source.PluginId), relPath);
+			var fullPath = Path.Combine(GetBasePluginPath(source.PluginId), relPath);
 			var fInfo = new FileInfo(fullPath);
 			if (!fInfo.Exists) return null;
 			return new PluginFileInfo(source.PluginId, fInfo, source.FileId);
@@ -41,7 +41,7 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
 			var segments = unsafePath.Split('/', '\\');
 			return Path.Combine(segments);
 		}
-		private string getBasePluginPath(Guid pluginId)
+        public string GetBasePluginPath(Guid pluginId)
 		{
 			return Path.Combine(_pluginsFolder.FullName, pluginId.ToString());
 		}
@@ -49,7 +49,7 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
 		public PluginFileInfo Rename(PluginFileInfo pluginFile, string newRelativePath)
 		{
 			var oldFileName = pluginFile.FileInfo.FullName;
-			var newFileName = Path.Combine(getBasePluginPath(pluginFile.PluginId), getOSSafePath(newRelativePath));
+			var newFileName = Path.Combine(GetBasePluginPath(pluginFile.PluginId), getOSSafePath(newRelativePath));
 			try
 			{
 				pluginFile.FileInfo = pluginFile.FileInfo.CopyTo(newFileName);

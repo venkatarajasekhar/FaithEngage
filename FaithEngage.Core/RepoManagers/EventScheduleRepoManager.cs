@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using FaithEngage.Core.Events.EventSchedules;
 using FaithEngage.Core.Events.EventSchedules.Interfaces;
+using FaithEngage.Core.RepoInterfaces;
 
 namespace FaithEngage.Core.RepoManagers
 {
 	public class EventScheduleRepoManager : IEventScheduleRepoManager
 	{
-		public void DeleteSchedule(Guid id)
+        public EventScheduleRepoManager (IEventScheduleRepository _repo, IConverterFactory<EventSchedule,EventScheduleDTO> dtoFactory, IConverterFactory<EventScheduleDTO, EventSchedule> factory)
+        {
+            throw new NotImplementedException ();
+        }
+
+        public void DeleteSchedule(Guid id)
 		{
 			throw new NotImplementedException();
 		}

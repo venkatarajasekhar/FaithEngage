@@ -6,8 +6,10 @@ namespace FaithEngage.Core.PluginManagers.Files.Interfaces
     {
         PluginFileInfo Create (FileInfo file, Guid pluginId);
 		PluginFileInfo Rename(PluginFileInfo pluginFile, string newRelativePath);
+        string GetBasePluginPath (Guid pluginId);
 		DirectoryInfo TempFolder { get; }
 		DirectoryInfo PluginsFolder { get; }
+
     }
 }
 
