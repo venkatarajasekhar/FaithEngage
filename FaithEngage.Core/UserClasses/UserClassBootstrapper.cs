@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using FaithEngage.Core.Containers;
+using FaithEngage.Core.UserClasses.Interfaces;
+using FaithEngage.Core.RepoManagers;
 
 namespace FaithEngage.Core.Userclasses
 {
@@ -8,17 +10,16 @@ namespace FaithEngage.Core.Userclasses
     {
         public void Execute (IContainer container)
         {
-            throw new NotImplementedException ();
         }
 
         public void LoadBootstrappers (IList<IBootstrapper> bootstrappers)
         {
-            throw new NotImplementedException ();
         }
 
         public void RegisterDependencies (IContainer container)
         {
-            throw new NotImplementedException ();
+			container.Register<IOrganizationRepoManager, OrganizationRepoManager>(LifeCycle.Singleton);
+			container.Register<IUserRepoManager, UserRepoManager>(LifeCycle.Singleton);
         }
     }
 }
