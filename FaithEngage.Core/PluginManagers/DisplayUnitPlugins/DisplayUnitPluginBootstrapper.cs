@@ -31,7 +31,6 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
         public void RegisterDependencies(IContainer container)
 		{
 			container.Register<IDisplayUnitPluginContainer, DisplayUnitPluginContainer>(LifeCycle.Singleton);
-			container.Register<IConverterFactory<DisplayUnitPlugin,DisplayUnitPluginDTO>, DisplayUnitPluginDtoFactory>(LifeCycle.Transient);
 			container.Register<IDisplayUnitPluginFactory, DisplayUnitPluginFactory>(LifeCycle.Transient);
 			container.Register<IDisplayUnitPluginRepoManager, DisplayUnitPluginRepoManager>(LifeCycle.Transient);
 		}

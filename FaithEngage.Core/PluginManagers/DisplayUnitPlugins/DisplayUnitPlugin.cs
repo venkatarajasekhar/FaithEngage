@@ -7,12 +7,15 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
 {
     public abstract class DisplayUnitPlugin : Plugin
     {
-
-        /// <summary>
-        /// This is the Specific Type this plugin represents. 
-        /// </summary>
-        /// <value>The display type of the unit.</value>
-        abstract public Type DisplayUnitType { get;}
+		public DisplayUnitPlugin()
+		{
+			this.PluginType = PluginTypeEnum.DisplayUnit;
+		}
+		/// <summary>
+		/// This is the Specific Type this plugin represents. 
+		/// </summary>
+		/// <value>The display type of the unit.</value>
+		abstract public Type DisplayUnitType { get;}
 
         /// <summary>
         /// All display unit plugins must specify the names of the attributes they

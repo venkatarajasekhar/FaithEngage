@@ -7,14 +7,16 @@ using FaithEngage.Core.Tests;
 using FakeItEasy;
 using NUnit.Framework;
 using System.Linq;
+using FaithEngage.Core.PluginManagers;
+
 namespace FaithEngage.Core.RepoManagers
 {
 	[TestFixture]
 	public class DisplayUnitPluginRepoManagerTests
 	{
-		private IDisplayUnitPluginRepository _repo;
+		private IPluginRepository _repo;
 		private IDisplayUnitPluginFactory _fac;
-		private IConverterFactory<DisplayUnitPlugin,DisplayUnitPluginDTO> _dtoFac;
+		private IConverterFactory<Plugin,PluginDTO> _dtoFac;
 		private const string VALID_STRING = "VALID";
 		private const string INVALID_STRING = "INVALID";
 		private Guid VALID_GUID = Guid.NewGuid();
@@ -24,9 +26,9 @@ namespace FaithEngage.Core.RepoManagers
 		[SetUp]
 		public void Init()
 		{
-			_repo = A.Fake<IDisplayUnitPluginRepository>();
+			_repo = A.Fake<IPluginRepository>();
 			_fac = A.Fake<IDisplayUnitPluginFactory>();
-			_dtoFac = A.Fake<IConverterFactory<DisplayUnitPlugin,DisplayUnitPluginDTO>>();
+			_dtoFac = A.Fake<IConverterFactory<Plugin,PluginDTO>>();
 			_plgn = A.Fake<DisplayUnitPlugin>();
             mgr = new DisplayUnitPluginRepoManager (_repo, _fac, _dtoFac);
 		}
@@ -34,7 +36,7 @@ namespace FaithEngage.Core.RepoManagers
         [Test]
 		public void RegisterNew_ValidPlugin_RegistersAndReturnsId()
 		{
-			var dto = new DisplayUnitPluginDTO()
+			var dto = new PluginDTO()
 			{
 				AssemblyLocation = VALID_STRING,
 				FullName = VALID_STRING,
@@ -42,7 +44,7 @@ namespace FaithEngage.Core.RepoManagers
 				PluginName = VALID_STRING
 			};
 			A.CallTo(() => _dtoFac.Convert(_plgn)).Returns(dto);
-			A.CallTo(() => _repo.Register(A<DisplayUnitPluginDTO>.Ignored)).Returns(VALID_GUID);
+			A.CallTo(() => _repo.Register(A<PluginDTO>.Ignored)).Returns(VALID_GUID);
 
 			var id = mgr.RegisterNew(_plgn);
 
@@ -61,7 +63,7 @@ namespace FaithEngage.Core.RepoManagers
         [Test]
         public void RegisterNew_RepoThrowsException_ThrowsRepoException()
         {
-            A.CallTo (() => _repo.Register (A<DisplayUnitPluginDTO>.Ignored)).Throws<RepositoryException>();
+            A.CallTo (() => _repo.Register (A<PluginDTO>.Ignored)).Throws<RepositoryException>();
             var e = TestHelpers.TryGetException (() => mgr.RegisterNew (_plgn));
             Assert.That (e, Is.Not.Null);
             Assert.That (e, Is.InstanceOf (typeof (RepositoryException)));
@@ -71,7 +73,7 @@ namespace FaithEngage.Core.RepoManagers
         public void UpdatePlugin_ValidPlugin_UpdatesRepo()
         {
             _plgn.PluginId = Guid.NewGuid ();
-            var dto = new DisplayUnitPluginDTO () {
+            var dto = new PluginDTO () {
                 AssemblyLocation = VALID_STRING,
                 FullName = VALID_STRING,
                 Id = VALID_GUID,
@@ -89,7 +91,7 @@ namespace FaithEngage.Core.RepoManagers
             var e = TestHelpers.TryGetException (() => mgr.UpdatePlugin (_plgn));
             Assert.That (e, Is.Not.Null);
             Assert.That (e, Is.InstanceOf (typeof (InvalidIdException)));
-            A.CallTo (() => _repo.Update (A<DisplayUnitPluginDTO>.Ignored)).MustNotHaveHappened();
+            A.CallTo (() => _repo.Update (A<PluginDTO>.Ignored)).MustNotHaveHappened();
         }
 
         [Test]
@@ -100,7 +102,7 @@ namespace FaithEngage.Core.RepoManagers
             var e = TestHelpers.TryGetException (() => mgr.UpdatePlugin (_plgn));
             Assert.That (e, Is.Not.Null);
             Assert.That (e, Is.InstanceOf (typeof (PluginIsMissingNecessaryInfoException)));
-            A.CallTo (() => _repo.Update (A<DisplayUnitPluginDTO>.Ignored)).MustNotHaveHappened();
+            A.CallTo (() => _repo.Update (A<PluginDTO>.Ignored)).MustNotHaveHappened();
         }
         [Test]
         public void UninstallPlugin_ValidId_DeletesPlugin()
@@ -127,7 +129,7 @@ namespace FaithEngage.Core.RepoManagers
         [Test]
         public void GetAll_ReturnsPluginsIEnumerable()
         {
-            var dtos = Enumerable.Repeat (new DisplayUnitPluginDTO (), 5).ToList();
+            var dtos = Enumerable.Repeat (new PluginDTO (), 5).ToList();
             A.CallTo (() => _repo.GetAll()).Returns (dtos);
             var duPlugins = A.CollectionOfFake<DisplayUnitPlugin> (5);
             A.CallTo (() => _fac.LoadPluginsFromDtos (dtos)).Returns (duPlugins);
@@ -147,7 +149,7 @@ namespace FaithEngage.Core.RepoManagers
         [Test]
         public void GetById_ValidId_ReturnsPlugin()
         {
-            var dto = new DisplayUnitPluginDTO ();
+            var dto = new PluginDTO ();
             var plugin = A.Fake<DisplayUnitPlugin> ();
             A.CallTo (() => _repo.GetById (VALID_GUID)).Returns (dto);
             A.CallTo (() => _fac.LoadPluginFromDto (dto)).Returns (plugin);

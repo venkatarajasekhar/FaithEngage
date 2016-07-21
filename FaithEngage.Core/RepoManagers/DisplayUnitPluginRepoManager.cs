@@ -5,15 +5,16 @@ using System.Collections.Generic;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.RepoInterfaces;
+using FaithEngage.Core.PluginManagers;
 
 namespace FaithEngage.Core.RepoManagers
 {
 	public class DisplayUnitPluginRepoManager : IDisplayUnitPluginRepoManager
 	{
-		private readonly IDisplayUnitPluginRepository _repo;
+		private readonly IPluginRepository _repo;
 		private readonly IDisplayUnitPluginFactory _factory;
-		private readonly IConverterFactory<DisplayUnitPlugin,DisplayUnitPluginDTO> _dtoFactory;
-		public DisplayUnitPluginRepoManager (IDisplayUnitPluginRepository repo, IDisplayUnitPluginFactory factory, IConverterFactory<DisplayUnitPlugin, DisplayUnitPluginDTO> dtoFactory)
+		private readonly IConverterFactory<Plugin,PluginDTO> _dtoFactory;
+		public DisplayUnitPluginRepoManager (IPluginRepository repo, IDisplayUnitPluginFactory factory, IConverterFactory<Plugin, PluginDTO> dtoFactory)
 		{
 			_repo = repo;
 			_factory = factory;
@@ -69,7 +70,7 @@ namespace FaithEngage.Core.RepoManagers
 		}
 		public IEnumerable<DisplayUnitPlugin> GetAll ()
 		{
-            List<DisplayUnitPluginDTO> dtos;
+            List<PluginDTO> dtos;
             try {
                 dtos = _repo.GetAll ();
             } catch (Exception ex) {
@@ -80,7 +81,7 @@ namespace FaithEngage.Core.RepoManagers
 
 		public DisplayUnitPlugin GetById(Guid id)
 		{
-            DisplayUnitPluginDTO dto;
+            PluginDTO dto;
             try {
                 if (id == Guid.Empty) throw new InvalidIdException ("Empty Guids are not valid Ids.");
                 dto = _repo.GetById (id);

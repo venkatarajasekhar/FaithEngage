@@ -5,6 +5,7 @@ using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.PluginManagers.Files.Interfaces;
 using FaithEngage.Core.PluginManagers.Files;
 using FaithEngage.Core.PluginManagers.Interfaces;
+using FaithEngage.Core.PluginManagers.Factories;
 
 namespace FaithEngage.Core.PluginManagers
 {
@@ -30,6 +31,7 @@ namespace FaithEngage.Core.PluginManagers
         public void RegisterDependencies(IContainer container)
 		{
             container.Register<IPluginManager, PluginManager> (LifeCycle.Singleton);
+			container.Register<IConverterFactory<Plugin, PluginDTO>, PluginDtoFactory>(LifeCycle.Transient);
 		}
 	}
 }

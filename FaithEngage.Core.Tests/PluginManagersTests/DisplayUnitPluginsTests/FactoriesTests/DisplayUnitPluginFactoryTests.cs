@@ -19,7 +19,7 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 		[Test]
 		public void LoadPluginFromDto_ValidDto_ValidAssembly_ValidPlugin()
 		{
-			var dto = new DisplayUnitPluginDTO ();
+			var dto = new PluginDTO ();
 			dto.AssemblyLocation = _plgin.AssemblyLocation;
 			dto.FullName = _plgin.FullName;
 			dto.Id = Guid.NewGuid ();
@@ -36,7 +36,7 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 		[Test]
 		public void LoadPluginFromDto_InvalidDto_Null()
 		{
-			var dto = new DisplayUnitPluginDTO ();
+			var dto = new PluginDTO ();
 
 			var factory = new DisplayUnitPluginFactory ();
 			var plugin = factory.LoadPluginFromDto (dto);
@@ -47,7 +47,7 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 		[Test]
 		public void LoadPluginsFromDtos_ValidDtos_ValidPlugins()
 		{
-			var dto = new DisplayUnitPluginDTO ();
+			var dto = new PluginDTO ();
 			dto.AssemblyLocation = _plgin.AssemblyLocation;
 			dto.FullName = _plgin.FullName;
 			dto.Id = Guid.NewGuid ();
@@ -64,14 +64,14 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 		[Test]
 		public void LoadPluginsFromDtos_SomeInvalid_ValidPluginsLessInvalidOnes()
 		{
-			var dto = new DisplayUnitPluginDTO ();
+			var dto = new PluginDTO ();
 			dto.AssemblyLocation = _plgin.AssemblyLocation;
 			dto.FullName = _plgin.FullName;
 			dto.Id = Guid.NewGuid ();
 
 			var dtos = Enumerable.Repeat (dto, 3).ToList ();
-			dtos.Add(new DisplayUnitPluginDTO());
-			dtos.Add(new DisplayUnitPluginDTO());
+			dtos.Add(new PluginDTO());
+			dtos.Add(new PluginDTO());
 
 			var factory = new DisplayUnitPluginFactory ();
 			var plugins = factory.LoadPluginsFromDtos (dtos);
@@ -83,7 +83,7 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 		[Test]
 		public void LoadPluginsFromDtos_AllInvalid_ReturnsEmptyIEnumerable()
 		{
-			var dto = new DisplayUnitPluginDTO ();
+			var dto = new PluginDTO ();
 			var dtos = Enumerable.Repeat (dto, 5);
 
 			var factory = new DisplayUnitPluginFactory ();

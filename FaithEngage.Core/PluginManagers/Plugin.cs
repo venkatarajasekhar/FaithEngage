@@ -31,6 +31,8 @@ namespace FaithEngage.Core.PluginManagers
             }
         }
 
+		public PluginTypeEnum PluginType { get; set; }
+
         abstract public int[] PluginVersion{ get;}
 
         abstract public void Initialize (IAppFactory FEFactory);

@@ -1,11 +1,12 @@
 ﻿using System;
 using NUnit.Framework;
 using FakeItEasy;
+using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 
-namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
+namespace FaithEngage.Core.PluginManagers.Factories
 {
 	[TestFixture]
-	public class DisplayUnitPluginDtoFactoryTests
+	public class PluginDtoFactoryTests
 	{
 		private Guid VALID_GUID = Guid.NewGuid();
 		private const string VALID_STRING = "VALID STRING";
@@ -18,7 +19,7 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 			A.CallTo (() => plugin.AssemblyLocation).Returns (VALID_STRING);
 			A.CallTo (() => plugin.PluginName).Returns (VALID_STRING);
 			A.CallTo (() => plugin.PluginVersion).Returns (new int[]{ 1, 0, 0 });
-			var fac = new DisplayUnitPluginDtoFactory ();
+			var fac = new PluginDtoFactory ();
 			var dto = fac.Convert (plugin);
 
 			Assert.That (dto.AssemblyLocation, Is.Not.Null);
@@ -35,7 +36,7 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 			A.CallTo (() => plugin.AssemblyLocation).Returns (VALID_STRING);
 			A.CallTo (() => plugin.PluginName).Returns (VALID_STRING);
 			A.CallTo (() => plugin.PluginVersion).Returns (new int[]{ 1, 0, 0 });
-			var fac = new DisplayUnitPluginDtoFactory ();
+			var fac = new PluginDtoFactory ();
 			var dto = fac.Convert (plugin);
 
 			Assert.That (dto.AssemblyLocation, Is.Not.Null);

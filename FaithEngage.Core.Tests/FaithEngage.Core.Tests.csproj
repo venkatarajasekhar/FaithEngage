@@ -81,7 +81,7 @@
     <Compile Include="CardProcessorTests\CardProcessorTests.cs" />
     <Compile Include="CardTests\CardDtoFactoryTests.cs" />
     <Compile Include="DisplayUnitsTests\DisplayUnitDTOTests.cs" />
-    <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\DisplayUnitPluginDtoFactoryTests.cs" />
+    <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\PluginDtoFactoryTests.cs" />
     <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\DisplayUnitPluginFactoryTests.cs" />
     <Compile Include="ActionProcessorTests\CardActionProcessorTests.cs" />
     <Compile Include="BootstrappersTests\FaithEngageBootLoaderTests.cs" />

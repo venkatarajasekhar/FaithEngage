@@ -2,23 +2,24 @@
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 using FaithEngage.Core.Exceptions;
 
-namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
+namespace FaithEngage.Core.PluginManagers.Factories
 {
-	public class DisplayUnitPluginDtoFactory : IConverterFactory<DisplayUnitPlugin,DisplayUnitPluginDTO>
+	public class PluginDtoFactory : IConverterFactory<Plugin,PluginDTO>
     {
-        public DisplayUnitPluginDTO Convert(DisplayUnitPlugin plugin)
+        public PluginDTO Convert(Plugin plugin)
         {
 			validate(plugin);
-			var dto = new DisplayUnitPluginDTO ();
+			var dto = new PluginDTO ();
 			dto.Id = plugin.PluginId;
 			dto.AssemblyLocation = plugin.AssemblyLocation;
 			dto.FullName = plugin.FullName;
 			dto.PluginName = plugin.PluginName;
 			dto.PluginVersion = plugin.PluginVersion;
+			dto.PluginType = plugin.PluginType;
             return dto;
         }
 
-		void validate(DisplayUnitPlugin plugin)
+		void validate(Plugin plugin)
 		{
 			if(plugin.AssemblyLocation == "") throwInvalidException("AssemblyLocation");
 			if(plugin.AssemblyLocation == null) throwInvalidException("AssemblyLocation");
