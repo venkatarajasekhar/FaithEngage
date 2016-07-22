@@ -166,6 +166,8 @@
     <Compile Include="PluginManagers\PluginTypeEnum.cs" />
     <Compile Include="PluginManagers\PluginDTO.cs" />
     <Compile Include="PluginManagers\Factories\PluginDtoFactory.cs" />
+    <Compile Include="RepoManagers\PluginRepoManager.cs" />
+    <Compile Include="PluginManagers\Interfaces\IPluginRepoManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

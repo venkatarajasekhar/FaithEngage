@@ -6,73 +6,36 @@ using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.RepoInterfaces;
 using FaithEngage.Core.PluginManagers;
+using FaithEngage.Core.PluginManagers.Interfaces;
 
 namespace FaithEngage.Core.RepoManagers
 {
 	public class DisplayUnitPluginRepoManager : IDisplayUnitPluginRepoManager
 	{
-		private readonly IPluginRepository _repo;
+		
 		private readonly IDisplayUnitPluginFactory _factory;
-		private readonly IConverterFactory<Plugin,PluginDTO> _dtoFactory;
-		public DisplayUnitPluginRepoManager (IPluginRepository repo, IDisplayUnitPluginFactory factory, IConverterFactory<Plugin, PluginDTO> dtoFactory)
+		private readonly IPluginRepoManager<Plugin> _base;
+
+		public DisplayUnitPluginRepoManager (IDisplayUnitPluginFactory factory, IPluginRepoManager<Plugin> pluginRepo, IConverterFactory<Plugin, PluginDTO> dtoFactory) 
 		{
-			_repo = repo;
 			_factory = factory;
-			_dtoFactory = dtoFactory;
+			_base = pluginRepo;
 		}
 
 
-		#region IDisplayUnitPluginRepoManager implementation
-		public Guid RegisterNew (DisplayUnitPlugin plugin)
-		{
-			plugin.PluginId = Guid.NewGuid ();
-			var dto = _dtoFactory.Convert (plugin);
-			Guid guid;
-			try
-			{
-				guid = _repo.Register(dto);
-			}
-			catch (PluginIsMissingNecessaryInfoException)
-			{
-				throw;
-			}
-			catch (PluginAlreadyRegisteredException)
-			{
-				throw;
-			}
-            catch (Exception ex)
-			{
-				throw new RepositoryException("There was a problem registering this plugin.", ex);
-			}
-			return guid;
-
-		}
 		public void UpdatePlugin (DisplayUnitPlugin plugin)
 		{
-			if (!plugin.PluginId.HasValue) {
-				throw new InvalidIdException ("PluginId must not be null");
-			}
-			var dto = _dtoFactory.Convert (plugin);
-			try {
-                _repo.Update (dto);
-            } catch (Exception ex) {
-                throw new RepositoryException ("There was a problem updating the plugin: " + plugin.PluginName, ex);
-            }
+			_base.UpdatePlugin(plugin);
 		}
 		public void UninstallPlugin (Guid id)
 		{
-            if (id == Guid.Empty) throw new InvalidIdException ("PluginId must not be an empty guid.");
-            try {
-                _repo.Delete (id);             
-            } catch (Exception ex) {
-                throw new RepositoryException ("There was a problem deleting the specified Id", ex); 
-            }
+			_base.UninstallPlugin(id);
 		}
 		public IEnumerable<DisplayUnitPlugin> GetAll ()
 		{
             List<PluginDTO> dtos;
             try {
-                dtos = _repo.GetAll ();
+				dtos = _base.GetAllDtos();
             } catch (Exception ex) {
                 throw new RepositoryException ("There was a problem obtaining plugins from the repository.", ex);
             }
@@ -92,7 +55,11 @@ namespace FaithEngage.Core.RepoManagers
             }
 			return _factory.LoadPluginFromDto (dto);
 		}
-		#endregion
+
+		public Guid RegisterNew(DisplayUnitPlugin plugin)
+		{
+			return _base.RegisterNew(plugin);
+		}
 	}
 }
 
