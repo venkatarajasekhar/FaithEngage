@@ -7,7 +7,7 @@ using FaithEngage.Core.RepoInterfaces;
 
 namespace FaithEngage.Core.RepoManagers
 {
-	public class PluginRepoManager : IPluginRepoManager<Plugin>
+	public class PluginRepoManager : IPluginRepoManager
 	{
 		protected readonly IPluginRepository _repo;
 		protected readonly IConverterFactory<Plugin, PluginDTO> _dtoFactory;
@@ -69,21 +69,6 @@ namespace FaithEngage.Core.RepoManagers
 			{
 				throw new RepositoryException("There was a problem updating the plugin: " + plugin.PluginName, ex);
 			}
-		}
-
-		public IEnumerable<Plugin> GetAll()
-		{
-			throw new NotImplementedException();
-		}
-
-		public Plugin GetById(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public List<PluginDTO> GetAllDtos()
-		{
-			return _repo.GetAll();
 		}
 	}
 }

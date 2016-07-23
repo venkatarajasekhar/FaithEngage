@@ -5,7 +5,7 @@ namespace FaithEngage.Core.PluginManagers.Interfaces
 {
     public interface IPluginManager
     {
-		Guid Install(ZipArchive zipFile);
+		int Install(ZipArchive zipFile);
 		void Uninstall(Guid pluginId);
     }
 }

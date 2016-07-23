@@ -8,6 +8,7 @@ using FaithEngage.Core.RepoInterfaces;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.Containers;
+using FaithEngage.Core.PluginManagers;
 
 namespace FaithEngage.IntegrationTests
 {
@@ -30,7 +31,12 @@ namespace FaithEngage.IntegrationTests
 				throw new NotImplementedException();
 			}
 
-			public Guid RegisterNew(DisplayUnitPlugin plugin)
+            public Guid RegisterNew (Plugin plugin)
+            {
+                throw new NotImplementedException ();
+            }
+
+            public Guid RegisterNew(DisplayUnitPlugin plugin)
 			{
 				throw new NotImplementedException();
 			}
@@ -40,7 +46,12 @@ namespace FaithEngage.IntegrationTests
 				throw new NotImplementedException();
 			}
 
-			public void UpdatePlugin(DisplayUnitPlugin plugin)
+            public void UpdatePlugin (Plugin plugin)
+            {
+                throw new NotImplementedException ();
+            }
+
+            public void UpdatePlugin(DisplayUnitPlugin plugin)
 			{
 				throw new NotImplementedException();
 			}
@@ -53,37 +64,20 @@ namespace FaithEngage.IntegrationTests
 		{
 
 			var initializer = new Initializer();
-			var booter = initializer.GetBootstrapper();
-            var container = initializer.GetContainer ();
-
-
-
-			var booters = new List<Core.IBootstrapper>();
             Console.WriteLine ("Loading Bootstrappers...");
-            booter.LoadBootstrappers(booters);
-            Console.WriteLine ("Registering Dependencies...");
-			foreach (var boot in booters)
-			{
-                Console.WriteLine($"--Registering {boot.GetType().Name}.");
-				Console.WriteLine (boot);
-                boot.RegisterDependencies(container);
-			}
-
-			container.Replace<IDisplayUnitPluginRepoManager, dummyPluginRepoMgr>(LifeCycle.Singleton);
-
-            Console.WriteLine ("Checking Dependencies");
-            var missingDeps = container.CheckAllDependencies ();
-            foreach(var dep in missingDeps)
-            {
-                Console.WriteLine($"--Missing Dependency: {dep.Name}");
+            var bootlist = initializer.LoadedBootList;
+            foreach(var booter in bootlist){
+                Console.WriteLine ($"--{booter.GetType ().Name}");
             }
 
-            Console.WriteLine ("Executing Booters...");
-			foreach (var boot in booters)
-			{
-				Console.WriteLine($"--Executing on {boot.GetType().Name}.");
-				boot.Execute (container);
-			}
+            Console.WriteLine ("Registering Dependencies...");
+            var log = bootlist.RegisterAllDependencies (true);
+            Console.Write (log);
+
+            initializer.Container.Replace<IDisplayUnitPluginRepoManager, dummyPluginRepoMgr>(LifeCycle.Singleton);
+
+            log = bootlist.ExecuteAllBooters ();
+            Console.Write (log);
 		}
 	}
 }

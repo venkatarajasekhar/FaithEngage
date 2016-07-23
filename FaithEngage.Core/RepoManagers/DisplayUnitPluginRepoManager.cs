@@ -10,32 +10,22 @@ using FaithEngage.Core.PluginManagers.Interfaces;
 
 namespace FaithEngage.Core.RepoManagers
 {
-	public class DisplayUnitPluginRepoManager : IDisplayUnitPluginRepoManager
+	public class DisplayUnitPluginRepoManager : PluginRepoManager, IDisplayUnitPluginRepoManager
 	{
 		
 		private readonly IDisplayUnitPluginFactory _factory;
-		private readonly IPluginRepoManager<Plugin> _base;
 
-		public DisplayUnitPluginRepoManager (IDisplayUnitPluginFactory factory, IPluginRepoManager<Plugin> pluginRepo, IConverterFactory<Plugin, PluginDTO> dtoFactory) 
+        public DisplayUnitPluginRepoManager (IDisplayUnitPluginFactory factory, IPluginRepository repo, IConverterFactory<Plugin, PluginDTO> dtoFactory) 
+            : base (repo, dtoFactory)
 		{
 			_factory = factory;
-			_base = pluginRepo;
 		}
 
-
-		public void UpdatePlugin (DisplayUnitPlugin plugin)
-		{
-			_base.UpdatePlugin(plugin);
-		}
-		public void UninstallPlugin (Guid id)
-		{
-			_base.UninstallPlugin(id);
-		}
 		public IEnumerable<DisplayUnitPlugin> GetAll ()
 		{
             List<PluginDTO> dtos;
             try {
-				dtos = _base.GetAllDtos();
+                dtos = _repo.GetAll();
             } catch (Exception ex) {
                 throw new RepositoryException ("There was a problem obtaining plugins from the repository.", ex);
             }
@@ -54,11 +44,6 @@ namespace FaithEngage.Core.RepoManagers
                 throw new RepositoryException ("There was a problem accessing the repository.", ex);
             }
 			return _factory.LoadPluginFromDto (dto);
-		}
-
-		public Guid RegisterNew(DisplayUnitPlugin plugin)
-		{
-			return _base.RegisterNew(plugin);
 		}
 	}
 }

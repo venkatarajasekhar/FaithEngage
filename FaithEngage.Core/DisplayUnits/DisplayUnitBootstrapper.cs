@@ -4,26 +4,27 @@ using FaithEngage.Core.Containers;
 using FaithEngage.Core.DisplayUnits.Factories;
 using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.RepoManagers;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.DisplayUnits
 {
 	public class DisplayUnitBootstrapper : IBootstrapper
 	{
 
-        public void Execute(IContainer container)
+        public void Execute(IAppFactory container)
 		{
 			
 		}
 
-        public void LoadBootstrappers (IList<IBootstrapper> bootstrappers)
+        public void LoadBootstrappers (IBootList bootstrappers)
         {
         }
 
-        public void RegisterDependencies(IContainer container)
+        public void RegisterDependencies(IRegistrationService rs)
 		{
-            container.Register<IDisplayUnitFactory, DisplayUnitFactory>(LifeCycle.Transient);
-            container.Register<IDisplayUnitsRepoManager, DisplayUnitsRepoManager> (LifeCycle.Transient);
-            container.Register<IConverterFactory<DisplayUnit,DisplayUnitDTO>, DisplayUnitDtoFactory> (LifeCycle.Transient);
+            rs.Register<IDisplayUnitFactory, DisplayUnitFactory>(LifeCycle.Transient);
+            rs.Register<IDisplayUnitsRepoManager, DisplayUnitsRepoManager> (LifeCycle.Transient);
+            rs.Register<IConverterFactory<DisplayUnit,DisplayUnitDTO>, DisplayUnitDtoFactory> (LifeCycle.Transient);
 		}
 	}
 }

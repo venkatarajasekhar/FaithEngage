@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.Factories;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 using FaithEngage.Core.RepoManagers;
-using FaithEngage.Core.RepoInterfaces;
 
 namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
 {
-	public class DisplayUnitPluginBootstrapper : IBootstrapper
+    public class DisplayUnitPluginBootstrapper : IBootstrapper
 	{
-        public void Execute(IContainer container)
+        public void Execute(IAppFactory factory)
 		{
-			var pluginContainer = container.Resolve<IDisplayUnitPluginContainer>();
-			var repoManager = container.Resolve<IDisplayUnitPluginRepoManager>();
-			var factory = container.Resolve<IAppFactory>();
-			var regService = container.GetRegistrationService();
+            var pluginContainer = factory.GetOther<IDisplayUnitPluginContainer> ();
+            var repoManager = factory.DisplayUnitsPluginRepo;
+            var regService = factory.RegistrationService;
 			foreach (var plugin in repoManager.GetAll()) {
 				plugin.RegisterDependencies (regService);
                 plugin.Initialize (factory);
@@ -24,15 +21,15 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
 			}
 		}
 
-        public void LoadBootstrappers (IList<IBootstrapper> bootstrappers)
+        public void LoadBootstrappers (IBootList bootstrappers)
         {
         }
 
-        public void RegisterDependencies(IContainer container)
+        public void RegisterDependencies(IRegistrationService rs)
 		{
-			container.Register<IDisplayUnitPluginContainer, DisplayUnitPluginContainer>(LifeCycle.Singleton);
-			container.Register<IDisplayUnitPluginFactory, DisplayUnitPluginFactory>(LifeCycle.Transient);
-			container.Register<IDisplayUnitPluginRepoManager, DisplayUnitPluginRepoManager>(LifeCycle.Transient);
+            rs.Register<IDisplayUnitPluginContainer, DisplayUnitPluginContainer> (LifeCycle.Singleton);
+            rs.Register<IDisplayUnitPluginFactory, DisplayUnitPluginFactory> (LifeCycle.Transient);
+            rs.Register<IDisplayUnitPluginRepoManager, DisplayUnitPluginRepoManager> (LifeCycle.Transient);
 		}
 
 	}

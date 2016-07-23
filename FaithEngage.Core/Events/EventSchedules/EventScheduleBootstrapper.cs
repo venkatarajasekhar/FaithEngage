@@ -4,26 +4,27 @@ using FaithEngage.Core.Containers;
 using FaithEngage.Core.Events.EventSchedules.Interfaces;
 using FaithEngage.Core.RepoManagers;
 using FaithEngage.Core.Events.EventSchedules.Factories;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.Events.EventSchedules
 {
 	public class EventScheduleBootstrapper : IBootstrapper
 	{
 
-        public void Execute(IContainer container)
+        public void Execute(IAppFactory container)
 		{
 		}
 
-		public void LoadBootstrappers(IList<IBootstrapper> bootstrappers)
+        public void LoadBootstrappers(IBootList bootstrappers)
 		{
             
 		}
 
-		public void RegisterDependencies(IContainer container)
+        public void RegisterDependencies(IRegistrationService rs)
 		{
-            container.Register<IEventScheduleRepoManager, EventScheduleRepoManager> ();
-            container.Register<IConverterFactory<EventSchedule, EventScheduleDTO>, EventScheduleDTOFactory> ();
-            container.Register<IConverterFactory<EventScheduleDTO, EventSchedule>, EventScheduleFactory> ();
+            rs.Register<IEventScheduleRepoManager, EventScheduleRepoManager> ();
+            rs.Register<IConverterFactory<EventSchedule, EventScheduleDTO>, EventScheduleDTOFactory> ();
+            rs.Register<IConverterFactory<EventScheduleDTO, EventSchedule>, EventScheduleFactory> ();
 		}
 	}
 }

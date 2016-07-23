@@ -6,32 +6,29 @@ using FaithEngage.Core.PluginManagers.Files.Interfaces;
 using FaithEngage.Core.PluginManagers.Files;
 using FaithEngage.Core.PluginManagers.Interfaces;
 using FaithEngage.Core.PluginManagers.Factories;
+using FaithEngage.Core.RepoManagers;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.PluginManagers
 {
 	public class PluginBootstrapper :IBootstrapper
 	{
 
-        public void Execute(IContainer container)
+        public void Execute(IAppFactory container)
 		{
 		}
 
-        public void LoadBootstrappers (IList<IBootstrapper> bootstrappers)
+        public void LoadBootstrappers (IBootList bootstrappers)
         {
-            var duBooter = new DisplayUnitPluginBootstrapper ();
-            var fileBooter = new PluginFileBootstrapper ();
-
-            bootstrappers.Add (duBooter);
-            bootstrappers.Add (fileBooter);
-
-            duBooter.LoadBootstrappers (bootstrappers);
-            fileBooter.LoadBootstrappers (bootstrappers);
+            bootstrappers.Load<DisplayUnitPluginBootstrapper> ();
+            bootstrappers.Load<PluginFileBootstrapper> ();
         }
 
-        public void RegisterDependencies(IContainer container)
+        public void RegisterDependencies(IRegistrationService rs)
 		{
-            container.Register<IPluginManager, PluginManager> (LifeCycle.Singleton);
-			container.Register<IConverterFactory<Plugin, PluginDTO>, PluginDtoFactory>(LifeCycle.Transient);
+            rs.Register<IPluginManager, PluginManager> (LifeCycle.Singleton);
+			rs.Register<IConverterFactory<Plugin, PluginDTO>, PluginDtoFactory>(LifeCycle.Transient);
+            rs.Register<IPluginRepoManager, PluginRepoManager> (LifeCycle.Singleton);
 		}
 	}
 }

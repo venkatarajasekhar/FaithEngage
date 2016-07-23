@@ -41,7 +41,7 @@ namespace FaithEngage.Plugins
 
 		public override void RegisterDependencies(IRegistrationService regService)
 		{
-			regService.RegisterDependency<ITemplatingService, RazorTemplatingService>(LifeCycle.Singleton);
+			regService.Register<ITemplatingService, RazorTemplatingService>(LifeCycle.Singleton);
 		}
 
 		public override void Uninstall(IAppFactory FEFactory)

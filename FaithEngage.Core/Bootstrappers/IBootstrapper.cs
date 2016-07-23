@@ -1,14 +1,15 @@
 ﻿using System;
 using FaithEngage.Core.Containers;
 using System.Collections.Generic;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core
 {
 	public interface IBootstrapper
 	{
-		void RegisterDependencies(IContainer container);
-		void Execute(IContainer container);
-        void LoadBootstrappers (IList<IBootstrapper> bootstrappers);
+        void RegisterDependencies(IRegistrationService regService);
+        void Execute(IAppFactory factory);
+        void LoadBootstrappers (IBootList bootstrappers);
 	}
 }
 

@@ -9,12 +9,12 @@ namespace FaithEngage.Core.Containers
 			_container = container;
 		}
 
-		public void RegisterDependency<Tabstract, Tconcrete>(LifeCycle lifeCycle)
+		public void Register<Tabstract, Tconcrete>(LifeCycle lifeCycle)
 		{
 			_container.Register<Tabstract, Tconcrete>(lifeCycle);
 		}
 
-		public void RegisterDependency<Tabstract, Tconcrete>()
+		public void Register<Tabstract, Tconcrete>()
 		{
 			_container.Register<Tabstract, Tconcrete>();
 		}

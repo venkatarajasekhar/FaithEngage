@@ -4,8 +4,10 @@ using FaithEngage.Core.PluginManagers.Interfaces;
 
 namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces
 {
-	public interface IDisplayUnitPluginRepoManager : IPluginRepoManager<DisplayUnitPlugin>
+	public interface IDisplayUnitPluginRepoManager : IPluginRepoManager
 	{
+        IEnumerable<DisplayUnitPlugin> GetAll ();
+        DisplayUnitPlugin GetById (Guid id);
 	}
 }
 

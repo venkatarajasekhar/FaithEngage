@@ -84,7 +84,13 @@ namespace FaithEngage.Core.Factories
 			}
 		}
 
-		public T GetOther<T>()
+        public IRegistrationService RegistrationService {
+            get {
+                return _container.GetRegistrationService ();
+            }
+        }
+
+        public T GetOther<T>()
 		{
 			if (typeof(T) == typeof(IContainer)) throw new FactoryException("Accessing the IContainer from the AppFactory is not permitted.");
 			return _container.Resolve<T>();

@@ -3,14 +3,11 @@ using System.Collections.Generic;
 
 namespace FaithEngage.Core.PluginManagers.Interfaces
 {
-	public interface IPluginRepoManager<T> where T:Plugin
+	public interface IPluginRepoManager
 	{
-		Guid RegisterNew(T plugin);
+        Guid RegisterNew(Plugin plugin);
 		void UninstallPlugin(Guid id);
-		void UpdatePlugin(T plugin);
-		IEnumerable<T> GetAll();
-		T GetById(Guid id);
-		List<PluginDTO> GetAllDtos();
+		void UpdatePlugin(Plugin plugin);
 	}
 }
 

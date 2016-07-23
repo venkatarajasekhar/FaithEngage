@@ -2,28 +2,25 @@
 using System.Collections.Generic;
 using FaithEngage.Core;
 using FaithEngage.Core.Containers;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Facade
 {
     public class Bootloader : IBootstrapper
 	{
 
-        public void Execute (IContainer container)
+        public void Execute (IAppFactory factory)
         {
         }
 
-        public void LoadBootstrappers (IList<IBootstrapper> bootstrappers)
+        public void LoadBootstrappers (IBootList bootstrappers)
         {
-            var feBooter = new FaithEngageBootLoader ();
-
-            bootstrappers.Add (feBooter);
-
-            feBooter.LoadBootstrappers (bootstrappers);
+            bootstrappers.Load<FaithEngageBootLoader> ();
         }
 
-        public void RegisterDependencies (IContainer container)
+        public void RegisterDependencies (IRegistrationService rs)
         {
-            container.Register<IAuthenticator, Authenticator> (LifeCycle.Transient);
+            rs.Register<IAuthenticator, Authenticator> (LifeCycle.Transient);
         }
     }
 }

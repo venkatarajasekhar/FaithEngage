@@ -2,23 +2,24 @@
 using System.Collections.Generic;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.Cards.Interfaces;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.Cards
 {
     public class CardBootstrapper : IBootstrapper
     {
 
-        public void Execute (IContainer container)
+        public void Execute (IAppFactory container)
         {
         }
 
-        public void LoadBootstrappers (IList<IBootstrapper> bootstrappers)
+        public void LoadBootstrappers (IBootList bootstrappers)
         {
         }
 
-        public void RegisterDependencies (IContainer container)
+        public void RegisterDependencies (IRegistrationService rs)
         {
-            container.Register<ICardDTOFactory, CardDtoFactory> (LifeCycle.Transient);
+            rs.Register<ICardDTOFactory, CardDtoFactory> (LifeCycle.Transient);
         }
     }
 }

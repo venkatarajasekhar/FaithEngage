@@ -168,6 +168,8 @@
     <Compile Include="PluginManagers\Factories\PluginDtoFactory.cs" />
     <Compile Include="RepoManagers\PluginRepoManager.cs" />
     <Compile Include="PluginManagers\Interfaces\IPluginRepoManager.cs" />
+    <Compile Include="Bootstrappers\BootList.cs" />
+    <Compile Include="Bootstrappers\IBootList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -14,42 +14,26 @@ namespace FaithEngage.Core
 	public class FaithEngageBootLoader : IBootstrapper
 	{
         
-        public void Execute(IContainer container)
+        public void Execute(IAppFactory factory)
 		{
-            FEFactory.Activate (container);
+            FEFactory.Activate (factory);
 		}
 
-		public void RegisterDependencies(IContainer container)
+        public void RegisterDependencies(IRegistrationService rs)
 		{
-            container.Register<IAppFactory, AppFactory> ();
-            container.Register<IRegistrationService, RegistrationService> (LifeCycle.Transient);
+            rs.Register<IAppFactory, AppFactory> (LifeCycle.Singleton);
+            rs.Register<IRegistrationService, RegistrationService> (LifeCycle.Singleton);
 		}
 
-        public void LoadBootstrappers (IList<IBootstrapper> bootstrappers)
+        public void LoadBootstrappers (IBootList bootstrappers)
         {
-            var pluginBooter = new PluginBootstrapper ();
-            var duBooter = new DisplayUnitBootstrapper ();
-            var actionBooter = new ActionProcessorsBootstrapper ();
-			var cardProcBooter = new CardProcessorBootstrapper ();
-			var cardBooter = new CardBootstrapper();
-            var eventBooter = new EventBootstrapper ();
-            var userBooter = new UserClassBootstrapper ();
-
-            bootstrappers.Add (pluginBooter);
-            bootstrappers.Add (duBooter);
-            bootstrappers.Add (actionBooter);
-            bootstrappers.Add (cardProcBooter);
-            bootstrappers.Add (eventBooter);
-			bootstrappers.Add(cardBooter);
-            bootstrappers.Add (userBooter);
-
-            pluginBooter.LoadBootstrappers (bootstrappers);
-            duBooter.LoadBootstrappers (bootstrappers);
-            actionBooter.LoadBootstrappers (bootstrappers);
-            cardProcBooter.LoadBootstrappers (bootstrappers);
-            eventBooter.LoadBootstrappers (bootstrappers);
-			cardBooter.LoadBootstrappers(bootstrappers);
-            userBooter.LoadBootstrappers (bootstrappers);
+            bootstrappers.Load<PluginBootstrapper> ();
+            bootstrappers.Load<DisplayUnitBootstrapper> ();
+            bootstrappers.Load<ActionProcessorsBootstrapper> ();
+            bootstrappers.Load<CardProcessorBootstrapper> ();
+            bootstrappers.Load<CardBootstrapper> ();
+            bootstrappers.Load<EventBootstrapper> ();
+            bootstrappers.Load<UserClassBootstrapper> ();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace FaithEngage.Core.RepoManagers
 			_fac = A.Fake<IDisplayUnitPluginFactory>();
 			_dtoFac = A.Fake<IConverterFactory<Plugin,PluginDTO>>();
 			_plgn = A.Fake<DisplayUnitPlugin>();
-            mgr = new DisplayUnitPluginRepoManager (_repo, _fac, _dtoFac);
+            mgr = new DisplayUnitPluginRepoManager (_fac, _repo, _dtoFac);
 		}
 
         [Test]

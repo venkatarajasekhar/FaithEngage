@@ -11,29 +11,29 @@ namespace FaithEngage.Core.Bootstrappers
     public class FaithEngageBootLoaderTests
     {
         private IContainer _container = A.Fake<IContainer> ();
-
+        private IAppFactory _appFac = A.Fake<IAppFactory>();
+        private IRegistrationService _rs = A.Fake<IRegistrationService> ();
         [Test]
         public void Execute_ActivatesAppFactory()
         {
             var feBooter = new FaithEngageBootLoader ();
-            feBooter.Execute (_container);
-
-            A.CallTo (() => _container.Resolve<IAppFactory> ()).MustHaveHappened();
+            feBooter.Execute (_appFac);
+            Assert.That (FEFactory.Get, Is.EqualTo (_appFac));
         }
 
         [Test]
         public void RegisterDependencies_RegistersDependencies ()
         {
             var feBooter = new FaithEngageBootLoader ();
-            feBooter.RegisterDependencies (_container);
+            feBooter.RegisterDependencies (_rs);
 
-            A.CallTo (() => _container.Register<IAppFactory, AppFactory> ()).MustHaveHappened();
+            A.CallTo (() => _rs.Register<IAppFactory, AppFactory> ()).MustHaveHappened();
         }
 
         [Test]
         public void LoadBootstrappers_AddsOtherBootstrappersToList()
         {
-            var list = new List<IBootstrapper> ();
+            var list = A.Fake<IBootList> ();
             var feBooter = new FaithEngageBootLoader ();
 
             feBooter.LoadBootstrappers (list);

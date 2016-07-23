@@ -5,8 +5,10 @@ namespace FaithEngage.Facade.Interfaces
 {
     public interface IInitializer
     {
-        IContainer GetContainer ();
-        IBootstrapper GetBootstrapper ();
+        IContainer Container { get; }
+        IBootList GetEmptyBootList (IContainer container);
+        IBootList LoadedBootList { get; }
+        IBootstrapper CoreBootstrapper { get; }
     }
 }
 

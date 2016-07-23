@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.ActionProcessors.Interfaces;
 using FaithEngage.Core.ActionProcessors;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core
 {
     public class ActionProcessorsBootstrapper : IBootstrapper
     {
-        public void Execute (IContainer container)
+        public void Execute (IAppFactory container)
         {
         }
 
-        public void LoadBootstrappers (IList<IBootstrapper> bootstrappers)
+        public void LoadBootstrappers (IBootList bootstrappers)
         {
         }
 
-        public void RegisterDependencies (IContainer container)
+        public void RegisterDependencies (IRegistrationService rs)
         {
-            container.Register<ICardActionProcessor, CardActionProcessor> (LifeCycle.Singleton);
+            rs.Register<ICardActionProcessor, CardActionProcessor> (LifeCycle.Singleton);
         }
     }
 }

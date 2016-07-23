@@ -8,11 +8,10 @@ namespace FaithEngage.Core
     {
         private static IAppFactory _fac;
 
-        internal static void Activate(IContainer container)
+        internal static void Activate(IAppFactory appFactory)
         {
-            _fac = container.Resolve<IAppFactory> ();
+            _fac = appFactory;
         }
-
         public static IAppFactory Get{ get { return _fac;}}
     }
 }

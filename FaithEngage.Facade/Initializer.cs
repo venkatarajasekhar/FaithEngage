@@ -6,14 +6,37 @@ namespace FaithEngage.Facade
 {
     public class Initializer : IInitializer
     {
-        public IBootstrapper GetBootstrapper ()
-        {
-            return new Bootloader ();
+        private IContainer _container;
+        private IBootList _bootlist;
+
+        public IBootList LoadedBootList {
+            get {
+                if(_bootlist == null){
+                    _bootlist = new BootList (this.Container);
+                    _bootlist.Load<Bootloader> ();
+                }
+                return _bootlist;
+            }
         }
 
-        public IContainer GetContainer ()
+        public IContainer Container {
+            get {
+                if(_container == null){
+                    _container = new IocContainer ();
+                }
+                return _container;
+            }
+        }
+
+        public IBootstrapper CoreBootstrapper {
+            get {
+                return new Bootloader ();
+            }
+        }
+
+        public IBootList GetEmptyBootList (IContainer container)
         {
-            return new IocContainer ();
+            return new BootList (container);
         }
     }
 }
