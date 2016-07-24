@@ -71,7 +71,6 @@
     <Compile Include="DummyTypes\Dummies.cs" />
     <Compile Include="CardTests\DefaultImplementations\RenderableCardSectionTests.cs" />
     <Compile Include="CardTests\DefaultImplementations\RenderableCardTests.cs" />
-    <Compile Include="CardTests\CardActionTests.cs" />
     <Compile Include="ContainersTests\IocContainerTests.cs" />
     <Compile Include="ContainersTests\RegisteredObjectTests.cs" />
     <Compile Include="DisplayUnitsTests\DisplayUnitTests.cs" />

@@ -14,7 +14,7 @@ namespace FaithEngage.Core.Bootstrappers
         private IAppFactory _appFac = A.Fake<IAppFactory>();
         private IRegistrationService _rs = A.Fake<IRegistrationService> ();
         [Test]
-        public void Execute_ActivatesAppFactory()
+        public void Execute_ActivatesFEFactory()
         {
             var feBooter = new FaithEngageBootLoader ();
             feBooter.Execute (_appFac);
@@ -38,7 +38,10 @@ namespace FaithEngage.Core.Bootstrappers
 
             feBooter.LoadBootstrappers (list);
 
-            A.CallTo (list).Where(p=> p.Method.Name == "Load").WithAnyArguments().MustHaveHappened (Repeated.Exactly.Times (7));
+            A.CallTo (list)
+             .Where(p=> p.Method.Name == "Load")
+             .WithAnyArguments()
+             .MustHaveHappened (Repeated.Exactly.Times (7));
         }
 
 
