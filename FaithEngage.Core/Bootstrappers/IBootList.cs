@@ -8,7 +8,7 @@ namespace FaithEngage.Core.Bootstrappers
     {
         void Load<T> () where T : IBootstrapper, new();
         string RegisterAllDependencies (bool checkDependencies);
-        string ExecuteAllBooters ();
+        string ExecuteAllBootstrappers ();
         IList<Type> MissingDependencies { get; }
     }
 }

@@ -76,7 +76,7 @@ namespace FaithEngage.IntegrationTests
 
             initializer.Container.Replace<IDisplayUnitPluginRepoManager, dummyPluginRepoMgr>(LifeCycle.Singleton);
 
-            log = bootlist.ExecuteAllBooters ();
+            log = bootlist.ExecuteAllBootstrappers ();
             Console.Write (log);
 		}
 	}

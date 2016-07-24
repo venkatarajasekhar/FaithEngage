@@ -25,6 +25,8 @@ namespace FaithEngage.Core.Bootstrappers
 
         public void Add (IBootstrapper item)
         {
+            if (this.Any (p => p.GetType () == item.GetType ())) 
+                return;
             base.Add (item);
             item.LoadBootstrappers (this);
         }
@@ -34,7 +36,7 @@ namespace FaithEngage.Core.Bootstrappers
             this.Add (new T());
         }
 
-        public string RegisterAllDependencies(bool checkDependencies){
+        public string RegisterAllDependencies(bool checkDependencies = false){
             var sb = new StringBuilder ();
             sb.AppendLine ("Registering dependencies:");
             var orderedList = this.OrderBy (p => p.BootPriority);
@@ -44,16 +46,17 @@ namespace FaithEngage.Core.Bootstrappers
             }
             if(checkDependencies){
                 sb.AppendLine ("Checking Dependencies:");
-                var missingDeps = MissingDependencies;
+                var missingDeps = this.MissingDependencies;
                 foreach(var dep in missingDeps)
                 {
                     sb.AppendLine($"--Missing Dependency: {dep.Name}");
                 }
+                if (missingDeps.Count == 0) sb.AppendLine ("--No Missing Dependencies found.");
             }
             return sb.ToString ();
         }
 
-        public string ExecuteAllBooters(){
+        public string ExecuteAllBootstrappers(){
             var sb = new StringBuilder ();
             sb.AppendLine ("Executing Bootstrappers:...");
             var orderedList = this.OrderBy (p => p.BootPriority);
