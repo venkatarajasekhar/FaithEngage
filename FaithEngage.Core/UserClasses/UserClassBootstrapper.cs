@@ -4,6 +4,7 @@ using FaithEngage.Core.Containers;
 using FaithEngage.Core.UserClasses.Interfaces;
 using FaithEngage.Core.RepoManagers;
 using FaithEngage.Core.Factories;
+using FaithEngage.Core.Bootstrappers;
 
 namespace FaithEngage.Core.Userclasses
 {

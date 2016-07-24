@@ -5,6 +5,7 @@ using FaithEngage.Core.Events.EventSchedules.Interfaces;
 using FaithEngage.Core.RepoManagers;
 using FaithEngage.Core.Events.EventSchedules.Factories;
 using FaithEngage.Core.Factories;
+using FaithEngage.Core.Bootstrappers;
 
 namespace FaithEngage.Core.Events.EventSchedules
 {

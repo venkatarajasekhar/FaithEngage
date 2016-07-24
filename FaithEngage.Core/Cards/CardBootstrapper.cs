@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.Cards.Interfaces;
 using FaithEngage.Core.Factories;
+using FaithEngage.Core.Bootstrappers;
 
 namespace FaithEngage.Core.Cards
 {

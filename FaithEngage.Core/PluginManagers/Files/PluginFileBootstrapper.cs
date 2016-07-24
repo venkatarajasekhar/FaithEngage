@@ -4,6 +4,7 @@ using FaithEngage.Core.Containers;
 using FaithEngage.Core.PluginManagers.Files.Factories;
 using FaithEngage.Core.PluginManagers.Files.Interfaces;
 using FaithEngage.Core.Factories;
+using FaithEngage.Core.Bootstrappers;
 
 namespace FaithEngage.Core.PluginManagers.Files
 {

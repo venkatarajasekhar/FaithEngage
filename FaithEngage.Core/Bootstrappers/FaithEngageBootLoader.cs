@@ -9,7 +9,7 @@ using FaithEngage.Core.Events;
 using FaithEngage.Core.Cards;
 using FaithEngage.Core.Userclasses;
 
-namespace FaithEngage.Core
+namespace FaithEngage.Core.Bootstrappers
 {
 	public class FaithEngageBootLoader : IBootstrapper
 	{
@@ -22,7 +22,6 @@ namespace FaithEngage.Core
         public void RegisterDependencies(IRegistrationService rs)
 		{
             rs.Register<IAppFactory, AppFactory> (LifeCycle.Singleton);
-            rs.Register<IRegistrationService, RegistrationService> (LifeCycle.Singleton);
 		}
 
         public void LoadBootstrappers (IBootList bootstrappers)

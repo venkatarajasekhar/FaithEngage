@@ -27,7 +27,7 @@ namespace FaithEngage.Core.Bootstrappers
             var feBooter = new FaithEngageBootLoader ();
             feBooter.RegisterDependencies (_rs);
 
-            A.CallTo (() => _rs.Register<IAppFactory, AppFactory> ()).MustHaveHappened();
+            A.CallTo (() => _rs.Register<IAppFactory, AppFactory> (LifeCycle.Singleton)).MustHaveHappened();
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace FaithEngage.Core.Bootstrappers
 
             feBooter.LoadBootstrappers (list);
 
-            Assert.That (list.Count, Is.GreaterThanOrEqualTo (5));
+            A.CallTo (list).Where(p=> p.Method.Name == "Load").WithAnyArguments().MustHaveHappened (Repeated.Exactly.Times (7));
         }
 
 

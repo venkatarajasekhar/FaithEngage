@@ -3,7 +3,7 @@ using FaithEngage.Core.Containers;
 using System.Collections.Generic;
 using FaithEngage.Core.Factories;
 
-namespace FaithEngage.Core
+namespace FaithEngage.Core.Bootstrappers
 {
 	public interface IBootstrapper
 	{

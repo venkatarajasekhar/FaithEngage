@@ -8,6 +8,7 @@ using FaithEngage.Core.PluginManagers.Interfaces;
 using FaithEngage.Core.PluginManagers.Factories;
 using FaithEngage.Core.RepoManagers;
 using FaithEngage.Core.Factories;
+using FaithEngage.Core.Bootstrappers;
 
 namespace FaithEngage.Core.PluginManagers
 {

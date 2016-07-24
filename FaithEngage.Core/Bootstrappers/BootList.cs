@@ -5,11 +5,18 @@ using FaithEngage.Core.Containers;
 using System.Text;
 using FaithEngage.Core.Factories;
 
-namespace FaithEngage.Core
+namespace FaithEngage.Core.Bootstrappers
 {
     public class BootList : List<IBootstrapper>, IBootList
     {
         private readonly IContainer _container;
+
+        public IList<Type> MissingDependencies {
+            get {
+                return _container.CheckAllDependencies ();
+            }
+        }
+
         public BootList (IContainer container)
         {
             _container = container;
@@ -35,7 +42,7 @@ namespace FaithEngage.Core
             }
             if(checkDependencies){
                 sb.AppendLine ("Checking Dependencies:");
-                var missingDeps = _container.CheckAllDependencies ();
+                var missingDeps = MissingDependencies;
                 foreach(var dep in missingDeps)
                 {
                     sb.AppendLine($"--Missing Dependency: {dep.Name}");

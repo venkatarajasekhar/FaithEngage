@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FaithEngage.Core.Bootstrappers;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.Factories;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories;

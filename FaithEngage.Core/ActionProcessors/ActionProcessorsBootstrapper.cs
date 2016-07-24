@@ -4,6 +4,7 @@ using FaithEngage.Core.Containers;
 using FaithEngage.Core.ActionProcessors.Interfaces;
 using FaithEngage.Core.ActionProcessors;
 using FaithEngage.Core.Factories;
+using FaithEngage.Core.Bootstrappers;
 
 namespace FaithEngage.Core
 {

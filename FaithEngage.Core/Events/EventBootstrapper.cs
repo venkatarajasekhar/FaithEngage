@@ -6,6 +6,7 @@ using FaithEngage.Core.Events.Factories;
 using FaithEngage.Core.Events.Interfaces;
 using FaithEngage.Core.RepoManagers;
 using FaithEngage.Core.Factories;
+using FaithEngage.Core.Bootstrappers;
 
 namespace FaithEngage.Core.Events
 {

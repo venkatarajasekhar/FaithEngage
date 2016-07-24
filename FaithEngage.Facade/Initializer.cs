@@ -1,5 +1,6 @@
 ﻿using System;
 using FaithEngage.Core;
+using FaithEngage.Core.Bootstrappers;
 using FaithEngage.Core.Containers;
 using FaithEngage.Facade.Interfaces;
 namespace FaithEngage.Facade

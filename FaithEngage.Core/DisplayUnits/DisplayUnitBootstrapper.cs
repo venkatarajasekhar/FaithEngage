@@ -5,6 +5,7 @@ using FaithEngage.Core.DisplayUnits.Factories;
 using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.RepoManagers;
 using FaithEngage.Core.Factories;
+using FaithEngage.Core.Bootstrappers;
 
 namespace FaithEngage.Core.DisplayUnits
 {
