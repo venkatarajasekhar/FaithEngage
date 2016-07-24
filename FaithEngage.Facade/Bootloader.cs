@@ -9,6 +9,11 @@ namespace FaithEngage.Facade
 {
     public class Bootloader : IBootstrapper
 	{
+        public BootPriority BootPriority {
+            get {
+                return BootPriority.First;
+            }
+        }
 
         public void Execute (IAppFactory factory)
         {

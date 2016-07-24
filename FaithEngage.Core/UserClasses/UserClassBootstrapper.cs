@@ -10,6 +10,12 @@ namespace FaithEngage.Core.Userclasses
 {
     public class UserClassBootstrapper : IBootstrapper
     {
+        public BootPriority BootPriority {
+            get {
+                return BootPriority.Normal;
+            }
+        }
+
         public void Execute (IAppFactory fac)
         {
         }

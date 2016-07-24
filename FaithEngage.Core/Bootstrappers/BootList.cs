@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using FaithEngage.Core.Containers;
 using System.Text;
 using FaithEngage.Core.Factories;
+using System.Linq;
 
 namespace FaithEngage.Core.Bootstrappers
 {
@@ -36,7 +37,8 @@ namespace FaithEngage.Core.Bootstrappers
         public string RegisterAllDependencies(bool checkDependencies){
             var sb = new StringBuilder ();
             sb.AppendLine ("Registering dependencies:");
-            foreach(var booter in this){
+            var orderedList = this.OrderBy (p => p.BootPriority);
+            foreach(var booter in orderedList){
                 sb.AppendLine ($"--Registering: {booter.GetType ().Name}");
                 booter.RegisterDependencies (_container.GetRegistrationService());
             }
@@ -54,7 +56,8 @@ namespace FaithEngage.Core.Bootstrappers
         public string ExecuteAllBooters(){
             var sb = new StringBuilder ();
             sb.AppendLine ("Executing Bootstrappers:...");
-            foreach(var booter in this){
+            var orderedList = this.OrderBy (p => p.BootPriority);
+            foreach(var booter in orderedList){
                 sb.AppendLine($"--Executing on {booter.GetType ().Name}.");
                 booter.Execute (_container.Resolve<IAppFactory>());
             }

@@ -11,6 +11,11 @@ namespace FaithEngage.Core.Events.EventSchedules
 {
 	public class EventScheduleBootstrapper : IBootstrapper
 	{
+        public BootPriority BootPriority {
+            get {
+                return BootPriority.Normal;
+            }
+        }
 
         public void Execute(IAppFactory container)
 		{

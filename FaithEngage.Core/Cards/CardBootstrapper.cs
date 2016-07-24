@@ -9,6 +9,11 @@ namespace FaithEngage.Core.Cards
 {
     public class CardBootstrapper : IBootstrapper
     {
+        public BootPriority BootPriority {
+            get {
+                return BootPriority.Normal;
+            }
+        }
 
         public void Execute (IAppFactory container)
         {

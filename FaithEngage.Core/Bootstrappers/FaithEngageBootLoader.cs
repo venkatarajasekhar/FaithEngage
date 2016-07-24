@@ -13,7 +13,12 @@ namespace FaithEngage.Core.Bootstrappers
 {
 	public class FaithEngageBootLoader : IBootstrapper
 	{
-        
+        public BootPriority BootPriority {
+            get {
+                return BootPriority.First;
+            }
+        }
+
         public void Execute(IAppFactory factory)
 		{
             FEFactory.Activate (factory);

@@ -170,6 +170,7 @@
     <Compile Include="PluginManagers\Interfaces\IPluginRepoManager.cs" />
     <Compile Include="Bootstrappers\BootList.cs" />
     <Compile Include="Bootstrappers\IBootList.cs" />
+    <Compile Include="Bootstrappers\BootPriority.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

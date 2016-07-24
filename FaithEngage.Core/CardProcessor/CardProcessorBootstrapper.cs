@@ -8,6 +8,11 @@ namespace FaithEngage.Core.CardProcessor
 {
     public class CardProcessorBootstrapper : IBootstrapper
     {
+        public BootPriority BootPriority {
+            get {
+                return BootPriority.Normal;
+            }
+        }
 
         public void Execute (IAppFactory container)
         {

@@ -10,6 +10,12 @@ namespace FaithEngage.Core.PluginManagers.Files
 {
     public class PluginFileBootstrapper : IBootstrapper
     {
+        public BootPriority BootPriority {
+            get {
+                return BootPriority.Normal;
+            }
+        }
+
         public void Execute (IAppFactory fac)
         {
             

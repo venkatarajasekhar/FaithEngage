@@ -11,6 +11,11 @@ namespace FaithEngage.Core.DisplayUnits
 {
 	public class DisplayUnitBootstrapper : IBootstrapper
 	{
+        public BootPriority BootPriority {
+            get {
+                return BootPriority.Normal;
+            }
+        }
 
         public void Execute(IAppFactory container)
 		{

@@ -12,6 +12,11 @@ namespace FaithEngage.Core.Events
 {
     public class EventBootstrapper : IBootstrapper
     {
+        public BootPriority BootPriority {
+            get {
+                return BootPriority.Normal;
+            }
+        }
 
         public void Execute (IAppFactory container)
         {
