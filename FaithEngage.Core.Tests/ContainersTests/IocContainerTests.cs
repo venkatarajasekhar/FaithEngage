@@ -13,6 +13,13 @@ namespace FaithEngage.Core.Containers
     {
 
         [Test]
+        public void Ctor_RegistersRegService(){
+            var container = new IocContainer ();
+            var rsIsRegistered = container.CheckRegistered<IRegistrationService> ();
+            Assert.That (rsIsRegistered);
+        }
+
+        [Test]
         public void Register_ValidAbstract_ValidConcrete_NoException()
         {
             var container = new IocContainer ();
@@ -31,8 +38,11 @@ namespace FaithEngage.Core.Containers
         {
             var container = new IocContainer ();
             var regService = container.GetRegistrationService ();
-            Assert.That (regService, Is.Not.Null);
+            regService.Register<IDummy, Dummy_NoParameters> ();
+            var dummy = container.Resolve<IDummy> ();
 
+            Assert.That (regService, Is.Not.Null);
+            Assert.That (dummy, Is.InstanceOf<Dummy_NoParameters> ());
         }
 
         [Test]
@@ -189,7 +199,7 @@ namespace FaithEngage.Core.Containers
         }
 
         [Test]
-        public void CheckDependencies_AddsUnregistedDepsToList()
+        public void CheckAllDependencies_AddsUnregistedDepsToList()
         {
             var container = new IocContainer ();
             container.Register<IDummy, Dummy_CtorHasDependencies> ();

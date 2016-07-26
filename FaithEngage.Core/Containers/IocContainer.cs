@@ -9,6 +9,7 @@ namespace FaithEngage.Core.Containers
     {
         public IocContainer ()
         {
+            this.Register<IRegistrationService, RegistrationService> (LifeCycle.Singleton);
         }
 
         private readonly List<RegisteredObject> _registry = new List<RegisteredObject>();
@@ -28,7 +29,7 @@ namespace FaithEngage.Core.Containers
 
 		public IRegistrationService GetRegistrationService()
 		{
-            return new RegistrationService (this);
+            return this.Resolve<IRegistrationService> ();
 		}
 
 		private RegisteredObject registerSelf(Type typeToRegister)
