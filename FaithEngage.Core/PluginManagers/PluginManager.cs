@@ -2,7 +2,6 @@
 using System.IO.Compression;
 using FaithEngage.Core.PluginManagers.Files.Interfaces;
 using FaithEngage.Core.PluginManagers.Interfaces;
-using FaithEngage.Core.RepoInterfaces;
 using System.Linq;
 using System.Reflection;
 

@@ -30,22 +30,20 @@ namespace Dummy_PluginAssembly
 
         public override void Initialize (IAppFactory container)
         {
-            throw new NotImplementedException ();
         }
 
         public override void RegisterDependencies (IRegistrationService container)
         {
-            throw new NotImplementedException ();
         }
 
         public override void Install (IAppFactory container)
         {
-            throw new NotImplementedException ();
+            
         }
 
         public override void Uninstall (IAppFactory container)
         {
-            throw new NotImplementedException ();
+            
         }
 
         public override Type DisplayUnitType {

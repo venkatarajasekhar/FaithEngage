@@ -14,7 +14,6 @@ namespace FaithEngage.Core.Events.Factories
         private IEventScheduleRepoManager _schedMgr;
         private EventFactory _fac;
         private Guid VALID_GUID = Guid.NewGuid ();
-        private Guid INVALID_GUID = Guid.Empty;
 
         [SetUp]
         public void Init ()
