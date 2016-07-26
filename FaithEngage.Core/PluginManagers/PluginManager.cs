@@ -23,7 +23,7 @@ namespace FaithEngage.Core.PluginManagers
 			var files = _fileMgr.ExtractZipToTempFolder(zipFile, key);
 			_fileMgr.StoreFilesForPlugin(files, key, true);
 			var pluginFiles = _fileMgr.GetFilesForPlugin(key);
-            var dlls = pluginFiles.Where (p => p.Value.FileInfo.Extension.ToLower () == ".dll");
+			var dlls = pluginFiles.Where(p => p.Value.FileInfo.Extension.ToLower() == ".dll").ToList();
             int num = 0;
             foreach(var dll in dlls){
                 var assembly = Assembly.LoadFrom (dll.Value.FileInfo.FullName);
