@@ -57,7 +57,6 @@
     <Folder Include="EventsTests\" />
     <Folder Include="PluginManagersTests\" />
     <Folder Include="PluginManagersTests\DisplayUnitPluginsTests\" />
-    <Folder Include="PluginManagersTests\PluginContainersTests\" />
     <Folder Include="RepoManagersTests\" />
     <Folder Include="PluginManagersTests\DisplayUnitPluginsTests\FactoriesTests\" />
     <Folder Include="BootstrappersTests\" />
@@ -66,6 +65,7 @@
     <Folder Include="EventsTests\FactoriesTests\" />
     <Folder Include="EventsTests\EventSchedulesTests\" />
     <Folder Include="EventsTests\EventSchedulesTests\FactoriesTests\" />
+    <Folder Include="PluginManagersTests\FilesTests\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DummyTypes\Dummies.cs" />
@@ -74,7 +74,6 @@
     <Compile Include="ContainersTests\IocContainerTests.cs" />
     <Compile Include="ContainersTests\RegisteredObjectTests.cs" />
     <Compile Include="DisplayUnitsTests\DisplayUnitTests.cs" />
-    <Compile Include="PluginManagersTests\PluginContainersTests\DisplayUnitPluginContainerTests.cs" />
     <Compile Include="RepoManagersTests\DisplayUnitRepoManagerTests.cs" />
     <Compile Include="CardProcessorTests\CardProcessorTests.cs" />
     <Compile Include="CardTests\CardDtoFactoryTests.cs" />
@@ -97,6 +96,8 @@
     <Compile Include="BootstrappersTests\BootListTests.cs" />
     <Compile Include="FactoriesTests\AppFactoryTests.cs" />
     <Compile Include="PluginManagersTests\PluginManagersTests.cs" />
+    <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\DisplayUnitPluginContainerTests.cs" />
+    <Compile Include="PluginManagersTests\FilesTests\PluginFileManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">

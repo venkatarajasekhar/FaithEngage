@@ -6,6 +6,7 @@ using FaithEngage.Core.PluginManagers.Files.Interfaces;
 using FaithEngage.Core.Config;
 using System.Linq;
 using FaithEngage.Core.RepoInterfaces;
+using FaithEngage.Core.Exceptions;
 namespace FaithEngage.Core.PluginManagers.Files
 {
     public class PluginFileManager : IPluginFileManager
@@ -27,21 +28,24 @@ namespace FaithEngage.Core.PluginManagers.Files
 
         public void DeleteAllFilesForPlugin (Guid pluginId)
         {
-            Directory.Delete(_factory.GetBasePluginPath(pluginId));
-            _repo.DeleteAllFilesForPlugin (pluginId);
-
-            //Insert try/catch blocks for repo calls and delete method. 
-            //see https://msdn.microsoft.com/en-us/library/system.io.fileinfo.delete(v=vs.110).aspx
+            var path = _factory.GetBasePluginPath (pluginId);
+            try {
+                if (Directory.Exists (path)) Directory.Delete (path, true);
+            } catch (Exception) {}
+            try{
+                _repo.DeleteAllFilesForPlugin (pluginId);
+            }catch(Exception){}
         }
 
         public void DeleteFile (Guid fileId)
         {
             var pFileInfo = GetFile (fileId);
-            if (pFileInfo.FileInfo.Exists) pFileInfo.FileInfo.Delete ();
-            _repo.DeleteFileRecord (fileId);
-
-            //Insert try/catch blocks for repo calls and delete method. 
-            //see https://msdn.microsoft.com/en-us/library/system.io.fileinfo.delete(v=vs.110).aspx
+            try {
+                if (pFileInfo.FileInfo.Exists) pFileInfo.FileInfo.Delete ();
+            } catch (Exception) {}
+            try{
+                _repo.DeleteFileRecord (fileId);
+            } catch (Exception){}
         }
 
         public IList<FileInfo> ExtractZipToTempFolder (ZipArchive zipArchive, Guid key)
@@ -51,12 +55,12 @@ namespace FaithEngage.Core.PluginManagers.Files
                 var folder = _tempFolder.CreateSubdirectory (key.ToString ());
                 zipArchive.ExtractToDirectory (folder.FullName);
                 list = folder.EnumerateFiles ("*", SearchOption.AllDirectories).ToList ();
-            } catch (IOException) {
+            }catch(ArgumentException){
                 return new List<FileInfo> ();
+            }catch (IOException) {
+                
             }
             return list;
-
-            //Insert try/catch blocks for repo calls and createSubdirctory method. 
         }
 
         public void FlushTempFolder (Guid key)
