@@ -16,17 +16,18 @@ namespace FaithEngage.Core.PluginManagers
 		{
 			_fileMgr = fileManager;
             _mgr = mgr;
-		}
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+        }
 
 		public int Install(ZipArchive zipFile)
 		{
 			var key = Guid.NewGuid();
-			var files = _fileMgr.ExtractZipToTempFolder(zipFile, key);
-			_fileMgr.StoreFilesForPlugin(files, key, true);
+            var files = _fileMgr.ExtractZipToTempFolder (zipFile, key);
+            _fileMgr.StoreFilesForPlugin (files, key, true);
+            _fileMgr.FlushTempFolder (key);
 			var pluginFiles = _fileMgr.GetFilesForPlugin(key);
 			var dlls = pluginFiles.Where(p => p.Value.FileInfo.Extension.ToLower() == ".dll").ToList();
             int num = 0;
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             foreach(var dll in dlls){
                 var assembly = Assembly.LoadFile (dll.Value.FileInfo.FullName);
                 IEnumerable<Type> types = null;
@@ -39,7 +40,7 @@ namespace FaithEngage.Core.PluginManagers
                 foreach(var pluginType in pluginTypes){
                     var ctor = pluginType.GetConstructors ().FirstOrDefault ();
                     if (ctor == null) continue;
-                    var plugin = (Plugin)ctor.Invoke (new object [] { });
+                    var plugin = (Plugin)ctor.Invoke (new object [] {});
                     if (plugin == null) continue;
                     num++;
                     _mgr.RegisterNew (plugin);
@@ -51,7 +52,6 @@ namespace FaithEngage.Core.PluginManagers
         Assembly CurrentDomain_AssemblyResolve (object sender, ResolveEventArgs args)
         {
             var name = args.Name.Split (',') [0];
-            var core = Assembly.GetExecutingAssembly ();
             var assemblies = AppDomain.CurrentDomain.GetAssemblies ();
             var foundAssembly = assemblies.FirstOrDefault (p => p.FullName.Split (',') [0] == name);
             return foundAssembly;

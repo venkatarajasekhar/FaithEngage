@@ -15,6 +15,7 @@ namespace FaithEngage.Core.PluginManagers.Files.Interfaces
         void DeleteAllFilesForPlugin (Guid pluginId);
         IList<FileInfo> ExtractZipToTempFolder (ZipArchive zipArchive, Guid key);
         void FlushTempFolder ();
+        void FlushTempFolder (Guid key);
 
     }
 }

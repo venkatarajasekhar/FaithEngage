@@ -46,17 +46,27 @@ namespace FaithEngage.Core.PluginManagers.Files
 
         public IList<FileInfo> ExtractZipToTempFolder (ZipArchive zipArchive, Guid key)
         {
-            var folder = _tempFolder.CreateSubdirectory (key.ToString ());
-            zipArchive.ExtractToDirectory (folder.FullName);
-            return folder.EnumerateFiles ("*",SearchOption.AllDirectories).ToList ();
+            IList<FileInfo> list = null;
+            try {
+                var folder = _tempFolder.CreateSubdirectory (key.ToString ());
+                zipArchive.ExtractToDirectory (folder.FullName);
+                list = folder.EnumerateFiles ("*", SearchOption.AllDirectories).ToList ();
+            } catch (IOException) {
+                return new List<FileInfo> ();
+            }
+            return list;
 
             //Insert try/catch blocks for repo calls and createSubdirctory method. 
         }
 
+        public void FlushTempFolder (Guid key)
+        {
+            _tempFolder.EnumerateDirectories (key.ToString ()).ToList ().ForEach (p => p.Delete(true));
+        }
+
         public void FlushTempFolder ()
         {
-            _tempFolder.EnumerateFiles ().ToList ().ForEach (p => p.Delete ());
-            _tempFolder.EnumerateDirectories ().ToList ().ForEach (p => p.Delete ());
+            _tempFolder.EnumerateDirectories ().ToList ().ForEach (p => p.Delete (true));
             //Insert try/catch blocks for repo calls and delete method. 
             //see https://msdn.microsoft.com/en-us/library/system.io.fileinfo.delete(v=vs.110).aspx
         }

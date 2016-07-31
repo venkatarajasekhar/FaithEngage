@@ -12,6 +12,7 @@ using System.IO.Compression;
 using System.IO;
 using System.Collections.Generic;
 using FaithEngage.Core.PluginManagers.Files;
+using System.Linq;
 
 namespace FaithEngage.IntegrationTests
 {
@@ -118,10 +119,17 @@ namespace FaithEngage.IntegrationTests
         public void InstallPlugin_StubbedRepoAndConfig()
         {
             _mgr = _container.Resolve<PluginManager> ();
+            int numInstalled;
             using(var zipFile = ZipFile.OpenRead(Path.Combine ("TestingFiles", "pluginZip.zip")))
             {
-                _mgr.Install (zipFile);
+                numInstalled = _mgr.Install (zipFile);
             }
+            var pluginDirs = new DirectoryInfo ("PLUGINS").EnumerateDirectories ();
+            var tempDirs = new DirectoryInfo ("TEMP").EnumerateDirectories ();
+            Assert.That (pluginDirs.Count () >= 1);
+            Assert.That (tempDirs.Count () == 0);
+            pluginDirs.ToList ().ForEach (p => p.Delete (true));
+            Assert.That(numInstalled == 1);
         }
 
     }
