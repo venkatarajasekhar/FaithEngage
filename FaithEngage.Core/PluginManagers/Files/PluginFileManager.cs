@@ -48,7 +48,7 @@ namespace FaithEngage.Core.PluginManagers.Files
         {
             var folder = _tempFolder.CreateSubdirectory (key.ToString ());
             zipArchive.ExtractToDirectory (folder.FullName);
-            return folder.EnumerateFiles ().ToList ();
+            return folder.EnumerateFiles ("*",SearchOption.AllDirectories).ToList ();
 
             //Insert try/catch blocks for repo calls and createSubdirctory method. 
         }
@@ -89,6 +89,8 @@ namespace FaithEngage.Core.PluginManagers.Files
             {
                 if(file.Exists){
                     var newPath = Path.Combine (_factory.GetBasePluginPath (pluginId), file.Name);
+                    var dirPath = Path.GetDirectoryName (newPath);
+                    var parentDir = Directory.CreateDirectory (dirPath);
                     var savedFile = file.CopyTo (newPath, overWrite);
                     var pfile = _factory.Create (savedFile, pluginId);
                     var dto = _dtoFac.Convert (pfile);

@@ -27,7 +27,7 @@ namespace FaithEngage.Core.PluginManagers.Files
 
         public void RegisterDependencies (IRegistrationService rs)
         {
-            rs.Register<IPluginFileManager, IPluginFileManager> (LifeCycle.Singleton);
+            rs.Register<IPluginFileManager, PluginFileManager> (LifeCycle.Singleton);
             rs.Register<IConverterFactory<PluginFileInfo, PluginFileInfoDTO>, PluginFileInfoDTOFactory> (LifeCycle.Transient);
             rs.Register<IPluginFileInfoFactory, PluginFileInfoFactory> (LifeCycle.Transient);
         }

@@ -14,10 +14,10 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
 
         public PluginFileInfoDTO Convert(PluginFileInfo source)
 		{
-            var fullPathSegments = source.FileInfo.FullName.Split (new [] { '/', '\\' });
-            var pluginsPathSegments = _config.PluginsFolderPath.Split (new [] { '/', '\\' });
-            var fullPluginPath = Path.Combine(Path.Combine (pluginsPathSegments), source.PluginId.ToString ());
-            var relPath = Path.Combine (fullPathSegments).Replace (fullPluginPath, "");
+            var pluginsPath = Path.Combine(_config.PluginsFolderPath.Split (new [] { '/', '\\' }));
+            var fullPluginsPath = new DirectoryInfo (pluginsPath).FullName;
+            var indPluginPath = Path.Combine(Path.Combine (fullPluginsPath), source.PluginId.ToString ());
+            var relPath = source.FileInfo.FullName.Replace (indPluginPath, "");
             var dto = new PluginFileInfoDTO () { FileId = source.FileId, Name = source.FileInfo.Name, PluginId = source.PluginId, RelativePath = relPath};
             return dto;
 		}

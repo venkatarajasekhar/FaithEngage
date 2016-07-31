@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FaithEngage.Core.Exceptions;
 using System.Linq;
+using System.Reflection;
 
 namespace FaithEngage.Core.Containers
 {
@@ -21,8 +22,8 @@ namespace FaithEngage.Core.Containers
 
         public void Register<Tabstract,Tconcrete>(LifeCycle lifecycle)
         {
-            if (!typeof(Tabstract).IsAssignableFrom (typeof(Tconcrete)))
-                throw new InvalidTypeRelationshipException (typeof(Tabstract), typeof(Tconcrete));
+            if (!typeof (Tabstract).IsAssignableFrom (typeof (Tconcrete)))
+                throw new InvalidTypeRelationshipException (typeof (Tabstract), typeof (Tconcrete));
             var ro = new RegisteredObject (typeof(Tabstract), typeof(Tconcrete), lifecycle);
             _registry.Add (ro);
         }
@@ -73,7 +74,13 @@ namespace FaithEngage.Core.Containers
 
         private IEnumerable<object> resolveConstructorParameters(RegisteredObject registeredObject)
         {
-			var constructorInfo = registeredObject.ConcreteType.GetConstructors ().First ();
+            ConstructorInfo constructorInfo = null;
+            try {
+                constructorInfo = registeredObject.ConcreteType.GetConstructors ().First ();
+            } catch (InvalidOperationException) {
+                throw new NoPublicConstructorsException ("Type has no public constructors: " + registeredObject.ConcreteType.Name);
+            }
+
             foreach(var parameter in constructorInfo.GetParameters())
             {
                 yield return resolveObject (parameter.ParameterType);

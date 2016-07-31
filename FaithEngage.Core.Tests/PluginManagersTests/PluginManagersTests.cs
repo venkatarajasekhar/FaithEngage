@@ -56,7 +56,7 @@ namespace FaithEngage.Core.PluginManagers
 
 			_pluginMgr.Install(zipFile);
 
-
+            zipFile.Dispose ();
 			A.CallTo(() => _fileMgr.StoreFilesForPlugin(fileslist, key, true)).MustHaveHappened();
 			A.CallTo(() => _mgr.RegisterNew(A<Plugin>.Ignored)).MustHaveHappened();
 
