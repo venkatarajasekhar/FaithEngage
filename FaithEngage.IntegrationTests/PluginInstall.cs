@@ -119,16 +119,28 @@ namespace FaithEngage.IntegrationTests
         public void InstallPlugin_StubbedRepoAndConfig()
         {
             _mgr = _container.Resolve<PluginManager> ();
+			var tempDirs = new DirectoryInfo("TEMP").EnumerateDirectories();
+			tempDirs.ToList().ForEach(p => p.Delete(true));
             int numInstalled;
             using(var zipFile = ZipFile.OpenRead(Path.Combine ("TestingFiles", "pluginZip.zip")))
             {
                 numInstalled = _mgr.Install (zipFile);
             }
             var pluginDirs = new DirectoryInfo ("PLUGINS").EnumerateDirectories ();
-            var tempDirs = new DirectoryInfo ("TEMP").EnumerateDirectories ();
+            tempDirs = new DirectoryInfo ("TEMP").EnumerateDirectories ();
             Assert.That (pluginDirs.Count () >= 1);
             Assert.That (tempDirs.Count () == 0);
-            pluginDirs.ToList ().ForEach (p => p.Delete (true));
+			foreach (var dir in pluginDirs)
+			{
+				try
+				{
+					dir.Delete(true);
+				}
+				catch (UnauthorizedAccessException)
+				{
+					continue;
+				}
+			}	
             Assert.That(numInstalled == 1);
         }
 

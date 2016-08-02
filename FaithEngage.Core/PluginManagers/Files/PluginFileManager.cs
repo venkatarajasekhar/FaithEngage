@@ -104,7 +104,7 @@ namespace FaithEngage.Core.PluginManagers.Files
                 if(file.Exists){
                     var newPath = Path.Combine (_factory.GetBasePluginPath (pluginId), file.Name);
                     var dirPath = Path.GetDirectoryName (newPath);
-                    var parentDir = Directory.CreateDirectory (dirPath);
+					var parentDir = Directory.CreateDirectory (dirPath);
                     var savedFile = file.CopyTo (newPath, overWrite);
                     var pfile = _factory.Create (savedFile, pluginId);
                     var dto = _dtoFac.Convert (pfile);
