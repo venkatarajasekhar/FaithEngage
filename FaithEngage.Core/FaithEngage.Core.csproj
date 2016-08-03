@@ -172,6 +172,7 @@
     <Compile Include="Bootstrappers\IBootList.cs" />
     <Compile Include="Bootstrappers\BootPriority.cs" />
     <Compile Include="Exceptions\NoPublicConstructorsException.cs" />
+    <Compile Include="Exceptions\PluginFileException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

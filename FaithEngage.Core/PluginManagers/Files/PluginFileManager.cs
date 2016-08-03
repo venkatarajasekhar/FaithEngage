@@ -7,6 +7,8 @@ using FaithEngage.Core.Config;
 using System.Linq;
 using FaithEngage.Core.RepoInterfaces;
 using FaithEngage.Core.Exceptions;
+using System.Security;
+
 namespace FaithEngage.Core.PluginManagers.Files
 {
     public class PluginFileManager : IPluginFileManager
@@ -29,9 +31,18 @@ namespace FaithEngage.Core.PluginManagers.Files
         public void DeleteAllFilesForPlugin (Guid pluginId)
         {
             var path = _factory.GetBasePluginPath (pluginId);
-            try {
-                if (Directory.Exists (path)) Directory.Delete (path, true);
-            } catch (Exception) {}
+			try
+			{
+				if (Directory.Exists(path)) Directory.Delete(path, true);
+			}
+			catch (IOException ex)
+			{
+				throw new PluginFileException(path + " was not able to be deleted.", ex);
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				throw new PluginFileException(path + " was not able to be deleted due to unauthorized access.", ex);
+			}
             try{
                 _repo.DeleteAllFilesForPlugin (pluginId);
             }catch(Exception){}
@@ -40,26 +51,45 @@ namespace FaithEngage.Core.PluginManagers.Files
         public void DeleteFile (Guid fileId)
         {
             var pFileInfo = GetFile (fileId);
-            try {
-                if (pFileInfo.FileInfo.Exists) pFileInfo.FileInfo.Delete ();
-            } catch (Exception) {}
+			try
+			{
+				if (pFileInfo.FileInfo.Exists) pFileInfo.FileInfo.Delete();
+			}
+			catch (IOException ex)
+			{
+				throw new PluginFileException(pFileInfo.FileInfo.FullName + " was not able to be deleted.", ex);
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				throw new PluginFileException(pFileInfo.FileInfo.FullName + " was not able to be deleted due to unauthorized access.", ex);
+			}
             try{
                 _repo.DeleteFileRecord (fileId);
-            } catch (Exception){}
+			} catch (RepositoryException){}
         }
 
         public IList<FileInfo> ExtractZipToTempFolder (ZipArchive zipArchive, Guid key)
         {
             IList<FileInfo> list = null;
-            try {
-                var folder = _tempFolder.CreateSubdirectory (key.ToString ());
-                zipArchive.ExtractToDirectory (folder.FullName);
-                list = folder.EnumerateFiles ("*", SearchOption.AllDirectories).ToList ();
-            }catch(ArgumentException){
-                return new List<FileInfo> ();
-            }catch (IOException) {
-                
-            }
+			DirectoryInfo folder = null;
+			try
+			{
+				folder = _tempFolder.CreateSubdirectory(key.ToString());
+				zipArchive.ExtractToDirectory(folder.FullName);
+				list = folder.EnumerateFiles("*", SearchOption.AllDirectories).ToList();
+			}
+			catch (ArgumentException)
+			{
+				return new List<FileInfo>();
+			}
+			catch (IOException ex)
+			{
+				throw new PluginFileException("Could not create subfolder of " + _tempFolder.FullName + ".", ex);
+			}
+			catch (SecurityException ex)
+			{
+				throw new PluginFileException("Inadequate permissions to enumerate files on " + folder.FullName + ".", ex);
+			}
             return list;
         }
 
@@ -112,6 +142,22 @@ namespace FaithEngage.Core.PluginManagers.Files
                 }
             }
         }
+		private void throwFileException(Exception ex, string pluginPath)
+		{
+			try { throw ex; }
+			catch (IOException)
+			{
+			}
+			catch (UnauthorizedAccessException)
+			{
+			}
+			catch (SecurityException)
+			{
+			}
+			catch (ArgumentException)
+			{
+			}
+		}
     }
 }
 
