@@ -165,6 +165,16 @@ namespace FaithEngage.Core.Tests
             _tempFolder.EnumerateDirectories ().ToList ().ForEach (p => p.Delete (true));
         }
 
+		[Test]
+		public void FlushTempFolder_ValidKey_Flushes()
+		{
+			var id = Guid.NewGuid();
+
+			var folder = _tempFolder.CreateSubdirectory(id.ToString());
+			Assert.That(Directory.Exists(Path.Combine(folder, id.ToString));
+			_mgr.FlushTempFolder(id);
+		}
+
 
     }
 }
