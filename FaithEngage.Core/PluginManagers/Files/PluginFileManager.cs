@@ -35,13 +35,9 @@ namespace FaithEngage.Core.PluginManagers.Files
 			{
 				if (Directory.Exists(path)) Directory.Delete(path, true);
 			}
-			catch (IOException ex)
+			catch (Exception ex)
 			{
-				throw new PluginFileException(path + " was not able to be deleted.", ex);
-			}
-			catch (UnauthorizedAccessException ex)
-			{
-				throw new PluginFileException(path + " was not able to be deleted due to unauthorized access.", ex);
+				throwFileException(ex, path);
 			}
             try{
                 _repo.DeleteAllFilesForPlugin (pluginId);
@@ -55,13 +51,9 @@ namespace FaithEngage.Core.PluginManagers.Files
 			{
 				if (pFileInfo.FileInfo.Exists) pFileInfo.FileInfo.Delete();
 			}
-			catch (IOException ex)
+			catch (Exception ex)
 			{
-				throw new PluginFileException(pFileInfo.FileInfo.FullName + " was not able to be deleted.", ex);
-			}
-			catch (UnauthorizedAccessException ex)
-			{
-				throw new PluginFileException(pFileInfo.FileInfo.FullName + " was not able to be deleted due to unauthorized access.", ex);
+				throwFileException(ex, pFileInfo.FileInfo.FullName);
 			}
             try{
                 _repo.DeleteFileRecord (fileId);
@@ -82,13 +74,9 @@ namespace FaithEngage.Core.PluginManagers.Files
 			{
 				return new List<FileInfo>();
 			}
-			catch (IOException ex)
+			catch (Exception ex)
 			{
-				throw new PluginFileException("Could not create subfolder of " + _tempFolder.FullName + ".", ex);
-			}
-			catch (SecurityException ex)
-			{
-				throw new PluginFileException("Inadequate permissions to enumerate files on " + folder.FullName + ".", ex);
+				throwFileException(ex, folder.FullName);
 			}
             return list;
         }
@@ -147,15 +135,19 @@ namespace FaithEngage.Core.PluginManagers.Files
 			try { throw ex; }
 			catch (IOException)
 			{
+				throw new PluginFileException("IO Exception encountered regarding " + pluginPath, ex);
 			}
 			catch (UnauthorizedAccessException)
 			{
+				throw new PluginFileException("Unauthorized Access on " + pluginPath, ex);
 			}
 			catch (SecurityException)
 			{
+				throw new PluginFileException("Unauthorized Access on " + pluginPath, ex);
 			}
 			catch (ArgumentException)
 			{
+				
 			}
 		}
     }

@@ -7,6 +7,7 @@ using FakeItEasy;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using FaithEngage.Core.Exceptions;
 
 namespace FaithEngage.Core.Tests
 {
@@ -142,7 +143,7 @@ namespace FaithEngage.Core.Tests
 
             A.CallTo (() => _repo.GetFileInfo (id)).Returns (dto);
             A.CallTo (() => _factory.Convert (dto)).Returns (pfile);
-            A.CallTo (() => _repo.DeleteFileRecord (id)).Throws<Exception>();
+            A.CallTo (() => _repo.DeleteFileRecord (id)).Throws<RepositoryException>();
             _mgr.DeleteFile (id);
 
             Assert.That (!File.Exists (path));
