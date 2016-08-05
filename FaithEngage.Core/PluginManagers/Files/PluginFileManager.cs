@@ -81,9 +81,21 @@ namespace FaithEngage.Core.PluginManagers.Files
             return list;
         }
 
-        public void FlushTempFolder (Guid key)
-        {
-            _tempFolder.EnumerateDirectories (key.ToString ()).ToList ().ForEach (p => p.Delete(true));
+		public void FlushTempFolder(Guid key)
+		{
+			_tempFolder.EnumerateDirectories(key.ToString())
+		   .ToList()
+		   .ForEach(p =>
+				{
+					try
+					{
+						p.Delete(true);
+					}
+					catch (Exception ex)
+					{
+						throwFileException(ex, p.FullName);
+					}
+				});
         }
 
         public void FlushTempFolder ()
@@ -144,10 +156,6 @@ namespace FaithEngage.Core.PluginManagers.Files
 			catch (SecurityException)
 			{
 				throw new PluginFileException("Unauthorized Access on " + pluginPath, ex);
-			}
-			catch (ArgumentException)
-			{
-				
 			}
 		}
     }
