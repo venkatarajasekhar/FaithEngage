@@ -1,15 +1,15 @@
 ﻿using System;
 using NUnit.Framework;
 using FaithEngage.Core.RepoInterfaces;
-using FaithEngage.Core.PluginManagers.Files;
 using FaithEngage.Core.PluginManagers.Files.Interfaces;
 using FakeItEasy;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using FaithEngage.Core.Exceptions;
+using FaithEngage.Core.Tests;
 
-namespace FaithEngage.Core.Tests
+namespace FaithEngage.Core.PluginManagers.Files
 {
 	[TestFixture]
 	public class PluginFileManagerTests
@@ -62,7 +62,7 @@ namespace FaithEngage.Core.Tests
 		[Test]
 		public void DeleteAllFilesForPlugin_RepoThrowsException_FailsSilently()
 		{
-			A.CallTo(() => _repo.DeleteAllFilesForPlugin(A<Guid>.Ignored)).Throws<Exception>();
+            A.CallTo(() => _repo.DeleteAllFilesForPlugin(A<Guid>.Ignored)).Throws<RepositoryException>();
 			var id = Guid.NewGuid();
 			var subDir = _pluginFolder.CreateSubdirectory(id.ToString());
 			Assert.That(subDir.Exists);
@@ -205,8 +205,64 @@ namespace FaithEngage.Core.Tests
 			_mgr.FlushTempFolder();
 		}
 
+        [Test]
+        public void GetFile_ValidId_ObtainsFile()
+        {
+            var id = Guid.NewGuid ();
+            var dto = new PluginFileInfoDTO ();
+            dto.FileId = id;
+            var pfile = new PluginFileInfo (Guid.NewGuid (), new FileInfo ("This is my file"));
+            A.CallTo (() => _repo.GetFileInfo (id)).Returns (dto);
+            A.CallTo (() => _factory.Convert (dto)).Returns (pfile);
 
+            var file = _mgr.GetFile (id);
 
+            Assert.That (file, Is.EqualTo (pfile));
+
+        }
+
+        [Test]
+        public void GetFile_InvalidId_ReturnNull()
+        {
+            var id = Guid.NewGuid ();
+            A.CallTo (() => _repo.GetFileInfo (id)).Returns (null);
+            var file = _mgr.GetFile (id);
+
+            Assert.That (file, Is.Null);
+        }
+
+        [Test]
+        public void GetFile_RepoThrows_Throws()
+        {
+            var id = Guid.NewGuid ();
+            var ex1 = new RepositoryException ("Test");
+            A.CallTo (() => _repo.GetFileInfo (id)).Throws(ex1);
+            var ex = TestHelpers.TryGetException(()=>  _mgr.GetFile (id));
+            Assert.That (ex, Is.Not.Null);
+            Assert.That (ex, Is.Not.EqualTo (ex1));
+            Assert.That (ex, Is.InstanceOf<RepositoryException> ());
+        }
+
+        [Test]
+        public void GetFile_FactoryThrows_Throws()
+        {
+            Assert.Inconclusive ();
+        }
+
+        [Test]
+        public void GetFile_FactoryReturnsNull_ReturnsNull()
+        {
+            var id = Guid.NewGuid ();
+            var dto = new PluginFileInfoDTO ();
+            dto.FileId = id;
+            A.CallTo (() => _repo.GetFileInfo (id)).Returns (dto);
+            A.CallTo (() => _factory.Convert (dto)).Returns (null);
+
+            var file = _mgr.GetFile (id);
+
+            Assert.That (file, Is.Null);
+
+        }
     }
 }
 

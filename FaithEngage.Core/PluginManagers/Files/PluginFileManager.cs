@@ -41,7 +41,9 @@ namespace FaithEngage.Core.PluginManagers.Files
 			}
             try{
                 _repo.DeleteAllFilesForPlugin (pluginId);
-            }catch(Exception){}
+            }catch(RepositoryException){
+                return;
+            }
         }
 
         public void DeleteFile (Guid fileId)
@@ -100,16 +102,28 @@ namespace FaithEngage.Core.PluginManagers.Files
 
         public void FlushTempFolder ()
         {
-            _tempFolder.EnumerateDirectories ().ToList ().ForEach (p => p.Delete (true));
-            //Insert try/catch blocks for repo calls and delete method. 
-            //see https://msdn.microsoft.com/en-us/library/system.io.fileinfo.delete(v=vs.110).aspx
+            var dirs = _tempFolder.EnumerateDirectories ();
+            foreach(var dir in dirs){
+                try {
+                    dir.Delete (true);
+                } catch (Exception) {
+                    continue;
+                }
+            }
         }
 
         public PluginFileInfo GetFile (Guid fileId)
         {
-            var dto = _repo.GetFileInfo (fileId);
-            return _factory.Convert (dto);
-            //Insert try/catch block for repo call
+            PluginFileInfoDTO dto = null;
+            try {
+                dto = _repo.GetFileInfo (fileId);
+            } catch (RepositoryException ex) {
+                throw new RepositoryException ("There was a problem obtaining the file record from the db.", ex);
+            }
+            if (dto == null) return null;
+            var pfile = _factory.Convert (dto);
+            return pfile;
+
         }
 
         public IDictionary<Guid, PluginFileInfo> GetFilesForPlugin (Guid pluginId)
