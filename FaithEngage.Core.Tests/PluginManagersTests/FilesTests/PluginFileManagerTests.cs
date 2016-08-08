@@ -244,12 +244,6 @@ namespace FaithEngage.Core.PluginManagers.Files
         }
 
         [Test]
-        public void GetFile_FactoryThrows_Throws()
-        {
-            Assert.Inconclusive ();
-        }
-
-        [Test]
         public void GetFile_FactoryReturnsNull_ReturnsNull()
         {
             var id = Guid.NewGuid ();
@@ -263,6 +257,34 @@ namespace FaithEngage.Core.PluginManagers.Files
             Assert.That (file, Is.Null);
 
         }
+
+		[Test]
+		public void GetFilesForPlugin_ValidId_ReturnsLoadedDict()
+		{
+			var pluginId = Guid.NewGuid();
+			var dtos = Enumerable
+				.Repeat("x", 5)
+	            .Select(
+	                (arg1, arg2) => new PluginFileInfoDTO() 
+						{ 
+							Name = "Test", 
+							FileId = Guid.NewGuid(), 
+							PluginId = pluginId
+						}
+                )
+				.ToList();
+
+			A.CallTo(() => _repo.GetAllFilesForPlugin(pluginId)).Returns(dtos);
+			A.CallTo(
+				() => _factory.Convert(A<PluginFileInfoDTO>.Ignored))
+			 	.ReturnsLazily(
+				 	(PluginFileInfoDTO d) => 
+			 		new PluginFileInfo(pluginId, new FileInfo("testing"),d.FileId)
+				);
+			var files = _mgr.GetFilesForPlugin(pluginId);
+
+
+		}
     }
 }
 
