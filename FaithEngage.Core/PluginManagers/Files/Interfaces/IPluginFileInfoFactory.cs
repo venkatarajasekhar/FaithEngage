@@ -5,7 +5,7 @@ namespace FaithEngage.Core.PluginManagers.Files.Interfaces
     public interface IPluginFileInfoFactory : IConverterFactory<PluginFileInfoDTO, PluginFileInfo>
     {
         PluginFileInfo Create (FileInfo file, Guid pluginId);
-		PluginFileInfo Rename(PluginFileInfo pluginFile, string newRelativePath);
+		string GetRenamedPath(PluginFileInfo pluginFile, string newRelativePath);
         string GetBasePluginPath (Guid pluginId);
 		DirectoryInfo TempFolder { get; }
 		DirectoryInfo PluginsFolder { get; }

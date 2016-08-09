@@ -8,6 +8,7 @@ using System.IO.Compression;
 using System.Linq;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.Tests;
+using System.Collections.Generic;
 
 namespace FaithEngage.Core.PluginManagers.Files
 {
@@ -283,7 +284,45 @@ namespace FaithEngage.Core.PluginManagers.Files
 				);
 			var files = _mgr.GetFilesForPlugin(pluginId);
 
+			Assert.That(files.All(p=> dtos.Any(q=> q.FileId == p.Value.FileId)));
+		}
 
+		[Test]
+		public void GetFilesForPlugin_InvalidId_ReturnsNull()
+		{
+			var pluginId = Guid.NewGuid();
+			A.CallTo(() => _repo.GetAllFilesForPlugin(pluginId)).Returns(null);
+
+			var files = _mgr.GetFilesForPlugin(pluginId);
+
+			Assert.That(files, Is.Null);
+
+		}
+		[Test]
+		public void GetFilesForPlugin_ValidId_NoFiles_ReturnsEmptyDict()
+		{
+			var pluginId = Guid.NewGuid();
+			A.CallTo(() => _repo.GetAllFilesForPlugin(pluginId)).Returns(new List<PluginFileInfoDTO>());
+			var files = _mgr.GetFilesForPlugin(pluginId);
+
+			Assert.That(files, Is.Not.Null);
+			Assert.That(files.Count == 0);
+		}
+
+		[Test]
+		public void GetFilesForPlugin_RepoThrows_ThrowsNewRepoException()
+		{
+			var pluginId = Guid.NewGuid();
+			A.CallTo(() => _repo.GetAllFilesForPlugin(pluginId)).Throws(new RepositoryException("Test"));
+			var e = TestHelpers.TryGetException(()=>_mgr.GetFilesForPlugin(pluginId));
+
+			Assert.That(e, Is.InstanceOf<RepositoryException>());
+			Assert.That(e.Message != "Test");
+		}
+
+		[Test]
+		public void RenameFile_ValidId_ValidPath_ExistingFile_RenamesFile()
+		{
 		}
     }
 }

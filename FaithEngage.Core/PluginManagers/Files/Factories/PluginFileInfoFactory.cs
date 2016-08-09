@@ -46,20 +46,9 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
 			return Path.Combine(_pluginsFolder.FullName, pluginId.ToString());
 		}
 
-		public PluginFileInfo Rename(PluginFileInfo pluginFile, string newRelativePath)
+		public string GetRenamedPath(PluginFileInfo pluginFile, string newRelativePath)
 		{
-			var oldFileName = pluginFile.FileInfo.FullName;
-			var newFileName = Path.Combine(GetBasePluginPath(pluginFile.PluginId), getOSSafePath(newRelativePath));
-			try
-			{
-				pluginFile.FileInfo = pluginFile.FileInfo.CopyTo(newFileName);
-				File.Delete(oldFileName);
-			}
-			catch (Exception ex)
-			{
-				//TODO: Come up with all the exception cases 
-			}
-			return pluginFile;
+			return Path.Combine(GetBasePluginPath(pluginFile.PluginId), getOSSafePath(newRelativePath));
 		}
 	}
 }

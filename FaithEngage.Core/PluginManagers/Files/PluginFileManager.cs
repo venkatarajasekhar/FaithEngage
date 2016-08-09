@@ -31,14 +31,8 @@ namespace FaithEngage.Core.PluginManagers.Files
         public void DeleteAllFilesForPlugin (Guid pluginId)
         {
             var path = _factory.GetBasePluginPath (pluginId);
-			try
-			{
-				if (Directory.Exists(path)) Directory.Delete(path, true);
-			}
-			catch (Exception ex)
-			{
-				throwFileException(ex, path);
-			}
+			if (Directory.Exists(path)) 
+				doFileAction(path, p => Directory.Delete(p, true));
             try{
                 _repo.DeleteAllFilesForPlugin (pluginId);
             }catch(RepositoryException){
@@ -49,14 +43,8 @@ namespace FaithEngage.Core.PluginManagers.Files
         public void DeleteFile (Guid fileId)
         {
             var pFileInfo = GetFile (fileId);
-			try
-			{
-				if (pFileInfo.FileInfo.Exists) pFileInfo.FileInfo.Delete();
-			}
-			catch (Exception ex)
-			{
-				throwFileException(ex, pFileInfo.FileInfo.FullName);
-			}
+			if (pFileInfo.FileInfo.Exists) 
+				doFileAction(pFileInfo, p => p.FileInfo.Delete());
             try{
                 _repo.DeleteFileRecord (fileId);
 			} catch (RepositoryException){}
@@ -128,7 +116,16 @@ namespace FaithEngage.Core.PluginManagers.Files
 
         public IDictionary<Guid, PluginFileInfo> GetFilesForPlugin (Guid pluginId)
         {
-            var dtos = _repo.GetAllFilesForPlugin (pluginId);
+			IList<PluginFileInfoDTO> dtos;
+			try
+			{
+				dtos = _repo.GetAllFilesForPlugin(pluginId);
+			}
+			catch (RepositoryException ex)
+			{
+				throw new RepositoryException("There was a problem obtaining the file records form the db.", ex);
+			}
+			if (dtos == null) return null;
             var dict = dtos.ToDictionary (p => p.FileId, p => _factory.Convert (p));
             return dict;
         }
@@ -136,8 +133,31 @@ namespace FaithEngage.Core.PluginManagers.Files
         public void RenameFile (Guid fileId, string newRelativePath)
         {
             var file = GetFile (fileId);
-			var newFile = _factory.Rename(file, newRelativePath);
-			var dto = _dtoFac.Convert(newFile);
+			if (file == null) 
+				throw new InvalidFileException(fileId.ToString(), $"The file with the id {fileId.ToString()} does not exist in either the db or on the filesystem.");
+			var oldFileName = file.FileInfo.FullName;
+			var newPath = _factory.GetRenamedPath(file, newRelativePath);
+			var dirName = Path.GetDirectoryName(newPath);
+			if (!Directory.Exists(dirName)) Directory.CreateDirectory(dirName);
+
+			try
+			{
+				file.FileInfo = file.FileInfo.CopyTo(newPath);
+			}
+			catch (Exception ex)
+			{
+				throwFileException(ex, newPath); 
+			}
+			try
+			{
+				File.Delete(oldFileName);
+			}
+			catch (Exception ex)
+			{
+				throwFileException(ex, oldFileName);
+			}
+
+			var dto = _dtoFac.Convert(file);
 			_repo.UpdateFile(dto);
         }
 
@@ -156,20 +176,46 @@ namespace FaithEngage.Core.PluginManagers.Files
                 }
             }
         }
-		private void throwFileException(Exception ex, string pluginPath)
+		private void throwFileException(Exception ex, object subject)
 		{
 			try { throw ex; }
 			catch (IOException)
 			{
-				throw new PluginFileException("IO Exception encountered regarding " + pluginPath, ex);
+				throw new PluginFileException($"IO Exception encountered regarding {subject.ToString()}", ex);
 			}
 			catch (UnauthorizedAccessException)
 			{
-				throw new PluginFileException("Unauthorized Access on " + pluginPath, ex);
+				throw new PluginFileException($"Unauthorized Access on {subject.ToString()}", ex);
 			}
 			catch (SecurityException)
 			{
-				throw new PluginFileException("Unauthorized Access on " + pluginPath, ex);
+				throw new PluginFileException($"Unauthorized Access on {subject.ToString()}", ex);
+			}
+		}
+
+		private Tresult doFileAction<Tinput, Tresult>(Tinput source, Func<Tinput, Tresult> func)
+		{
+			Tresult result = default(Tresult);
+			try
+			{
+				result = func(source);
+			}
+			catch (Exception ex)
+			{
+				throwFileException(ex, source);
+			}
+			return result;
+		}
+
+		private void doFileAction<Tinput>(Tinput source, Action<Tinput> func)
+		{
+			try
+			{
+				func(source);
+			}
+			catch (Exception ex)
+			{
+				throwFileException(ex, source);
 			}
 		}
     }
