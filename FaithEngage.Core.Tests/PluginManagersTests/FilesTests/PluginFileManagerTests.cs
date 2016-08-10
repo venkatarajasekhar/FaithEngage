@@ -323,6 +323,42 @@ namespace FaithEngage.Core.PluginManagers.Files
 		[Test]
 		public void RenameFile_ValidId_ValidPath_ExistingFile_RenamesFile()
 		{
+			var id = Guid.NewGuid();
+			var plug = Guid.NewGuid();
+			var plugFolder = _pluginFolder.CreateSubdirectory(plug.ToString());
+			var path = Path.Combine(_pluginFolder.FullName, plug.ToString(), "TestFile.txt");
+			var newPath = Path.Combine(_pluginFolder.FullName, plug.ToString(), "testing", "testfile1.txt");
+			File.WriteAllText(path, "Testing This file.");
+			var dto = new PluginFileInfoDTO()
+			{
+				FileId = id,
+				Name = "TestFile.txt",
+				PluginId = id,
+				RelativePath = "TestFile.txt"
+			};
+			var file = new FileInfo(path);
+			var pfile = new PluginFileInfo(plug, file);
+			var newDto = new PluginFileInfoDTO()
+			{
+				FileId = id,
+				Name = "testfile1.txt",
+				PluginId = plug,
+				RelativePath = "testing/testfile1.txt"
+			};
+
+			A.CallTo(() => _repo.GetFileInfo(id)).Returns(dto);
+			A.CallTo(() => _factory.Convert(dto)).Returns(pfile);
+			A.CallTo(() => _factory.GetRenamedPath(pfile, "testing/testfile1.txt")).Returns(newPath);
+			A.CallTo(() => _dtoFac.Convert(pfile)).Returns(newDto);
+
+			Assert.That(File.Exists(path));
+			_mgr.RenameFile(id, "testing/testfile1.txt");
+
+			A.CallTo(() => _repo.UpdateFile(newDto)).MustHaveHappened();
+			Assert.That(File.Exists(newPath));
+			Assert.That(!File.Exists(path));
+
+			plugFolder.Delete(true);
 		}
     }
 }

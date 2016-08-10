@@ -52,22 +52,10 @@ namespace FaithEngage.Core.PluginManagers.Files
 
         public IList<FileInfo> ExtractZipToTempFolder (ZipArchive zipArchive, Guid key)
         {
-            IList<FileInfo> list = null;
-			DirectoryInfo folder = null;
-			try
-			{
-				folder = _tempFolder.CreateSubdirectory(key.ToString());
-				zipArchive.ExtractToDirectory(folder.FullName);
-				list = folder.EnumerateFiles("*", SearchOption.AllDirectories).ToList();
-			}
-			catch (ArgumentException)
-			{
-				return new List<FileInfo>();
-			}
-			catch (Exception ex)
-			{
-				throwFileException(ex, folder.FullName);
-			}
+            
+			DirectoryInfo folder = doFileAction(key, p=>  _tempFolder.CreateSubdirectory(p.ToString()));
+			doFileAction(folder, p => zipArchive.ExtractToDirectory(p.FullName));
+			IList<FileInfo> list = doFileAction(folder, p=> p.EnumerateFiles("*",SearchOption.AllDirectories).ToList());
             return list;
         }
 
@@ -90,7 +78,7 @@ namespace FaithEngage.Core.PluginManagers.Files
 
         public void FlushTempFolder ()
         {
-            var dirs = _tempFolder.EnumerateDirectories ();
+			var dirs = doFileAction(_tempFolder, p=> p.EnumerateDirectories ());
             foreach(var dir in dirs){
                 try {
                     dir.Delete (true);
@@ -138,25 +126,9 @@ namespace FaithEngage.Core.PluginManagers.Files
 			var oldFileName = file.FileInfo.FullName;
 			var newPath = _factory.GetRenamedPath(file, newRelativePath);
 			var dirName = Path.GetDirectoryName(newPath);
-			if (!Directory.Exists(dirName)) Directory.CreateDirectory(dirName);
-
-			try
-			{
-				file.FileInfo = file.FileInfo.CopyTo(newPath);
-			}
-			catch (Exception ex)
-			{
-				throwFileException(ex, newPath); 
-			}
-			try
-			{
-				File.Delete(oldFileName);
-			}
-			catch (Exception ex)
-			{
-				throwFileException(ex, oldFileName);
-			}
-
+			if (!Directory.Exists(dirName)) doFileAction(dirName, p=> Directory.CreateDirectory(p));
+			file.FileInfo = doFileAction(newPath, p => file.FileInfo.CopyTo(newPath));
+			doFileAction(oldFileName, p => File.Delete(p));
 			var dto = _dtoFac.Convert(file);
 			_repo.UpdateFile(dto);
         }
