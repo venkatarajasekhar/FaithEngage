@@ -111,7 +111,7 @@ namespace FaithEngage.Core.PluginManagers.Files
 			}
 			catch (RepositoryException ex)
 			{
-				throw new RepositoryException("There was a problem obtaining the file records form the db.", ex);
+				throw new RepositoryException("There was a problem obtaining the file records from the db.", ex);
 			}
 			if (dtos == null) return null;
             var dict = dtos.ToDictionary (p => p.FileId, p => _factory.Convert (p));
@@ -130,15 +130,24 @@ namespace FaithEngage.Core.PluginManagers.Files
 			file.FileInfo = doFileAction(newPath, p => file.FileInfo.CopyTo(newPath));
 			doFileAction(oldFileName, p => File.Delete(p));
 			var dto = _dtoFac.Convert(file);
-			_repo.UpdateFile(dto);
+			try
+			{
+				_repo.UpdateFile(dto);
+			}
+			catch (RepositoryException ex)
+			{
+				throw new RepositoryException("There was a problem updating the db.", ex);
+			}
+
         }
 
         public void StoreFilesForPlugin (IList<FileInfo> files, Guid pluginId, bool overWrite = false)
         {
-            foreach(var file in files)
+			foreach(var file in files)
             {
                 if(file.Exists){
-                    var newPath = Path.Combine (_factory.GetBasePluginPath (pluginId), file.Name);
+                    
+					var newPath = Path.Combine (_factory.GetBasePluginPath (pluginId), file.Name);
                     var dirPath = Path.GetDirectoryName (newPath);
 					var parentDir = Directory.CreateDirectory (dirPath);
                     var savedFile = file.CopyTo (newPath, overWrite);
@@ -148,6 +157,8 @@ namespace FaithEngage.Core.PluginManagers.Files
                 }
             }
         }
+
+
 		private void throwFileException(Exception ex, object subject)
 		{
 			try { throw ex; }
