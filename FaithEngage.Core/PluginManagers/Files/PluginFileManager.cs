@@ -143,19 +143,90 @@ namespace FaithEngage.Core.PluginManagers.Files
 
         public void StoreFilesForPlugin (IList<FileInfo> files, Guid pluginId, bool overWrite = false)
         {
-			foreach(var file in files)
+            var anchorDir = getCommonDir (files, 3);
+
+            foreach(var file in files)
             {
                 if(file.Exists){
-                    
-					var newPath = Path.Combine (_factory.GetBasePluginPath (pluginId), file.Name);
+                    var newPath = makeNewPath (anchorDir, file, pluginId);
                     var dirPath = Path.GetDirectoryName (newPath);
-					var parentDir = Directory.CreateDirectory (dirPath);
-                    var savedFile = file.CopyTo (newPath, overWrite);
+                    doFileAction(dirPath,p=> Directory.CreateDirectory (p));
+                    var savedFile = doFileAction(file, p=> p.CopyTo(newPath, overWrite));
                     var pfile = _factory.Create (savedFile, pluginId);
                     var dto = _dtoFac.Convert (pfile);
                     _repo.SaveFileInfo (dto);
                 }
             }
+        }
+
+        private string makeNewPath(DirectoryInfo anchorDir, FileInfo file, Guid pluginId)
+        {
+            var relPath = file.DirectoryName.Replace (anchorDir.FullName, "");
+            relPath = (relPath != "" && relPath [0] == Path.DirectorySeparatorChar) 
+                ? relPath.Remove (0, 1) : relPath;
+            return Path.Combine (_factory.GetBasePluginPath (pluginId), relPath, file.Name);
+        }
+
+        private DirectoryInfo getCommonDir(IList<FileInfo> files, int maxDepth)
+        {
+            string currentDir = Path.GetPathRoot (files [0].FullName);
+            if (files.All (p => p.FullName.Contains (_tempFolder.FullName))) {
+                return _tempFolder;
+            }
+
+            for (int i = 0; i < files.Count;i++)
+            {
+                string commonDir;
+                if(files.ElementAtOrDefault(i+1) != null){
+                    commonDir = FindCommonDir (files [i].FullName,files [i + 1].FullName);
+                }else{
+                    commonDir = files [i].Directory.FullName;
+                }
+
+                if(currentDir == Path.GetPathRoot(files[i].FullName)){
+                    currentDir = commonDir;
+                }else if(currentDir == commonDir){
+                    continue;
+                }
+                else{
+                    currentDir = FindCommonDir (currentDir, commonDir);
+                }
+            }
+            return new DirectoryInfo (currentDir);
+        }
+
+        private string FindCommonDir (string path1, string path2)
+        {
+            string p1 = File.Exists (path1) ? Path.GetDirectoryName (path1) : path1;
+            string p2 = File.Exists (path2) ? Path.GetDirectoryName (path2) : path2;
+            if (p1 == p2) return p1;
+            var segs1 = p1.Split (Path.DirectorySeparatorChar);
+            var segs2 = p2.Split (Path.DirectorySeparatorChar);
+
+            if(segs1.Length > segs2.Length){
+                string [] segs = new string [segs2.Length];
+                Array.Copy (segs1, segs, segs2.Length);
+                segs1 = segs;
+            }else if(segs1.Length < segs2.Length){
+                string [] segs = new string [segs1.Length];
+                Array.Copy (segs2, segs, segs1.Length);
+            }
+            int index;
+
+            var list = new List<string> ();
+
+            for (index = 0; index < segs1.Length; index++) {
+                if (segs1 [index] != segs2 [index]) break;
+                list.Add (segs1 [index]);
+            }
+
+            if(list[0] == ""){
+                list [0] = Path.DirectorySeparatorChar.ToString();
+            }
+
+            var commondir = Path.Combine (list.ToArray());
+            return commondir;
+
         }
 
 

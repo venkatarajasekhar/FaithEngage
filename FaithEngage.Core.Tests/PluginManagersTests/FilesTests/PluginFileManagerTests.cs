@@ -419,15 +419,74 @@ namespace FaithEngage.Core.PluginManagers.Files
 		}
 
 		[Test]
-		public void StoreFilesForPlugin_ValidFiles_ValidPlugin_Stores()
+		public void StoreFilesForPlugin_ValidFiles_PluginNotPrexisting_Stores()
 		{
 			var currentDir = Directory.GetCurrentDirectory();
 			var testFilesDir = new DirectoryInfo(Path.Combine(currentDir, "TestingFiles"));
 			var files = testFilesDir.EnumerateFiles("*", SearchOption.AllDirectories).ToList();
 			var plugid = Guid.NewGuid();
-			_mgr.StoreFilesForPlugin(files, plugid, true);
 
+            A.CallTo (() => _factory.Create (A<FileInfo>.Ignored, plugid))
+             .ReturnsLazily ((FileInfo f, Guid g) => new PluginFileInfo (g, f));
+            A.CallTo (() => _dtoFac.Convert (A<PluginFileInfo>.Ignored))
+             .ReturnsLazily ((PluginFileInfo p) =>
+                             new PluginFileInfoDTO ());
+
+            _mgr.StoreFilesForPlugin(files, plugid, true);
+
+            A.CallTo (() => _repo.SaveFileInfo (A<PluginFileInfoDTO>.Ignored))
+             .MustHaveHappened (Repeated.Exactly.Times(files.Count));
+            var plugDirPath = Path.Combine (_pluginFolder.FullName, plugid.ToString ());
+            var plugDir = new DirectoryInfo (plugDirPath);
+            var plugFileNames = plugDir.EnumerateFiles ("*", SearchOption.AllDirectories).Select (p => p.Name);
+            var copiedfileNames = files.Select (p => p.Name);
+            Assert.That (plugFileNames.All (p => copiedfileNames.Any (c => p == c)));
+
+            plugDir.Delete (true);
 		}
+
+        [Test]
+        public void StoreFilesForPlugin_ValidFiles_PluginPreExisting_Stores(){
+            var currentDir = Directory.GetCurrentDirectory ();
+            var testFilesDir = new DirectoryInfo (Path.Combine (currentDir, "TestingFiles"));
+            var files = testFilesDir.EnumerateFiles ("*", SearchOption.AllDirectories).ToList ();
+            var plugid = Guid.NewGuid ();
+            var plugDirPath = Path.Combine (_pluginFolder.FullName, plugid.ToString ());
+            var plugDir = new DirectoryInfo (plugDirPath);
+            plugDir.Create ();
+
+
+            A.CallTo (() => _factory.Create (A<FileInfo>.Ignored, plugid))
+             .ReturnsLazily ((FileInfo f, Guid g) => new PluginFileInfo (g, f));
+            A.CallTo (() => _dtoFac.Convert (A<PluginFileInfo>.Ignored))
+             .ReturnsLazily ((PluginFileInfo p) =>
+                             new PluginFileInfoDTO ());
+
+            _mgr.StoreFilesForPlugin (files, plugid, true);
+
+            A.CallTo (() => _repo.SaveFileInfo (A<PluginFileInfoDTO>.Ignored))
+             .MustHaveHappened (Repeated.Exactly.Times (files.Count));
+            
+            var plugFileNames = plugDir.EnumerateFiles ("*", SearchOption.AllDirectories).Select (p => p.Name);
+            var copiedfileNames = files.Select (p => p.Name);
+            Assert.That (plugFileNames.All (p => copiedfileNames.Any (c => p == c)));
+
+            plugDir.Delete (true);
+        }
+
+        [Test]
+        public void StoreFilesForPlugin_NonExistentFiles_NoAction(){
+            var file1 = new FileInfo ("Test1.text");
+            var file2 = new FileInfo ("Test2.text");
+            var file3 = new FileInfo ("Test3.text");
+
+            var files = new List<FileInfo> () { file1, file2, file3};
+            var plugid = Guid.NewGuid ();
+
+            _mgr.StoreFilesForPlugin (files, plugid, true);
+
+            A.CallTo (() => _repo.SaveFileInfo (A<PluginFileInfoDTO>.Ignored)).MustNotHaveHappened();
+        }
 
     }
 }
