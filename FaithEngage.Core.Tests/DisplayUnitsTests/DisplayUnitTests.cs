@@ -36,7 +36,7 @@ namespace FaithEngage.Core.DisplayUnits
             }
             public override void SetAttributes (System.Collections.Generic.Dictionary<string, string> attributes)
             {
-                throw new NotImplementedException ();
+                
             }
             public override DisplayUnitPlugin Plugin {
                 get {

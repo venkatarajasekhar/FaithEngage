@@ -21,6 +21,7 @@ namespace FaithEngage.Core.DisplayUnits
         {
             this.Id = Guid.NewGuid ();
             tryApplyAttributes (attributes);
+            SetAttributes (attributes);
         }
 
         protected DisplayUnit(Guid id, Dictionary<string,string> attributes)
@@ -29,6 +30,7 @@ namespace FaithEngage.Core.DisplayUnits
                 throw new EmptyGuidException ();
             this.Id = id;
             tryApplyAttributes (attributes);
+            SetAttributes (attributes);
         }
 
         private void tryApplyAttributes(Dictionary<string,string> attributes)
@@ -115,10 +117,11 @@ namespace FaithEngage.Core.DisplayUnits
         /// it will be sent to this method. These calls will be made via a respons API.
         /// </summary>
         /// <param name="Action">Action.</param>
-        public virtual CardActionResult ExecuteCardAction (CardAction Action)
+        public virtual void ExecuteCardAction (CardAction Action)
         {
-            return null;
         }
+
+        public virtual event CardActionResultEventHandler OnCardActionResult;
 
         public DisplayUnitGrouping? UnitGroup {get;set;}
 

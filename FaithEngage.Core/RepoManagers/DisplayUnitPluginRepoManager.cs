@@ -4,53 +4,47 @@ using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 using System.Collections.Generic;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.Exceptions;
+using FaithEngage.Core.RepoInterfaces;
+using FaithEngage.Core.PluginManagers;
+using FaithEngage.Core.PluginManagers.Interfaces;
 
 namespace FaithEngage.Core.RepoManagers
 {
-	public class DisplayUnitPluginRepoManager : IDisplayUnitPluginRepoManager
+	public class DisplayUnitPluginRepoManager : PluginRepoManager, IDisplayUnitPluginRepoManager
 	{
-		private readonly IDisplayUnitPluginRepository _repo;
+		
 		private readonly IDisplayUnitPluginFactory _factory;
-		private readonly IDisplayUnitPluginDtoFactory _dtoFactory;
-		public DisplayUnitPluginRepoManager (IDisplayUnitPluginRepository repo, IDisplayUnitPluginFactory factory, IDisplayUnitPluginDtoFactory dtoFactory)
+
+        public DisplayUnitPluginRepoManager (IDisplayUnitPluginFactory factory, IPluginRepository repo, IConverterFactory<Plugin, PluginDTO> dtoFactory) 
+            : base (repo, dtoFactory)
 		{
-			_repo = repo;
 			_factory = factory;
-			_dtoFactory = dtoFactory;
 		}
 
-
-		#region IDisplayUnitPluginRepoManager implementation
-		public Guid RegisterNew (DisplayUnitPlugin plugin)
-		{
-			var id = Guid.NewGuid ();
-			var dto = _dtoFactory.ConvertFromPlugin (plugin);
-			return _repo.Register (dto);
-		}
-		public void UpdatePlugin (DisplayUnitPlugin plugin)
-		{
-			if (!plugin.PluginId.HasValue) {
-				throw new InvalidIdException ("PluginId must not be null");
-			}
-			var dto = _dtoFactory.ConvertFromPlugin (plugin);
-			_repo.Update (dto);
-		}
-		public void UninstallPlugin (Guid id)
-		{
-			_repo.Delete (id);
-		}
 		public IEnumerable<DisplayUnitPlugin> GetAll ()
 		{
-			var dtos = _repo.GetAll ();
+            List<PluginDTO> dtos;
+            try {
+                dtos = _repo.GetAll();
+            } catch (Exception ex) {
+                throw new RepositoryException ("There was a problem obtaining plugins from the repository.", ex);
+            }
 			return _factory.LoadPluginsFromDtos (dtos);
 		}
 
 		public DisplayUnitPlugin GetById(Guid id)
 		{
-			var dto = _repo.GetById (id);
+            PluginDTO dto;
+            try {
+                if (id == Guid.Empty) throw new InvalidIdException ("Empty Guids are not valid Ids.");
+                dto = _repo.GetById (id);
+            } catch (InvalidIdException){
+                throw;
+            } catch (Exception ex) {
+                throw new RepositoryException ("There was a problem accessing the repository.", ex);
+            }
 			return _factory.LoadPluginFromDto (dto);
 		}
-		#endregion
 	}
 }
 

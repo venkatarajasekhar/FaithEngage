@@ -30,17 +30,17 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="RazorEngine">
+      <HintPath>..\packages\RazorEngine.3.8.2\lib\net45\RazorEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DisplayUnits\FileUnit.cs" />
-    <Compile Include="DisplayUnits\BibleUnit\BibleUnit.cs" />
-    <Compile Include="DisplayUnits\BibleUnit\BibleUnitPlugin.cs" />
-    <Compile Include="DisplayUnits\TextUnit\TextUnit.cs" />
-    <Compile Include="DisplayUnits\TextUnit\TextUnitPlugin.cs" />
-    <Compile Include="DisplayUnits\TextUnit\TextCard.cs" />
-    <Compile Include="DisplayUnits\TextUnit\TextCardSection.cs" />
-    <Compile Include="DisplayUnits\ImageUnit\ImageUnit.cs" />
+    <Compile Include="RazorTemplating\RazorTemplatingService.cs" />
+    <Compile Include="RazorTemplating\RazorTemplatingPlugin.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -49,11 +49,23 @@
     <Folder Include="DisplayUnits\ImageUnit\" />
     <Folder Include="DisplayUnits\TextUnit\" />
     <Folder Include="DisplayUnits\Abstracts\" />
+    <Folder Include="RazorTemplating\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FaithEngage.Core\FaithEngage.Core.csproj">
       <Project>{F94B6862-B7CC-4507-BC82-9093F97CDEC2}</Project>
       <Name>FaithEngage.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DisplayUnits\BibleUnit\BibleUnit.cs" />
+    <None Include="DisplayUnits\BibleUnit\BibleUnitPlugin.cs" />
+    <None Include="DisplayUnits\ImageUnit\ImageUnit.cs" />
+    <None Include="DisplayUnits\FileUnit.cs" />
+    <None Include="packages.config" />
+    <None Include="DisplayUnits\TextUnit\TextCard.cs" />
+    <None Include="DisplayUnits\TextUnit\TextCardSection.cs" />
+    <None Include="DisplayUnits\TextUnit\TextUnit.cs" />
+    <None Include="DisplayUnits\TextUnit\TextUnitPlugin.cs" />
   </ItemGroup>
 </Project>

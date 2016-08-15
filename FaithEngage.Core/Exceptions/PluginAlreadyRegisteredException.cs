@@ -4,7 +4,8 @@ namespace FaithEngage.Core
 {
     public class PluginAlreadyRegisteredException : Exception
     {
-        public PluginAlreadyRegisteredException ()
+		public Guid ExistingPluginId { get; set; }
+		public PluginAlreadyRegisteredException ()
         {
         }
         

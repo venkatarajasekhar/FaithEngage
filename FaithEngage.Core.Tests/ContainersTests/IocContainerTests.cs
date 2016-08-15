@@ -4,12 +4,20 @@ using FaithEngage.Core.Exceptions;
 using NUnit.Framework;
 using FaithEngage.Core.Tests;
 using System;
+using System.Collections.Generic;
 
 namespace FaithEngage.Core.Containers
 {
     [TestFixture]
     public class IocContainerTests
     {
+
+        [Test]
+        public void Ctor_RegistersRegService(){
+            var container = new IocContainer ();
+            var rsIsRegistered = container.CheckRegistered<IRegistrationService> ();
+            Assert.That (rsIsRegistered);
+        }
 
         [Test]
         public void Register_ValidAbstract_ValidConcrete_NoException()
@@ -23,6 +31,18 @@ namespace FaithEngage.Core.Containers
         {
             var container = new IocContainer();
             container.Register<IDummy,DisplayUnit> ();
+        }
+
+        [Test]
+        public void GetRegistrationService_RegServiceIsRegistered_ValidRegistrationService()
+        {
+            var container = new IocContainer ();
+            var regService = container.GetRegistrationService ();
+            regService.Register<IDummy, Dummy_NoParameters> ();
+            var dummy = container.Resolve<IDummy> ();
+
+            Assert.That (regService, Is.Not.Null);
+            Assert.That (dummy, Is.InstanceOf<Dummy_NoParameters> ());
         }
 
         [Test]
@@ -84,11 +104,109 @@ namespace FaithEngage.Core.Containers
 
         [Test]
         [ExpectedException("FaithEngage.Core.Exceptions.TypeNotRegisteredException")]
-        public void Resolve_NotRegisteredtype_TypeNotRegisteredException()
+        public void Resolve_NotRegisteredtypeWithUnregisteredDependencies_TypeNotRegisteredException()
         {
             var container = new IocContainer ();
             var notRef = container.Resolve<IDummy> ();
         }
+
+		[Test]
+		public void Resolve_UnregisteredConcreteType_RegisteredDependencies_ReturnsInstance()
+		{
+			var container = new IocContainer ();
+			container.Register<IDummy2,Dummy2_NoParameters> ();
+			var dummy2 = container.Resolve<Dummy_CtorHasDependencies> ();
+
+			Assert.That (dummy2, Is.Not.Null);
+		}
+
+		[Test]
+		public void Resolve_TypeDependsOnIContainer_Resolves()
+		{
+			var container = new IocContainer ();
+			var dummy = container.Resolve<Dummy_CtorDependsOnIContainer> ();
+
+			Assert.That (dummy, Is.Not.Null);
+		}
+
+		[Test]
+		public void DeRegister_AbstractType_RemovesFromContainer_ReturnsNumber() {
+			var container = new IocContainer();
+			container.Register<IDummy, Dummy_NoParameters>();
+			var resolved = container.Resolve<IDummy>();
+			var num = container.DeRegister<IDummy>();
+			var e = TestHelpers.TryGetException(() => container.Resolve<IDummy>());
+
+			Assert.That(resolved, Is.Not.Null);
+			Assert.That(num == 1);
+			Assert.That(e, Is.InstanceOf<TypeNotRegisteredException>());
+		}
+
+		[Test]
+		public void DeRegister_ConcreteType_RemovesFromContainer_ReturnsNumber() {
+			var container = new IocContainer();
+			container.Register<IDummy, Dummy_NoParameters>();
+			var resolved = container.Resolve<IDummy>();
+			var num = container.DeRegister<Dummy_NoParameters>();
+			var e = TestHelpers.TryGetException(() => container.Resolve<IDummy>());
+
+			Assert.That(resolved, Is.Not.Null);
+			Assert.That(num == 1);
+			Assert.That(e, Is.InstanceOf<TypeNotRegisteredException>());
+		}
+
+		[Test]
+		public void DeRegister_UnknownType_ReturnsZero() {
+			var container = new IocContainer();
+			var num = container.DeRegister<Dummy_NoParameters>();
+			Assert.That(num == 0);
+		}
+
+		[Test]
+		public void Replace_ExistingAbstract_ValidNewConcrete_ReplacesDependency() {
+			var container = new IocContainer();
+			container.Register<IDummy, Dummy_NoParameters>();
+			var resolvedDummy1 = container.Resolve<IDummy>();
+			container.Replace<IDummy, Dummy_NoParameters2>(LifeCycle.Transient);
+			var resolvedDummy2 = container.Resolve<IDummy>();
+			Assert.That(resolvedDummy1, Is.InstanceOf<Dummy_NoParameters>());
+			Assert.That(resolvedDummy2, Is.InstanceOf<Dummy_NoParameters2>());
+		}
+
+		[Test]
+		public void Replace_NonExistingAbstract_RegistersDependency() {
+			var container = new IocContainer();
+			container.Replace<IDummy, Dummy_NoParameters>(LifeCycle.Transient);
+			var resolvedDummy = container.Resolve<IDummy>();
+			Assert.That(resolvedDummy, Is.InstanceOf<Dummy_NoParameters>());
+		}
+
+        [Test]
+        public void CheckRegistered_RegisteredDependency_True()
+        {
+            var container = new IocContainer ();
+            container.Register<IDummy, Dummy_NoParameters> (LifeCycle.Transient);
+            var registered = container.CheckRegistered<IDummy> ();
+            Assert.That (registered);
+        }
+
+        [Test]
+        public void CheckRegistered_NotRegistered_False ()
+        {
+            var container = new IocContainer ();
+            var registered = container.CheckRegistered<IDummy> ();
+            Assert.That (!registered);
+        }
+
+        [Test]
+        public void CheckAllDependencies_AddsUnregistedDepsToList()
+        {
+            var container = new IocContainer ();
+            container.Register<IDummy, Dummy_CtorHasDependencies> ();
+            var list = container.CheckAllDependencies ();
+            Assert.That (list.Count > 0);
+        }
+
     }
 }
 

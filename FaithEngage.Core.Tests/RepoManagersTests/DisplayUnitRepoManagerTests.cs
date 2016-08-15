@@ -9,6 +9,8 @@ using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
+using FaithEngage.Core.RepoInterfaces;
+using FaithEngage.Core.Tests;
 
 namespace FaithEngage.Core.RepoManagers
 {
@@ -22,9 +24,11 @@ namespace FaithEngage.Core.RepoManagers
         private DateTime _dt = DateTime.Now;
         private IDisplayUnitFactory _fctry;
 		private DisplayUnitPlugin _plugin;
+        private IConverterFactory<DisplayUnit,DisplayUnitDTO> _dtoFac;
+        private IDisplayUnitsRepository _repo;
 
 
-        [TestFixtureSetUp]
+        [SetUp]
         public void init()
         {
             
@@ -33,7 +37,8 @@ namespace FaithEngage.Core.RepoManagers
             _fctry = A.Fake<IDisplayUnitFactory> ();
 			_plugin = A.Fake<DisplayUnitPlugin> ();
 			_plugin.PluginId = VALID_GUID;
-
+            _dtoFac = A.Fake<IConverterFactory<DisplayUnit,DisplayUnitDTO>> ();
+            _repo = A.Fake<IDisplayUnitsRepository> ();
 
             _dto = new DisplayUnitDTO (VALID_GUID, VALID_GUID) {
                 DateCreated = _dt,
@@ -45,16 +50,14 @@ namespace FaithEngage.Core.RepoManagers
                     {"Text","This is the text for my TextUnit"} 
                 }
             };
-
         }
             
         [Test]
         public void GetById_ValidId_DisplayUnit()
         {
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.GetById (VALID_GUID)).Returns (_dto);
-            A.CallTo (() => _fctry.ConvertFromDto (_dto)).Returns (A.Fake<DisplayUnit> ());
-            var mgr = new DisplayUnitsRepoManager(_fctry,repo);
+            A.CallTo (() => _repo.GetById (VALID_GUID)).Returns (_dto);
+            A.CallTo (() => _fctry.Convert (_dto)).Returns (A.Fake<DisplayUnit> ());
+            var mgr = new DisplayUnitsRepoManager(_fctry,_repo,_dtoFac);
             var du = mgr.GetById (VALID_GUID);
 
             Assert.That (du, Is.Not.Null);
@@ -64,22 +67,20 @@ namespace FaithEngage.Core.RepoManagers
         [Test]
         public void GetById_InvalidId_ReturnsNull()
         {
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.GetById (INVALID_GUID)).Returns (null);
-            var mgr = new DisplayUnitsRepoManager(_fctry,repo);
+            A.CallTo (() => _repo.GetById (INVALID_GUID)).Returns (null);
+            var mgr = new DisplayUnitsRepoManager(_fctry,_repo,_dtoFac);
             var du = mgr.GetById (INVALID_GUID);
             Assert.That (du, Is.Null);
         }
 
         [Test]
-        [ExpectedException(typeof(RepositoryException))]
         public void GetById_RepoThrowsException_ReturnsRepoException()
         {
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.GetById (VALID_GUID)).Throws<RepositoryException> ();
+            A.CallTo (() => _repo.GetById (VALID_GUID)).Throws<RepositoryException> ();
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
-            mgr.GetById (VALID_GUID);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
+            var e = TestHelpers.TryGetException(()=> mgr.GetById (VALID_GUID));
+            Assert.That (e, Is.InstanceOf (typeof (RepositoryException)));
         }
 
         [Test]
@@ -90,12 +91,11 @@ namespace FaithEngage.Core.RepoManagers
             {
                 dict.Add (i, new DisplayUnitDTO(VALID_GUID, VALID_GUID));
             }
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.GetByEvent (VALID_GUID, false)).Returns (dict);
-            A.CallTo (() => _fctry.ConvertFromDto (null))
+            A.CallTo (() => _repo.GetByEvent (VALID_GUID, false)).Returns (dict);
+            A.CallTo (() => _fctry.Convert (null))
                 .WithAnyArguments()
                 .ReturnsLazily((DisplayUnitDTO d) => A.Fake<DisplayUnit>(p=> p.WithArgumentsForConstructor(new object[]{d.Attributes})));
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             var duDict = mgr.GetByEvent (VALID_GUID, false);
 
             Assert.That (duDict, Is.InstanceOf (typeof(Dictionary<int,DisplayUnit>)));
@@ -110,10 +110,9 @@ namespace FaithEngage.Core.RepoManagers
         [Test]
         public void GetByEvent_InvalidEventId_ReturnsNull()
         {
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.GetByEvent (INVALID_GUID, false)).Returns (null);
+            A.CallTo (() => _repo.GetByEvent (INVALID_GUID, false)).Returns (null);
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             var duDict = mgr.GetByEvent (INVALID_GUID, false);
 
             Assert.That (duDict, Is.Null);
@@ -124,10 +123,9 @@ namespace FaithEngage.Core.RepoManagers
         [ExpectedException(typeof(RepositoryException))]
         public void GetByEvent_RepoThrowsException_ReturnsNull()
         {
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.GetByEvent (VALID_GUID, false)).Throws<RepositoryException> ();
+            A.CallTo (() => _repo.GetByEvent (VALID_GUID, false)).Throws<RepositoryException> ();
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             var duDict = mgr.GetByEvent (VALID_GUID, false);
         }
 
@@ -140,9 +138,8 @@ namespace FaithEngage.Core.RepoManagers
             {
                 dict.Add (i, dtos [i]);
             }
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.GetByEvent (VALID_GUID, false)).Returns (dict);
-            A.CallTo (() => _fctry.ConvertFromDto (_dto))
+            A.CallTo (() => _repo.GetByEvent (VALID_GUID, false)).Returns (dict);
+            A.CallTo (() => _fctry.Convert (_dto))
                 .ReturnsLazily (
                     (DisplayUnitDTO d) => A.Fake<DisplayUnit>(
                         p=> p.WithArgumentsForConstructor(
@@ -150,8 +147,8 @@ namespace FaithEngage.Core.RepoManagers
                         )
                     )
                 );
-            A.CallTo (() => _fctry.ConvertFromDto (_dto)).Returns (null).Once();
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            A.CallTo (() => _fctry.Convert (_dto)).Returns (null).Once();
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             var duDict = mgr.GetByEvent (VALID_GUID, false);
 
             Assert.That (duDict, Is.InstanceOf (typeof(Dictionary<int,DisplayUnit>)));
@@ -175,27 +172,49 @@ namespace FaithEngage.Core.RepoManagers
             var units = Enumerable.Repeat(0, 5).Select( u => A.Fake<DisplayUnit>(
                 p=> p.WithArgumentsForConstructor(new object[]{dict})))
                 .ToDictionary (p => i++, p => p);
-			foreach (var unit in units) 
-			{
-				A.CallTo (() => unit.Value.Plugin).Returns (_plugin);
-			}
             Dictionary<int,DisplayUnitDTO> receivedUnits = null;
-
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.SaveManyToEvent (A<Dictionary<int,DisplayUnitDTO>>.Ignored, VALID_GUID))
+            A.CallTo (() => _repo.SaveManyToEvent (A<Dictionary<int,DisplayUnitDTO>>.Ignored, VALID_GUID))
                 .Invokes ((Dictionary<int,DisplayUnitDTO> p, Guid g) => receivedUnits = p);
-
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
-            mgr.SaveManyToEvent (units, VALID_GUID);
-
-            Assert.That (receivedUnits, Is.Not.Null);
-            Assert.That (receivedUnits.Count == 5);
-            Assert.That (receivedUnits.All (p => p.Value.AssociatedEvent == VALID_GUID));
-            foreach(var key in receivedUnits.Keys.ToArray())
-            {
-                Assert.That (receivedUnits [key].PositionInEvent, Is.EqualTo(key));
-            }
+            A.CallTo (() => _dtoFac.Convert (A<DisplayUnit>.Ignored))
+             .ReturnsLazily ((DisplayUnit u) => {
+                 var duDto = new DisplayUnitDTO (u.AssociatedEvent, u.Id);
+                 duDto.PositionInEvent = u.PositionInEvent;
+                 return duDto;
+            });
         }
+
+		[Test]
+		public void SaveManyToEvent_FactoryReturnsOneNull_SavesOneFewer()
+		{
+			var dict = new Dictionary<string, string>() {
+				{"AssociatedEvent",VALID_GUID.ToString ()}
+			};
+			var i = 0;
+			var units = Enumerable.Repeat(0, 5).Select(u => A.Fake<DisplayUnit>(
+			   p => p.WithArgumentsForConstructor(new object[] { dict })))
+				.ToDictionary(p => i++, p => p);
+			Dictionary<int, DisplayUnitDTO> receivedUnits = null;
+			A.CallTo(() => _repo.SaveManyToEvent(A<Dictionary<int, DisplayUnitDTO>>.Ignored, VALID_GUID))
+				.Invokes((Dictionary<int, DisplayUnitDTO> p, Guid g) => receivedUnits = p);
+            A.CallTo(() => _dtoFac.Convert(A<DisplayUnit>.Ignored))
+			 .ReturnsLazily((DisplayUnit u) =>
+			 {
+				 var duDto = new DisplayUnitDTO(u.AssociatedEvent, u.Id);
+				 duDto.PositionInEvent = u.PositionInEvent;
+				 return duDto;
+			 });
+            A.CallTo(() => _dtoFac.Convert(A<DisplayUnit>.Ignored)).Returns(null).Once();
+			var mgr = new DisplayUnitsRepoManager(_fctry, _repo, _dtoFac);
+			mgr.SaveManyToEvent(units, VALID_GUID);
+
+			Assert.That(receivedUnits, Is.Not.Null);
+			Assert.That(receivedUnits.Count == 4);
+			Assert.That(receivedUnits.All(p => p.Value.AssociatedEvent == VALID_GUID));
+			foreach (var key in receivedUnits.Keys.ToArray())
+			{
+				Assert.That(receivedUnits[key].PositionInEvent, Is.EqualTo(key));
+			}
+		}
 
         [Test]
         [ExpectedException(typeof(InvalidIdException))]
@@ -212,11 +231,9 @@ namespace FaithEngage.Core.RepoManagers
 			{
 				A.CallTo (() => unit.Value.Plugin).Returns (_plugin);
 			}
-            var repo = A.Fake<IDisplayUnitsRepository> ();
+            A.CallTo (() => _repo.SaveManyToEvent (null, INVALID_GUID)).WithAnyArguments ().Throws<InvalidIdException> ();
 
-            A.CallTo (() => repo.SaveManyToEvent (null, INVALID_GUID)).WithAnyArguments ().Throws<InvalidIdException> ();
-
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             mgr.SaveManyToEvent (units, INVALID_GUID);
         }
 
@@ -236,13 +253,13 @@ namespace FaithEngage.Core.RepoManagers
 			{
 				A.CallTo (() => unit.Value.Plugin).Returns (_plugin);
 			}
-            var repo = A.Fake<IDisplayUnitsRepository> ();
 
-            A.CallTo (() => repo.SaveManyToEvent (null, INVALID_GUID)).WithAnyArguments ().Throws<RepositoryException> ();
+            A.CallTo (() => _repo.SaveManyToEvent (null, INVALID_GUID)).WithAnyArguments ().Throws<RepositoryException> ();
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             mgr.SaveManyToEvent (units, INVALID_GUID);
         }
+
 
         [Test]
         public void GetGroup_ValidEventId_ValidGroupId_ReturnsGroupDictionary()
@@ -250,11 +267,10 @@ namespace FaithEngage.Core.RepoManagers
             var i = 0;
             var dict = Enumerable.Repeat (_dto, 5).ToDictionary (p => i++, p => p);
 
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => _fctry.ConvertFromDto (_dto)).ReturnsLazily ((DisplayUnitDTO d) => A.Fake<DisplayUnit> ());
-            A.CallTo (() => repo.GetGroup (VALID_GUID, VALID_GUID)).Returns (dict);
+            A.CallTo (() => _fctry.Convert (_dto)).ReturnsLazily ((DisplayUnitDTO d) => A.Fake<DisplayUnit> ());
+            A.CallTo (() => _repo.GetGroup (VALID_GUID, VALID_GUID)).Returns (dict);
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             var du = mgr.GetGroup (VALID_GUID, VALID_GUID);
 
             Assert.That (du, Is.Not.Null);
@@ -269,20 +285,18 @@ namespace FaithEngage.Core.RepoManagers
         [ExpectedException(typeof(InvalidIdException))]
         public void GetGroup_InvalidEventId_ThrowsInvalidIdException()
         {
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.GetGroup (VALID_GUID, VALID_GUID)).Throws<InvalidIdException> ();
+            A.CallTo (() => _repo.GetGroup (VALID_GUID, VALID_GUID)).Throws<InvalidIdException> ();
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             var grp = mgr.GetGroup (VALID_GUID, VALID_GUID);
         }
 
         [Test]
         public void GetGroup_ValidEventId_InvalidGroupId_ReturnsNull()
         {
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.GetGroup (VALID_GUID, INVALID_GUID)).Returns (null);
+            A.CallTo (() => _repo.GetGroup (VALID_GUID, INVALID_GUID)).Returns (null);
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             var grp = mgr.GetGroup (VALID_GUID, INVALID_GUID);
 
             Assert.That (grp, Is.Null);
@@ -292,10 +306,9 @@ namespace FaithEngage.Core.RepoManagers
         [ExpectedException(typeof(RepositoryException))]
         public void GetGroup_RepoThrowsException_ThrowsRepoException()
         {
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.GetGroup (VALID_GUID, VALID_GUID)).Throws<RepositoryException> ();
+            A.CallTo (() => _repo.GetGroup (VALID_GUID, VALID_GUID)).Throws<RepositoryException> ();
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             var grp = mgr.GetGroup (VALID_GUID, VALID_GUID);
         }
 
@@ -303,27 +316,14 @@ namespace FaithEngage.Core.RepoManagers
         public void SaveOneToEvent_ValidDisplayUnit_SavesToRepo()
         {
             var unit = A.Fake<DisplayUnit> ();
-            unit.AssociatedEvent = VALID_GUID;
-            unit.Name = "My Unit";
-            unit.DateCreated = DateTime.Now.Date;
-            unit.PositionInEvent = 3;
-            unit.UnitGroup = new DisplayUnitGrouping? (new DisplayUnitGrouping (3, VALID_GUID));
-			A.CallTo (() => unit.Plugin).Returns (_plugin);
-            var repo = A.Fake<IDisplayUnitsRepository> ();
             DisplayUnitDTO receivedDto = null;
-            A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
+            A.CallTo (() => _repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
                 .Invokes ((DisplayUnitDTO p) => receivedDto = p);
-
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            A.CallTo (() => _dtoFac.Convert (unit)).Returns (new DisplayUnitDTO (VALID_GUID, VALID_GUID));
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             mgr.SaveOneToEvent (unit);
 
             Assert.That (receivedDto, Is.Not.Null);
-            Assert.That (receivedDto.AssociatedEvent, Is.EqualTo (VALID_GUID));
-            Assert.That (receivedDto.Name, Is.EqualTo ("My Unit"));
-            Assert.That (receivedDto.DateCreated, Is.EqualTo (DateTime.Now.Date));
-            Assert.That (receivedDto.PositionInEvent, Is.EqualTo (3));
-            Assert.That (receivedDto.GroupId, Is.EqualTo (VALID_GUID));
-            Assert.That (receivedDto.PositionInGroup, Is.EqualTo (3));
         }
 
         [Test]
@@ -333,11 +333,10 @@ namespace FaithEngage.Core.RepoManagers
             var unit = A.Fake<DisplayUnit> ();
             unit.AssociatedEvent = INVALID_GUID;
 			A.CallTo (() => unit.Plugin).Returns (_plugin);
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
+            A.CallTo (() => _repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
                 .Throws<InvalidIdException> ();
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             mgr.SaveOneToEvent (unit);
 
         }
@@ -349,11 +348,10 @@ namespace FaithEngage.Core.RepoManagers
             var unit = A.Fake<DisplayUnit> ();
             unit.AssociatedEvent = VALID_GUID;
 			A.CallTo (() => unit.Plugin).Returns (_plugin);
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
+            A.CallTo (() => _repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
                 .Throws<RepositoryException> ();
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             mgr.SaveOneToEvent (unit);
         }
 
@@ -361,20 +359,17 @@ namespace FaithEngage.Core.RepoManagers
         public void DuplicateToEvent_SavesCloneToEvent()
         {
             var unit = A.Fake<DisplayUnit> ();
-            unit.Description = "My Description";
-            unit.Name = "My Name";
-            unit.AssociatedEvent = VALID_GUID;
-			A.CallTo (() => unit.Plugin).Returns (_plugin);
+            var dto = new DisplayUnitDTO (VALID_GUID, VALID_GUID);
             A.CallTo (() => unit.Clone ()).Returns (unit);
-            var repo = A.Fake<IDisplayUnitsRepository> ();
+            A.CallTo (() => _dtoFac.Convert (unit)).Returns (dto);
             DisplayUnitDTO receivedUnit = null;
-            A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
+            A.CallTo (() => _repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
                 .Invokes ((DisplayUnitDTO d) => receivedUnit = d);
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             mgr.DuplicateToEvent (unit);
 
-            Assert.That (receivedUnit, Is.Not.Null);
+            Assert.That (receivedUnit, Is.EqualTo(dto));
         }
 
         [Test]
@@ -388,11 +383,10 @@ namespace FaithEngage.Core.RepoManagers
 			A.CallTo (() => unit.Plugin).Returns (_plugin);
             A.CallTo (() => unit.Clone ()).Returns (unit);
 
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
+            A.CallTo (() => _repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
                 .Throws<InvalidIdException> ();
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             mgr.DuplicateToEvent (unit);
         }
 
@@ -407,22 +401,20 @@ namespace FaithEngage.Core.RepoManagers
 			A.CallTo (() => unit.Plugin).Returns (_plugin);
 			A.CallTo (() => unit.Clone ()).Returns (unit);
 
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
+            A.CallTo (() => _repo.SaveOneToEvent (A<DisplayUnitDTO>.Ignored))
                 .Throws<RepositoryException> ();
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             mgr.DuplicateToEvent (unit);
         }
 
         [Test]
         public void Delete_ValidId_SendsDeleteToRepo()
         {
-            var repo = A.Fake<IDisplayUnitsRepository> ();
             Guid receivedGuid = Guid.Empty;
-            A.CallTo (() => repo.Delete (VALID_GUID)).Invokes ((Guid g) => receivedGuid = g);
+            A.CallTo (() => _repo.Delete (VALID_GUID)).Invokes ((Guid g) => receivedGuid = g);
                 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             mgr.Delete (VALID_GUID);
 
             Assert.That (receivedGuid, Is.EqualTo (VALID_GUID));
@@ -432,10 +424,9 @@ namespace FaithEngage.Core.RepoManagers
         [ExpectedException(typeof(InvalidIdException))]
         public void Delete_InvalidId_RepoThrowsInvalidIdException_ThrowsSame()
         {
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.Delete (INVALID_GUID)).Throws<InvalidIdException> ();
+            A.CallTo (() => _repo.Delete (INVALID_GUID)).Throws<InvalidIdException> ();
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             mgr.Delete (INVALID_GUID);
         }
 
@@ -443,10 +434,9 @@ namespace FaithEngage.Core.RepoManagers
         [ExpectedException(typeof(RepositoryException))]
         public void Delete_RepoThrowsException_ThrowsSame()
         {
-            var repo = A.Fake<IDisplayUnitsRepository> ();
-            A.CallTo (() => repo.Delete (INVALID_GUID)).Throws<RepositoryException> ();
+            A.CallTo (() => _repo.Delete (INVALID_GUID)).Throws<RepositoryException> ();
 
-            var mgr = new DisplayUnitsRepoManager (_fctry,repo);
+            var mgr = new DisplayUnitsRepoManager (_fctry,_repo, _dtoFac);
             mgr.Delete (INVALID_GUID);
         }
     }

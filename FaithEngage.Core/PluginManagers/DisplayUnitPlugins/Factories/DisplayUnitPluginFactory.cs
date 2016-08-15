@@ -8,8 +8,9 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
 {
     public class DisplayUnitPluginFactory : IDisplayUnitPluginFactory
     {
-        public DisplayUnitPlugin LoadPluginFromDto(DisplayUnitPluginDTO dto)
+        public DisplayUnitPlugin LoadPluginFromDto(PluginDTO dto)
         {
+			if (dto.PluginType != PluginTypeEnum.DisplayUnit) return null;
 			DisplayUnitPlugin plugin = null;
 			try {
 				var assembly = Assembly.LoadFrom (dto.AssemblyLocation);
@@ -23,7 +24,7 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Factories
             return plugin;
         }
 
-		public IEnumerable<DisplayUnitPlugin> LoadPluginsFromDtos(IEnumerable<DisplayUnitPluginDTO> dtos)
+		public IEnumerable<DisplayUnitPlugin> LoadPluginsFromDtos(IEnumerable<PluginDTO> dtos)
 		{
 			foreach (var dto in dtos) {
 				var du = this.LoadPluginFromDto (dto);

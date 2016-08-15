@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using FaithEngage.Core.PluginManagers.Interfaces;
 
 namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces
 {
-	public interface IDisplayUnitPluginRepoManager
+	public interface IDisplayUnitPluginRepoManager : IPluginRepoManager
 	{
-		Guid RegisterNew (DisplayUnitPlugin plugin);
-		void UpdatePlugin (DisplayUnitPlugin plugin);
-		void UninstallPlugin(Guid id);
-		IEnumerable<DisplayUnitPlugin> GetAll();
-		DisplayUnitPlugin GetById(Guid id);
+        IEnumerable<DisplayUnitPlugin> GetAll ();
+        DisplayUnitPlugin GetById (Guid id);
 	}
 }
 

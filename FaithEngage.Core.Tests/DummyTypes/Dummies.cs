@@ -3,6 +3,7 @@ using FaithEngage.Core.Interfaces;
 using FakeItEasy;
 using FaithEngage.Core.Tests;
 using NUnit.Framework;
+using FaithEngage.Core.Containers;
 
 namespace FaithEngage.Core.Tests
 {
@@ -27,6 +28,9 @@ namespace FaithEngage.Core.Tests
     {
         
     }
+
+	public class Dummy_NoParameters2 : IDummy
+	{ }
 
     public class Dummy_CtorThrowsException : IDummy
     {
@@ -64,5 +68,13 @@ namespace FaithEngage.Core.Tests
             
         }
     }
+
+	public class Dummy_CtorDependsOnIContainer : IDummy
+	{
+		public Dummy_CtorDependsOnIContainer (IContainer container)
+		{
+			
+		}
+	}
 }
 

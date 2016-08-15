@@ -1,9 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
-using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.Exceptions;
 
-namespace FaithEngage.Core.Tests
+namespace FaithEngage.Core.DisplayUnits
 {
 	[TestFixture]
 	public class DisplayUnitDTOTests

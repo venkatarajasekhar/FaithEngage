@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -29,6 +28,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -40,7 +41,7 @@
     <Compile Include="Exceptions\InvalidFileTypeException.cs" />
     <Compile Include="Exceptions\UnregisteredDependencyException.cs" />
     <Compile Include="Exceptions\DependencyException.cs" />
-    <Compile Include="Exceptions\DependencyAlreadyRegisteredException.cs" />
+    <Compile Include="Exceptions\TypeNotRegisteredException.cs" />
     <Compile Include="Exceptions\InvalidTypeRelationshipException.cs" />
     <Compile Include="Exceptions\RegisteredObjectInstantiationException.cs" />
     <Compile Include="Exceptions\EmptyGuidException.cs" />
@@ -48,15 +49,11 @@
     <Compile Include="Containers\IocContainer.cs" />
     <Compile Include="Containers\RegisteredObject.cs" />
     <Compile Include="Exceptions\NotDisplayUnitException.cs" />
-    <Compile Include="DisplayUnits\Interfaces\IDisplayUnitPluginRepository.cs" />
-    <Compile Include="DisplayUnits\Interfaces\IDisplayUnitsRepository.cs" />
-    <Compile Include="Events\Interfaces\IEvent.cs" />
     <Compile Include="DisplayUnits\Interfaces\IDisplayUnitsRepoManager.cs" />
     <Compile Include="Exceptions\NegativePositionException.cs" />
     <Compile Include="Exceptions\PluginHasInvalidConstructorsException.cs" />
     <Compile Include="DisplayUnits\Interfaces\IDisplayUnitFactory.cs" />
     <Compile Include="Cards\CardAction.cs" />
-    <Compile Include="Cards\CardActionResult.cs" />
     <Compile Include="Exceptions\InvalidAttributesException.cs" />
     <Compile Include="Cards\DefaultImplementations\RenderableCard.cs" />
     <Compile Include="Cards\DefaultImplementations\RenderableCardSection.cs" />
@@ -68,19 +65,14 @@
     <Compile Include="Cards\Interfaces\IRenderableCard.cs" />
     <Compile Include="Cards\Interfaces\IRenderableCardSection.cs" />
     <Compile Include="Cards\Interfaces\ICardEditorAction.cs" />
-    <Compile Include="DisplayUnitEditor\DisplayUnitEditorDefinition.cs" />
+    <Compile Include="DisplayUnitEditor\IDisplayUnitEditorDefinition.cs" />
     <Compile Include="RepoManagers\DisplayUnitRepoManager.cs" />
-    <Compile Include="DisplayUnits\DisplayUnitFactory.cs" />
     <Compile Include="DisplayUnits\DisplayUnitGrouping.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\DisplayUnitPlugin.cs" />
     <Compile Include="DisplayUnits\DisplayUnit.cs" />
     <Compile Include="DisplayUnits\DisplayUnitDTO.cs" />
-    <Compile Include="PluginManagers\DisplayUnitPlugins\DisplayUnitPluginDTO.cs" />
     <Compile Include="Containers\IContainer.cs" />
-    <Compile Include="DisplayUnitEditor\CardSectionDefinition.cs" />
-    <Compile Include="DisplayUnitEditor\EditorFieldTypes.cs" />
     <Compile Include="Containers\LifeCycle.cs" />
-    <Compile Include="PluginManagers\PluginContainers\DisplayUnitPluginContainer.cs" />
     <Compile Include="PluginManagers\Plugin.cs" />
     <Compile Include="Cards\RenderableCardDTO.cs" />
     <Compile Include="Cards\RenderableCardSectionDTO.cs" />
@@ -90,20 +82,97 @@
     <Compile Include="Cards\CardDtoFactory.cs" />
     <Compile Include="Cards\Interfaces\ICardDTOFactory.cs" />
     <Compile Include="Exceptions\CouldNotConvertDTOException.cs" />
-    <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginRepository.cs" />
-    <Compile Include="PluginManagers\DisplayUnitPlugins\Factories\DisplayUnitPluginDtoFactory.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\Factories\DisplayUnitPluginFactory.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginRepoManager.cs" />
     <Compile Include="RepoManagers\DisplayUnitPluginRepoManager.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginFactory.cs" />
-    <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginDtoFactory.cs" />
-    <Compile Include="PluginManagers\DisplayUnitPlugins\Bootstrapper.cs" />
+    <Compile Include="PluginManagers\DisplayUnitPlugins\DisplayUnitPluginBootstrapper.cs" />
     <Compile Include="Obsolete Interfaces %28needs moving%29\IReferenceProvider.cs" />
     <Compile Include="Obsolete Interfaces %28needs moving%29\IReference.cs" />
     <Compile Include="Obsolete Interfaces %28needs moving%29\IPptParser.cs" />
     <Compile Include="Bootstrappers\IBootstrapper.cs" />
     <Compile Include="Exceptions\PluginHasInvalidIdException.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginContainer.cs" />
+    <Compile Include="UserClasses\User.cs" />
+    <Compile Include="UserClasses\Organization.cs" />
+    <Compile Include="UserClasses\UserPrivileges.cs" />
+    <Compile Include="UserClasses\Interfaces\IUserRepoManager.cs" />
+    <Compile Include="UserClasses\Interfaces\IOrganizationRepoManager.cs" />
+    <Compile Include="RepoManagers\UserRepoManager.cs" />
+    <Compile Include="RepoManagers\OrganizationRepoManager.cs" />
+    <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\Interfaces\IEventRepoManager.cs" />
+    <Compile Include="Exceptions\AuthenticationException.cs" />
+    <Compile Include="ActionProcessors\CardActionProcessor.cs" />
+    <Compile Include="Cards\CardActionResultEventHandler.cs" />
+    <Compile Include="Cards\CardActionResultArgs.cs" />
+    <Compile Include="CardProcessor\ICardProcessor.cs" />
+    <Compile Include="Exceptions\InvalidUsernameException.cs" />
+    <Compile Include="ActionProcessors\Interfaces\ICardActionProcessor.cs" />
+    <Compile Include="Bootstrappers\FaithEngageBootLoader.cs" />
+    <Compile Include="PluginManagers\PluginBootstrapper.cs" />
+    <Compile Include="PluginManagers\DisplayUnitPlugins\DisplayUnitPluginContainer.cs" />
+    <Compile Include="RepoInterfaces\IPluginRepository.cs" />
+    <Compile Include="RepoInterfaces\IDisplayUnitsRepository.cs" />
+    <Compile Include="DisplayUnits\DisplayUnitBootstrapper.cs" />
+    <Compile Include="Factories\IAppFactory.cs" />
+    <Compile Include="Factories\AppFactory.cs" />
+    <Compile Include="CardProcessor\CardProcessorBootstrapper.cs" />
+    <Compile Include="Cards\CardBootstrapper.cs" />
+    <Compile Include="RepoInterfaces\IEventRepository.cs" />
+    <Compile Include="RepoInterfaces\IUserRepository.cs" />
+    <Compile Include="RepoInterfaces\IOrganizationRepository.cs" />
+    <Compile Include="ActionProcessors\ActionProcessorsBootstrapper.cs" />
+    <Compile Include="RepoManagers\EventRepoManager.cs" />
+    <Compile Include="Events\EventBootstrapper.cs" />
+    <Compile Include="Exceptions\PluginIsMissingNecessaryInfoException.cs" />
+    <Compile Include="DisplayUnits\Factories\DisplayUnitFactory.cs" />
+    <Compile Include="DisplayUnits\Factories\DisplayUnitDtoFactory.cs" />
+    <Compile Include="Exceptions\InvalidEventException.cs" />
+    <Compile Include="RepoInterfaces\IEventScheduleRepository.cs" />
+    <Compile Include="Events\EventSchedules\EventSchedule.cs" />
+    <Compile Include="Events\EventSchedules\EventScheduleDTO.cs" />
+    <Compile Include="Events\EventDTO.cs" />
+    <Compile Include="Events\EventSchedules\Interfaces\IEventScheduleRepoManager.cs" />
+    <Compile Include="Events\EventSchedules\Recurrance.cs" />
+    <Compile Include="Events\Factories\EventDTOFactory.cs" />
+    <Compile Include="Events\Factories\EventFactory.cs" />
+    <Compile Include="Events\EventSchedules\EventScheduleBootstrapper.cs" />
+    <Compile Include="Events\EventSchedules\Factories\EventScheduleDTOFactory.cs" />
+    <Compile Include="Events\EventSchedules\Factories\EventScheduleFactory.cs" />
+    <Compile Include="Factories\IConverterFactory %28Tin,Tout%29.cs" />
+    <Compile Include="RepoManagers\EventScheduleRepoManager.cs" />
+    <Compile Include="Exceptions\InvalidTimeZoneException.cs" />
+    <Compile Include="TemplatingService\ITemplatingService.cs" />
+    <Compile Include="DisplayUnitEditor\DisplayUnitEditorContext.cs" />
+    <Compile Include="PluginManagers\Files\Interfaces\IPluginFileManager.cs" />
+    <Compile Include="PluginManagers\Files\PluginFileInfo.cs" />
+    <Compile Include="RepoInterfaces\IConfigRepository.cs" />
+    <Compile Include="FEFactory.cs" />
+    <Compile Include="Containers\RegistrationService.cs" />
+    <Compile Include="Exceptions\FactoryException.cs" />
+    <Compile Include="Containers\IRegistrationService.cs" />
+    <Compile Include="PluginManagers\Interfaces\IPluginManager.cs" />
+    <Compile Include="PluginManagers\Files\PluginFileManager.cs" />
+    <Compile Include="Config\Interfaces\IConfigManager.cs" />
+    <Compile Include="RepoInterfaces\IPluginFileInfoRepository.cs" />
+    <Compile Include="PluginManagers\Files\PluginFileInfoDTO.cs" />
+    <Compile Include="PluginManagers\Files\Interfaces\IPluginFileInfoFactory.cs" />
+    <Compile Include="PluginManagers\Files\PluginFileBootstrapper.cs" />
+    <Compile Include="PluginManagers\PluginManager.cs" />
+    <Compile Include="PluginManagers\Files\Factories\PluginFileInfoFactory.cs" />
+    <Compile Include="PluginManagers\Files\Factories\PluginFileInfoDTOFactory.cs" />
+    <Compile Include="UserClasses\UserClassBootstrapper.cs" />
+    <Compile Include="PluginManagers\PluginTypeEnum.cs" />
+    <Compile Include="PluginManagers\PluginDTO.cs" />
+    <Compile Include="PluginManagers\Factories\PluginDtoFactory.cs" />
+    <Compile Include="RepoManagers\PluginRepoManager.cs" />
+    <Compile Include="PluginManagers\Interfaces\IPluginRepoManager.cs" />
+    <Compile Include="Bootstrappers\BootList.cs" />
+    <Compile Include="Bootstrappers\IBootList.cs" />
+    <Compile Include="Bootstrappers\BootPriority.cs" />
+    <Compile Include="Exceptions\NoPublicConstructorsException.cs" />
+    <Compile Include="Exceptions\PluginFileException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -120,14 +189,29 @@
     <Folder Include="CardProcessor\" />
     <Folder Include="EventProcessor\" />
     <Folder Include="DisplayUnitEditor\" />
-    <Folder Include="ActionProcessor\" />
     <Folder Include="RepoManagers\" />
     <Folder Include="PluginManagers\" />
     <Folder Include="PluginManagers\DisplayUnitPlugins\" />
-    <Folder Include="PluginManagers\PluginContainers\" />
     <Folder Include="PluginManagers\DisplayUnitPlugins\Interfaces\" />
     <Folder Include="PluginManagers\DisplayUnitPlugins\Factories\" />
     <Folder Include="Obsolete Interfaces %28needs moving%29\" />
     <Folder Include="Bootstrappers\" />
+    <Folder Include="UserClasses\" />
+    <Folder Include="UserClasses\Interfaces\" />
+    <Folder Include="ActionProcessors\" />
+    <Folder Include="ActionProcessors\Interfaces\" />
+    <Folder Include="RepoInterfaces\" />
+    <Folder Include="DisplayUnits\Factories\" />
+    <Folder Include="Events\EventSchedules\" />
+    <Folder Include="Events\EventSchedules\Interfaces\" />
+    <Folder Include="Events\Factories\" />
+    <Folder Include="Events\EventSchedules\Factories\" />
+    <Folder Include="TemplatingService\" />
+    <Folder Include="PluginManagers\Files\" />
+    <Folder Include="Config\" />
+    <Folder Include="Config\Interfaces\" />
+    <Folder Include="PluginManagers\Interfaces\" />
+    <Folder Include="PluginManagers\Files\Factories\" />
+    <Folder Include="PluginManagers\Factories\" />
   </ItemGroup>
 </Project>

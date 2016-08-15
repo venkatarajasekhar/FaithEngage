@@ -5,8 +5,8 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces
 {
 	public interface IDisplayUnitPluginFactory
 	{
-		DisplayUnitPlugin LoadPluginFromDto (DisplayUnitPluginDTO dto);
-		IEnumerable<DisplayUnitPlugin> LoadPluginsFromDtos (IEnumerable<DisplayUnitPluginDTO> dtos);
+		DisplayUnitPlugin LoadPluginFromDto (PluginDTO dto);
+		IEnumerable<DisplayUnitPlugin> LoadPluginsFromDtos (IEnumerable<PluginDTO> dtos);
 	}
 }
 

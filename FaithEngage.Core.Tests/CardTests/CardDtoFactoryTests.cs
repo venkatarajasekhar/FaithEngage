@@ -4,11 +4,9 @@ using NUnit.Framework;
 using FakeItEasy;
 using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.Cards.Interfaces;
-using FaithEngage.Core.Cards;
 using System.Collections.Generic;
-using NUnit.Framework.Constraints;
 
-namespace FaithEngage.Core.Tests
+namespace FaithEngage.Core.Cards
 {
 	[TestFixture]
 	public class CardDtoFactoryTests
@@ -99,6 +97,49 @@ namespace FaithEngage.Core.Tests
 
 			Assert.That (dto, Is.Null);
         }
+
+		[Test]
+		public void ConvertCard_ValidCard_ValidDto()
+		{
+			var card = A.Fake<IRenderableCard>();
+			card.Sections = A.CollectionOfFake<IRenderableCardSection>(5).ToArray();
+			for (var i = 0; i < card.Sections.Length;i++)
+			{
+				card.Sections[i].HeadingText = "Heading";
+				card.Sections[i].HtmlContents = "<p>Contents</p>";
+			}
+			card.Description = "Description";
+			card.OriginatingDisplayUnit = du;
+			card.Title = "Title";
+			du.PositionInEvent = 1;
+			var id = Guid.NewGuid();
+			du.AssociatedEvent = id;
+
+			var fac = new CardDtoFactory();
+			var dto = fac.ConvertCard(card);
+
+			Assert.That(dto.AssociatedEvent, Is.EqualTo(id));
+			Assert.That(dto.Description, Is.EqualTo(card.Description));
+			Assert.That(dto.OriginatingDisplayUnit, Is.EqualTo(du.Id));
+			Assert.That(dto.Sections.All(p => p.HeadingText == "Heading"));
+			Assert.That(dto.Sections.All(p => p.HtmlContents == "<p>Contents</p>"));
+			Assert.That(dto.Title, Is.EqualTo(card.Title));
+			Assert.That(dto.PositionInEvent, Is.EqualTo(du.PositionInEvent));
+		}
+
+		[Test]
+		public void ConvertCard_InvalidCard_ReturnsNull()
+		{
+			var card = A.Fake<IRenderableCard>();
+			card.Sections = A.CollectionOfFake<IRenderableCardSection>(5).ToArray();
+			card.OriginatingDisplayUnit = du;
+			A.CallTo(() => card.Title).Throws<Exception>();
+
+			var fac = new CardDtoFactory();
+			var dto = fac.ConvertCard(card);
+
+			Assert.That(dto, Is.Null);
+		}
 	}
 }
 

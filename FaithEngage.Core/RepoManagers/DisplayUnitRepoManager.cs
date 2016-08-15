@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Exceptions;
-using FaithEngage.Core.Interfaces;
 using FaithEngage.Core.DisplayUnits;
-
+using FaithEngage.Core.RepoInterfaces;
 
 namespace FaithEngage.Core.RepoManagers
 {
-    public class DisplayUnitsRepoManager : IDisplayUnitsRepoManager
+	public class DisplayUnitsRepoManager : IDisplayUnitsRepoManager
     {
         private readonly IDisplayUnitsRepository _duRepo;
         private readonly IDisplayUnitFactory _factory;
-        public DisplayUnitsRepoManager (IDisplayUnitFactory factory, IDisplayUnitsRepository repo)
+        private readonly IConverterFactory<DisplayUnit,DisplayUnitDTO> _dtoFac;
+        public DisplayUnitsRepoManager (IDisplayUnitFactory factory, IDisplayUnitsRepository repo, IConverterFactory<DisplayUnit,DisplayUnitDTO> dtoFactory)
         {
             _factory = factory;
             _duRepo = repo;
+            _dtoFac = dtoFactory;
         }
 
         public DisplayUnit GetById (Guid unitId)
@@ -25,7 +26,7 @@ namespace FaithEngage.Core.RepoManagers
                 DisplayUnit du;
                 var dto = _duRepo.GetById (unitId);
                 if(dto == null) return null;
-                du = _factory.ConvertFromDto(dto);
+				du = _factory.Convert(dto);
                 return du;
             } catch (RepositoryException ex) {
                 throw new RepositoryException ("There was a problem accessing the DisplayUnitRepository.", ex);
@@ -42,7 +43,7 @@ namespace FaithEngage.Core.RepoManagers
                     return null;
                 foreach(var key in dict.Keys)
                 {
-                    var du = _factory.ConvertFromDto (dict [key]);
+					var du = _factory.Convert (dict [key]);
                     if(du == null) continue;
                     returnDict.Add (key, du);
                 }
@@ -57,13 +58,13 @@ namespace FaithEngage.Core.RepoManagers
         public void SaveManyToEvent (Dictionary<int, DisplayUnit> unitsAtPositions, Guid eventId)
         {
             ensurePositions (unitsAtPositions);
-            var dict = (
-                        from u in unitsAtPositions
-                        select new
-                        {
-                            k = u.Key,
-                            v = convertToDTO(u.Value)
-                        }).ToDictionary (p => p.k, p => p.v);
+			var dict = new Dictionary<int, DisplayUnitDTO>();
+			foreach (var u in unitsAtPositions)
+			{
+				var dto = _dtoFac.Convert(u.Value);
+				if (dto == null) continue;
+				dict.Add(u.Key, dto);
+			}
             try {
                 _duRepo.SaveManyToEvent (dict, eventId);
             }
@@ -93,7 +94,7 @@ namespace FaithEngage.Core.RepoManagers
                 if(dict == null) return null;
                 foreach(var key in dict.Keys)
                 {
-                    var du = _factory.ConvertFromDto (dict [key]);
+					var du = _factory.Convert (dict [key]);
                     returnDict.Add (key, du);
                 }
             } catch (InvalidIdException) {
@@ -108,7 +109,7 @@ namespace FaithEngage.Core.RepoManagers
 
         public void SaveOneToEvent (DisplayUnit unit)
         {
-            var dto = convertToDTO (unit);
+			var dto = _dtoFac.Convert(unit);
             try{
                 _duRepo.SaveOneToEvent (dto);
             }catch(InvalidIdException){
@@ -131,7 +132,7 @@ namespace FaithEngage.Core.RepoManagers
 
         public void DuplicateToEvent (DisplayUnit unit)
         {
-            var dto = convertToDTO (unit.Clone ());
+			var dto = _dtoFac.Convert(unit.Clone ());
             try{
                 _duRepo.SaveOneToEvent (dto);
             }catch(InvalidIdException){
@@ -152,29 +153,11 @@ namespace FaithEngage.Core.RepoManagers
             }
         }
 
-        private DisplayUnitDTO convertToDTO(DisplayUnit unit)
-        {
-            var dto = new DisplayUnitDTO (unit.AssociatedEvent, unit.Id);
-            dto.Name = unit.Name;
-            dto.DateCreated = unit.DateCreated;
-            dto.Description = unit.Description;
-			dto.PluginId = unit.Plugin.PluginId.Value;
-            dto.PositionInEvent = unit.PositionInEvent;
-            dto.Attributes = unit.GetAttributes ();
-            if(unit.UnitGroup.HasValue)
-            {
-                dto.PositionInGroup = unit.UnitGroup.Value.Position;
-                dto.GroupId = unit.UnitGroup.Value.Id;
-            }
-            return dto;
-        }
-
-
         public DisplayUnit PushDU (Guid id)
         {
             try {
                 var dto = _duRepo.PushDU(id);
-                return _factory.ConvertFromDto(dto);
+				return _factory.Convert(dto);
             } catch (Exception ex) {
                 throw;
             }
