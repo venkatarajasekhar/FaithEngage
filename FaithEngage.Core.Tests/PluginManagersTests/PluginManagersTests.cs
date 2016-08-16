@@ -7,6 +7,10 @@ using FaithEngage.Core.PluginManagers.Interfaces;
 using FakeItEasy;
 using System.Linq;
 using FaithEngage.Core.PluginManagers.Files;
+using FaithEngage.Core.Factories;
+using FaithEngage.Core.PluginManagers.AssemblyReflector.Interfaces;
+using System.Reflection;
+using Dummy_PluginAssembly;
 
 namespace FaithEngage.Core.PluginManagers
 {
@@ -16,13 +20,15 @@ namespace FaithEngage.Core.PluginManagers
 		private IPluginFileManager _fileMgr;
 		private IPluginRepoManager _mgr;
 		private PluginManager _pluginMgr;
+        private IAppFactory _fac;
 
 		[SetUp]
 		public void init()
 		{
 			_fileMgr = A.Fake<IPluginFileManager>();
 			_mgr = A.Fake<IPluginRepoManager>();
-			_pluginMgr = new PluginManager(_fileMgr, _mgr);
+            _fac = A.Fake<IAppFactory> ();
+            _pluginMgr = new PluginManager(_fileMgr, _mgr, _fac);
 		}
 
         [Test]
@@ -52,12 +58,15 @@ namespace FaithEngage.Core.PluginManagers
 			  return pfile;
 			});
 
-			A.CallTo(() => _fileMgr.GetFilesForPlugin(A<Guid>.Ignored)).Returns(pluginFiles);
-
+            var plugid = Guid.NewGuid ();
+            var asmReflect = A.Fake<IAssemblyReflectionMgr> ();
+            A.CallTo (() => _fac.GetOther<IAssemblyReflectionMgr> ()).Returns (asmReflect);
+            A.CallTo (() => asmReflect.Reflect (A<string>.Ignored, A<Func<Assembly, Type []>>.Ignored)).Returns (new Type [] { typeof (DummyPlugin)});
+            A.CallTo (() => _mgr.RegisterNew (A<Plugin>.Ignored)).Returns (plugid);
 			var num = _pluginMgr.Install(zipFile);
 
             zipFile.Dispose ();
-			A.CallTo(() => _fileMgr.StoreFilesForPlugin(fileslist, key, true)).MustHaveHappened();
+            A.CallTo(() => _fileMgr.StoreFilesForPlugin(fileslist, plugid, true)).MustHaveHappened();
             A.CallTo (() => _fileMgr.FlushTempFolder (key)).MustHaveHappened();
 			A.CallTo(() => _mgr.RegisterNew(A<Plugin>.Ignored)).MustHaveHappened();
             Assert.That (num == 1);

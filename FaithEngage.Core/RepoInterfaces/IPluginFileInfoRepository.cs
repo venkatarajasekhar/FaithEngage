@@ -8,6 +8,7 @@ namespace FaithEngage.Core.RepoInterfaces
     {
         PluginFileInfoDTO GetFileInfo (Guid fileId);
         IList<PluginFileInfoDTO> GetAllFilesForPlugin (Guid pluginId);
+        IList<PluginFileInfoDTO> GetAllFilesForPlugin (string PluginName);
         void DeleteFileRecord (Guid fileId);
         void DeleteAllFilesForPlugin (Guid pluginId);
         void UpdateFile (PluginFileInfoDTO dto);

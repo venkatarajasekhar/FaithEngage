@@ -173,6 +173,10 @@
     <Compile Include="Bootstrappers\BootPriority.cs" />
     <Compile Include="Exceptions\NoPublicConstructorsException.cs" />
     <Compile Include="Exceptions\PluginFileException.cs" />
+    <Compile Include="PluginManagers\AssemblyReflector\Interfaces\IAssemblyReflectionMgr.cs" />
+    <Compile Include="PluginManagers\AssemblyReflector\AssemblyReflectionProxy.cs" />
+    <Compile Include="PluginManagers\AssemblyReflector\AssemblyReflector.cs" />
+    <Compile Include="PluginManagers\AssemblyReflector\AssemblyReflectorBootstrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -213,5 +217,7 @@
     <Folder Include="PluginManagers\Interfaces\" />
     <Folder Include="PluginManagers\Files\Factories\" />
     <Folder Include="PluginManagers\Factories\" />
+    <Folder Include="PluginManagers\AssemblyReflector\" />
+    <Folder Include="PluginManagers\AssemblyReflector\Interfaces\" />
   </ItemGroup>
 </Project>

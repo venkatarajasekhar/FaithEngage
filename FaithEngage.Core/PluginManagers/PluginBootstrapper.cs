@@ -28,6 +28,7 @@ namespace FaithEngage.Core.PluginManagers
         {
             bootstrappers.Load<DisplayUnitPluginBootstrapper> ();
             bootstrappers.Load<PluginFileBootstrapper> ();
+            bootstrappers.Load<AssemblyReflectorBootstrapper> ();
         }
 
         public void RegisterDependencies(IRegistrationService rs)

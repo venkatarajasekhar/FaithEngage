@@ -5,6 +5,9 @@ using FaithEngage.Core.PluginManagers.Interfaces;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using FaithEngage.Core.Factories;
+using System.IO;
+using FaithEngage.Core.PluginManagers.AssemblyReflector.Interfaces;
 
 namespace FaithEngage.Core.PluginManagers
 {
@@ -12,10 +15,12 @@ namespace FaithEngage.Core.PluginManagers
 	{
 		private readonly IPluginFileManager _fileMgr;
         private readonly IPluginRepoManager _mgr;
-        public PluginManager(IPluginFileManager fileManager, IPluginRepoManager mgr)
+        private readonly IAppFactory _factory;
+        public PluginManager (IPluginFileManager fileManager, IPluginRepoManager mgr, IAppFactory factory)
 		{
 			_fileMgr = fileManager;
             _mgr = mgr;
+            _factory = factory;
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
@@ -23,33 +28,51 @@ namespace FaithEngage.Core.PluginManagers
 		{
 			var key = Guid.NewGuid();
             var files = _fileMgr.ExtractZipToTempFolder (zipFile, key);
-            _fileMgr.StoreFilesForPlugin (files, key, true);
-            _fileMgr.FlushTempFolder (key);
-			var pluginFiles = _fileMgr.GetFilesForPlugin(key);
-			var dlls = pluginFiles.Where(p => p.Value.FileInfo.Extension.ToLower() == ".dll").ToList();
-            int num = 0;
-            foreach(var dll in dlls){
-                var assembly = Assembly.LoadFile (dll.Value.FileInfo.FullName);
-                IEnumerable<Type> types = null;
-                try{
-                    types = assembly.GetTypes ();
-                }catch(ReflectionTypeLoadException ex){
-                    types = ex.Types.Where(p => p != null);
+            if(files.All(p=> p.Extension.ToLower() == ".zip")){
+                int n = 0;
+                foreach(var file in files){
+                    using (var zip = new ZipArchive (file.Open (FileMode.Open))){
+                        n += Install (zip);
+                    };
                 }
-                var pluginTypes = types.Where (p => p.IsSubclassOf (typeof (Plugin)));
-                foreach(var pluginType in pluginTypes){
-                    var ctor = pluginType.GetConstructors ().FirstOrDefault ();
-                    if (ctor == null) continue;
-                    var plugin = (Plugin)ctor.Invoke (new object [] {});
-                    if (plugin == null) continue;
-                    num++;
-                    _mgr.RegisterNew (plugin);
-                }                      
+                return n;
             }
+
+			var dlls = files.Where(p => p.Extension.ToLower() == ".dll").ToList();
+            int num = 0;
+            using (var reflector = _factory.GetOther<IAssemblyReflectionMgr> ()){
+                foreach (var dll in dlls) {
+                    var pluginTypes = getPluginTypes (dll, reflector);
+                    foreach (var pluginType in pluginTypes) {
+                        var ctor = pluginType.GetConstructors ().FirstOrDefault ();
+                        if (ctor == null) continue;
+                        var plugin = (Plugin)ctor.Invoke (new object [] { });
+                        if (plugin == null) continue;
+                        num++;
+                        var plugid = _mgr.RegisterNew (plugin);
+                        _fileMgr.StoreFilesForPlugin (files, plugid, true);
+                        plugin.Install (_factory);
+                    }
+                }
+            }
+            _fileMgr.FlushTempFolder (key);
             return num;
 		}
 
-        Assembly CurrentDomain_AssemblyResolve (object sender, ResolveEventArgs args)
+        private IEnumerable<Type> getPluginTypes(FileInfo dll, IAssemblyReflectionMgr reflector){
+            var path = dll.FullName;
+            var success = reflector.LoadAssembly (dll.FullName, dll.Name);
+            IEnumerable<Type> types = null;
+            try {
+                types = reflector.Reflect (dll.FullName, a => a.GetTypes ());
+            }catch(ReflectionTypeLoadException ex){
+                types = ex.Types.Where (p => p != null);
+            }
+            var pluginTypes = types.Where (p => p.IsSubclassOf (typeof (Plugin)));
+            return pluginTypes;
+        }
+
+        private Assembly CurrentDomain_AssemblyResolve (object sender, ResolveEventArgs args)
         {
             var name = args.Name.Split (',') [0];
             var assemblies = AppDomain.CurrentDomain.GetAssemblies ();

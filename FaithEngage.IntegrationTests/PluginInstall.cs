@@ -13,6 +13,16 @@ using System.IO;
 using System.Collections.Generic;
 using FaithEngage.Core.PluginManagers.Files;
 using System.Linq;
+using FaithEngage.Core.Factories;
+using FaithEngage.Core.CardProcessor;
+using FaithEngage.Core.DisplayUnits.Interfaces;
+using FaithEngage.Core.Events.EventSchedules.Interfaces;
+using FaithEngage.Core.Events.Interfaces;
+using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
+using FaithEngage.Core.TemplatingService;
+using FaithEngage.Core.UserClasses.Interfaces;
+using FaithEngage.Core.PluginManagers.AssemblyReflector.Interfaces;
+using FaithEngage.Core.PluginManagers.AssemblyReflector;
 
 namespace FaithEngage.IntegrationTests
 {
@@ -81,6 +91,11 @@ namespace FaithEngage.IntegrationTests
                 throw new NotImplementedException ();
             }
 
+            public IList<PluginFileInfoDTO> GetAllFilesForPlugin (string PluginName)
+            {
+                throw new NotImplementedException ();
+            }
+
             public IList<PluginFileInfoDTO> GetAllFilesForPlugin (Guid pluginId)
             {
                 return _dtos;
@@ -102,6 +117,8 @@ namespace FaithEngage.IntegrationTests
             }
         }
 
+
+
         [SetUp]
         public void Init()
         {
@@ -110,6 +127,8 @@ namespace FaithEngage.IntegrationTests
             _container.Register<IConfigManager, config> ();
             _container.Register<IPluginRepository, repo> ();
             _container.Register<IPluginFileInfoRepository, fileRepo> ();
+            _container.Register<IAppFactory, AppFactory> ();
+            _container.Register<IAssemblyReflectionMgr, AssemblyReflector> ();
             _bootlist.Load<PluginBootstrapper> ();
             Console.Write(_bootlist.RegisterAllDependencies (true));
 
