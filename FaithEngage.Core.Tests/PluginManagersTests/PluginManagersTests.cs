@@ -67,7 +67,7 @@ namespace FaithEngage.Core.PluginManagers
             A.CallTo(() => _fileMgr.StoreFilesForPlugin(A<List<FileInfo>>.Ignored, A<Guid>.Ignored, true)).MustHaveHappened();
             A.CallTo (() => _fileMgr.FlushTempFolder (key)).MustHaveHappened();
             A.CallTo(() => _mgr.RegisterNew(A<Plugin>.Ignored, A<Guid>.Ignored)).MustHaveHappened();
-            Assert.That (num == 1);
+            Assert.That (num == 2);
         }
 
         [Test]

@@ -94,15 +94,11 @@ namespace FaithEngage.Core.PluginManagers
 
         private PluginPackage getPluginPackage (FileInfo file)
         {
-            var generator = new JsonSchemaGenerator ();
-            var schema = generator.Generate (typeof (PluginPackage));
             string json;
             using (var reader = file.OpenText ()) {
                 json = reader.ReadToEnd ();
             }
             var jobject = JObject.Parse (json);
-            var isValid = jobject.IsValid (schema);
-            if (!isValid) throw new PluginLoadException ("Invalid json schema: " + file.Name);
             return jobject.ToObject<PluginPackage> ();
         }
 

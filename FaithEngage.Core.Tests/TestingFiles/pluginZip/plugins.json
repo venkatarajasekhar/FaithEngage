@@ -3,8 +3,19 @@
         {
             "PluginTypeName":"DummyPlugin",
             "PluginTypeEnum": 0,
-             "DllName": "Dummy_PluginAssembly.dll",
+            "DllName": "Dummy_PluginAssembly.dll",
             "Files" : [
+                "cross_sunset-26.jpg",
+                "Dummy_PluginAssembly.dll",
+                "levelcards.pdf",
+                "SermonWk5.jpg"
+            ]
+        },
+        {
+            "PluginTypeName":"DummyPlugin2",
+            "PluginTypeEnum":0,
+            "DllName":"Dummy_PluginAssembly.dll",
+            "files":[
                 "cross_sunset-26.jpg",
                 "Dummy_PluginAssembly.dll",
                 "levelcards.pdf",
