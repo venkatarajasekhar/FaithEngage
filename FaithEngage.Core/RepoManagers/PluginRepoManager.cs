@@ -17,30 +17,6 @@ namespace FaithEngage.Core.RepoManagers
 			_dtoFactory = dtoFactory;
 		}
 
-		public Guid RegisterNew(Plugin plugin)
-		{
-			plugin.PluginId = Guid.NewGuid();
-			var dto = _dtoFactory.Convert(plugin);
-			Guid guid;
-			try
-			{
-				guid = _repo.Register(dto);
-			}
-			catch (PluginIsMissingNecessaryInfoException)
-			{
-				throw;
-			}
-			catch (PluginAlreadyRegisteredException)
-			{
-				throw;
-			}
-			catch (Exception ex)
-			{
-				throw new RepositoryException("There was a problem registering this plugin.", ex);
-			}
-			return guid;
-		}
-
 		public void UninstallPlugin(Guid id)
 		{
 			if (id == Guid.Empty) throw new InvalidIdException("PluginId must not be an empty guid.");
@@ -70,6 +46,20 @@ namespace FaithEngage.Core.RepoManagers
 				throw new RepositoryException("There was a problem updating the plugin: " + plugin.PluginName, ex);
 			}
 		}
-	}
+
+        public void RegisterNew (Plugin plugin, Guid pluginId)
+        {
+            var dto = _dtoFactory.Convert (plugin);
+            try {
+                _repo.Register (dto, pluginId);
+            } catch (PluginIsMissingNecessaryInfoException) {
+                throw;
+            } catch (PluginAlreadyRegisteredException) {
+                throw;
+            } catch (Exception ex) {
+                throw new RepositoryException ("There was a problem registering this plugin.", ex);
+            }
+        }
+    }
 }
 

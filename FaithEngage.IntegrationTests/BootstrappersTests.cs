@@ -31,7 +31,7 @@ namespace FaithEngage.IntegrationTests
 				throw new NotImplementedException();
 			}
 
-            public Guid RegisterNew (Plugin plugin)
+            public void RegisterNew (Plugin plugin, Guid pluginId)
             {
                 throw new NotImplementedException ();
             }

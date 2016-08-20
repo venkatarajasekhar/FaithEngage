@@ -7,7 +7,7 @@ namespace FaithEngage.Core.RepoInterfaces
 {
     public interface IPluginRepository
     {
-        Guid Register(PluginDTO plugin);
+        void Register(PluginDTO plugin, Guid id);
 		void Update(PluginDTO plugin);
         void Delete(Guid pluginId);
         PluginDTO GetById(Guid pluginId);

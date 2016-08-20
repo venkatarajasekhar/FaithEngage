@@ -7,7 +7,9 @@ using System.Reflection;
 using System.Collections.Generic;
 using FaithEngage.Core.Factories;
 using System.IO;
-using FaithEngage.Core.PluginManagers.AssemblyReflector.Interfaces;
+using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Linq;
+using FaithEngage.Core.Exceptions;
 
 namespace FaithEngage.Core.PluginManagers
 {
@@ -38,38 +40,70 @@ namespace FaithEngage.Core.PluginManagers
                 return n;
             }
 
-			var dlls = files.Where(p => p.Extension.ToLower() == ".dll").ToList();
+            var pluginsFile = files.FirstOrDefault (p => p.Name == "plugins.json");
+            var pPackage = getPluginPackage (pluginsFile);
             int num = 0;
-            using (var reflector = _factory.GetOther<IAssemblyReflectionMgr> ()){
-                foreach (var dll in dlls) {
-                    var pluginTypes = getPluginTypes (dll, reflector);
-                    foreach (var pluginType in pluginTypes) {
-                        var ctor = pluginType.GetConstructors ().FirstOrDefault ();
-                        if (ctor == null) continue;
-                        var plugin = (Plugin)ctor.Invoke (new object [] { });
-                        if (plugin == null) continue;
-                        num++;
-                        var plugid = _mgr.RegisterNew (plugin);
-                        _fileMgr.StoreFilesForPlugin (files, plugid, true);
-                        plugin.Install (_factory);
-                    }
+            foreach (var pinfo in pPackage.Plugins){
+                var plugId = storeFilesForPlugin (pinfo, files);
+                var dll = getDll (pinfo, plugId);
+                if (dll == null){
+                    _fileMgr.FlushTempFolder (key);
+                    _fileMgr.DeleteAllFilesForPlugin (plugId);
+                    throw new PluginLoadException ("Dll not found for plugin: " + pinfo.PluginTypeName);
                 }
+                var plugin = getPlugin (pinfo, dll);
+                num++;
+                _mgr.RegisterNew (plugin, plugId);
+                plugin.Install (_factory);
             }
             _fileMgr.FlushTempFolder (key);
             return num;
 		}
 
-        private IEnumerable<Type> getPluginTypes(FileInfo dll, IAssemblyReflectionMgr reflector){
-            var path = dll.FullName;
-            var success = reflector.LoadAssembly (dll.FullName, dll.Name);
-            IEnumerable<Type> types = null;
-            try {
-                types = reflector.Reflect (dll.FullName, a => a.GetTypes ());
-            }catch(ReflectionTypeLoadException ex){
-                types = ex.Types.Where (p => p != null);
+        private Guid storeFilesForPlugin(PluginPackage.pluginInfo pinfo,IList<FileInfo> allFiles)
+        {
+            var plugId = Guid.NewGuid ();
+            var relPaths = pinfo.Files.Select (p => Path.Combine (p.Split ('/', '\\')));
+
+            var pFiles = allFiles.Where (p => relPaths.Any (q => p.FullName.Contains (q)));
+            _fileMgr.StoreFilesForPlugin (pFiles.ToList (), plugId, true);
+            return plugId;
+        }
+
+        private FileInfo getDll(PluginPackage.pluginInfo pinfo, Guid plugId){
+            var plugFiles = _fileMgr.GetFilesForPlugin (plugId);
+            var dll = plugFiles.FirstOrDefault (
+                p => p.Value.FileInfo.Name.ToLower ().Contains (
+                    pinfo.DllName.ToLower ()
+                ));
+            return (dll.Value != null) ? dll.Value.FileInfo : null;
+        }
+
+        private Plugin getPlugin(PluginPackage.pluginInfo pinfo, FileInfo dll)
+        {
+            var assembly = Assembly.LoadFrom (dll.FullName);
+            var types = assembly.GetTypes ();
+            var ptype = types.FirstOrDefault (p => p.Name == pinfo.PluginTypeName);
+            if (!ptype.IsSubclassOf (typeof (Plugin))) throw new PluginLoadException ("Plugin type is not derived from Plugin");
+            var ctor = ptype.GetConstructors ().FirstOrDefault ();
+            if (ctor == null) throw new PluginLoadException ("Plugin has no valid constructors");
+            var plugin = (Plugin)ctor.Invoke (new object [] { });
+            if (plugin == null) throw new PluginLoadException ("Plugin could not be constructed");
+            return plugin;
+        }
+
+        private PluginPackage getPluginPackage (FileInfo file)
+        {
+            var generator = new JsonSchemaGenerator ();
+            var schema = generator.Generate (typeof (PluginPackage));
+            string json;
+            using (var reader = file.OpenText ()) {
+                json = reader.ReadToEnd ();
             }
-            var pluginTypes = types.Where (p => p.IsSubclassOf (typeof (Plugin)));
-            return pluginTypes;
+            var jobject = JObject.Parse (json);
+            var isValid = jobject.IsValid (schema);
+            if (!isValid) throw new PluginLoadException ("Invalid json schema: " + file.Name);
+            return jobject.ToObject<PluginPackage> ();
         }
 
         private Assembly CurrentDomain_AssemblyResolve (object sender, ResolveEventArgs args)

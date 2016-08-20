@@ -163,7 +163,7 @@ namespace FaithEngage.Core.PluginManagers.Files
 			{
 				var id = Guid.NewGuid();
 				var list = _mgr.ExtractZipToTempFolder(zipFile, id);
-				Assert.That(list.Count, Is.EqualTo(4));
+				Assert.That(list.Count, Is.EqualTo(5));
 				Assert.That(list.All(p => p.Exists));
 			}
 			_tempFolder.EnumerateDirectories().ToList().ForEach(p => p.Delete(true));

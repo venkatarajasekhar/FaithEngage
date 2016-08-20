@@ -1,12 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
-using FaithEngage.Core.PluginManagers.Files.Interfaces;
 using FaithEngage.Core.PluginManagers.Interfaces;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.Bootstrappers;
 using FaithEngage.Core.PluginManagers;
 using FaithEngage.Core.Config;
-using FakeItEasy;
 using FaithEngage.Core.RepoInterfaces;
 using System.IO.Compression;
 using System.IO;
@@ -14,15 +12,6 @@ using System.Collections.Generic;
 using FaithEngage.Core.PluginManagers.Files;
 using System.Linq;
 using FaithEngage.Core.Factories;
-using FaithEngage.Core.CardProcessor;
-using FaithEngage.Core.DisplayUnits.Interfaces;
-using FaithEngage.Core.Events.EventSchedules.Interfaces;
-using FaithEngage.Core.Events.Interfaces;
-using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
-using FaithEngage.Core.TemplatingService;
-using FaithEngage.Core.UserClasses.Interfaces;
-using FaithEngage.Core.PluginManagers.AssemblyReflector.Interfaces;
-using FaithEngage.Core.PluginManagers.AssemblyReflector;
 
 namespace FaithEngage.IntegrationTests
 {
@@ -68,9 +57,8 @@ namespace FaithEngage.IntegrationTests
                 throw new NotImplementedException ();
             }
 
-            public Guid Register (PluginDTO plugin)
+            public void Register (PluginDTO plugin, Guid pluginId)
             {
-                return Guid.Empty;
             }
 
             public void Update (PluginDTO plugin)
@@ -128,7 +116,6 @@ namespace FaithEngage.IntegrationTests
             _container.Register<IPluginRepository, repo> ();
             _container.Register<IPluginFileInfoRepository, fileRepo> ();
             _container.Register<IAppFactory, AppFactory> ();
-            _container.Register<IAssemblyReflectionMgr, AssemblyReflector> ();
             _bootlist.Load<PluginBootstrapper> ();
             Console.Write(_bootlist.RegisterAllDependencies (true));
 

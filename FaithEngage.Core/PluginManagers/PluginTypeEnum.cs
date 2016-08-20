@@ -3,8 +3,8 @@ namespace FaithEngage.Core.PluginManagers
 {
 	public enum PluginTypeEnum
 	{
-		DisplayUnit,
-		Other
+		DisplayUnit = 0,
+		Other = 1
 	}
 }
 

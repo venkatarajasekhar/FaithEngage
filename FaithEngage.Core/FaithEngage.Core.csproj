@@ -30,6 +30,9 @@
     <Reference Include="System" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -173,10 +176,8 @@
     <Compile Include="Bootstrappers\BootPriority.cs" />
     <Compile Include="Exceptions\NoPublicConstructorsException.cs" />
     <Compile Include="Exceptions\PluginFileException.cs" />
-    <Compile Include="PluginManagers\AssemblyReflector\Interfaces\IAssemblyReflectionMgr.cs" />
-    <Compile Include="PluginManagers\AssemblyReflector\AssemblyReflectionProxy.cs" />
-    <Compile Include="PluginManagers\AssemblyReflector\AssemblyReflector.cs" />
-    <Compile Include="PluginManagers\AssemblyReflector\AssemblyReflectorBootstrapper.cs" />
+    <Compile Include="PluginManagers\PluginPackage.cs" />
+    <Compile Include="Exceptions\PluginLoadException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -217,7 +218,8 @@
     <Folder Include="PluginManagers\Interfaces\" />
     <Folder Include="PluginManagers\Files\Factories\" />
     <Folder Include="PluginManagers\Factories\" />
-    <Folder Include="PluginManagers\AssemblyReflector\" />
-    <Folder Include="PluginManagers\AssemblyReflector\Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -44,27 +44,24 @@ namespace FaithEngage.Core.RepoManagers
 				PluginName = VALID_STRING
 			};
 			A.CallTo(() => _dtoFac.Convert(_plgn)).Returns(dto);
-			A.CallTo(() => _repo.Register(A<PluginDTO>.Ignored)).Returns(VALID_GUID);
 
-			var id = mgr.RegisterNew(_plgn);
-
-			Assert.That(id, Is.EqualTo(VALID_GUID));
-			Assert.That(_plgn.PluginId.HasValue);
+            mgr.RegisterNew(_plgn, VALID_GUID);
+            A.CallTo (() => _repo.Register (dto, VALID_GUID)).MustHaveHappened();
 		}
 
 		[Test]
 		public void RegisterNew_InvalidPlugin_Throws()
 		{
 			A.CallTo(() => _dtoFac.Convert(_plgn)).Throws<PluginIsMissingNecessaryInfoException>();
-            var e = TestHelpers.TryGetException (() => mgr.RegisterNew (_plgn));
+            var e = TestHelpers.TryGetException (() => mgr.RegisterNew (_plgn, VALID_GUID));
             Assert.That (e, Is.Not.Null);
             Assert.That (e, Is.InstanceOf (typeof (PluginIsMissingNecessaryInfoException)));
 		}
         [Test]
         public void RegisterNew_RepoThrowsException_ThrowsRepoException()
         {
-            A.CallTo (() => _repo.Register (A<PluginDTO>.Ignored)).Throws<RepositoryException>();
-            var e = TestHelpers.TryGetException (() => mgr.RegisterNew (_plgn));
+            A.CallTo (() => _repo.Register (A<PluginDTO>.Ignored, VALID_GUID)).Throws<RepositoryException>();
+            var e = TestHelpers.TryGetException (() => mgr.RegisterNew (_plgn, VALID_GUID));
             Assert.That (e, Is.Not.Null);
             Assert.That (e, Is.InstanceOf (typeof (RepositoryException)));
         }

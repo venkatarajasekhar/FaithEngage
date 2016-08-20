@@ -5,7 +5,7 @@ namespace FaithEngage.Core.PluginManagers.Interfaces
 {
 	public interface IPluginRepoManager
 	{
-        Guid RegisterNew(Plugin plugin);
+        void RegisterNew(Plugin plugin, Guid pluginId);
 		void UninstallPlugin(Guid id);
 		void UpdatePlugin(Plugin plugin);
 	}
