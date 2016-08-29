@@ -22,8 +22,8 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
             var expectedP = Path.Combine ("folder", "plugins");
             var expectedT = Path.Combine ("folder", "temp");
 
-            if (Directory.Exists (expectedP)) Directory.Delete (expectedP);
-            if (Directory.Exists (expectedT)) Directory.Delete (expectedT);
+            if (Directory.Exists (expectedP)) Directory.Delete (expectedP, true);
+            if (Directory.Exists (expectedT)) Directory.Delete (expectedT, true);
 
             Assert.That (Directory.Exists (expectedP), Is.Not.True);
             Assert.That (Directory.Exists (expectedT), Is.Not.True);
@@ -37,8 +37,8 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
             Assert.That (fac.PluginsFolder.Exists);
             Assert.That (fac.TempFolder.Exists);
 
-            fac.PluginsFolder.Delete ();
-            fac.TempFolder.Delete ();
+            fac.PluginsFolder.Delete (true);
+            fac.TempFolder.Delete (true);
         }
 
         [Test]
