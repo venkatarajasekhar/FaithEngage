@@ -66,6 +66,7 @@
     <Folder Include="EventsTests\EventSchedulesTests\" />
     <Folder Include="EventsTests\EventSchedulesTests\FactoriesTests\" />
     <Folder Include="PluginManagersTests\FilesTests\" />
+    <Folder Include="PluginManagersTests\FilesTests\FactoriesTests\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DummyTypes\Dummies.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="PluginManagersTests\PluginManagersTests.cs" />
     <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\DisplayUnitPluginContainerTests.cs" />
     <Compile Include="PluginManagersTests\FilesTests\PluginFileManagerTests.cs" />
+    <Compile Include="PluginManagersTests\FilesTests\FactoriesTests\PluginFileInfoFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">
