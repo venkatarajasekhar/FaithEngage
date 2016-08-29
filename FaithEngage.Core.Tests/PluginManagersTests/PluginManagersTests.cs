@@ -8,8 +8,6 @@ using FakeItEasy;
 using System.Linq;
 using FaithEngage.Core.PluginManagers.Files;
 using FaithEngage.Core.Factories;
-using System.Reflection;
-using Dummy_PluginAssembly;
 using System.Collections.Generic;
 using FaithEngage.Core.Tests;
 using FaithEngage.Core.Exceptions;

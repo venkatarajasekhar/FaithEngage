@@ -10,6 +10,7 @@ using System.IO;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Linq;
 using FaithEngage.Core.Exceptions;
+using System.Security;
 
 namespace FaithEngage.Core.PluginManagers
 {
@@ -29,19 +30,30 @@ namespace FaithEngage.Core.PluginManagers
 		public int Install(ZipArchive zipFile)
 		{
 			var key = Guid.NewGuid();
-            var files = _fileMgr.ExtractZipToTempFolder (zipFile, key);
-            if(files.All(p=> p.Extension.ToLower() == ".zip")){
-                int n = 0;
-                foreach(var file in files){
-                    using (var zip = new ZipArchive (file.Open (FileMode.Open))){
-                        n += Install (zip);
-                    };
-                }
-                return n;
+            IList<FileInfo> files = null;
+            try {
+                files = _fileMgr.ExtractZipToTempFolder (zipFile, key);
+            } catch (PluginFileException ex) {
+                throw new PluginLoadException ("There was a problem extracting the zipfile to the temp folder.", ex);
             }
 
             var pluginsFile = files.FirstOrDefault (p => p.Name == "plugins.json");
-            var pPackage = getPluginPackage (pluginsFile);
+            if (pluginsFile == null) throw new PluginLoadException ("There was no file called plugins.json in the zip folder.");
+            PluginPackage pPackage = null;
+            try {
+                pPackage = getPluginPackage (pluginsFile);
+            }catch (SecurityException ex) {
+                throw new PluginLoadException ("There were not sufficient permissions to read the file: " + pluginsFile.Name, ex);
+            }catch (FileNotFoundException ex){
+                throw new PluginLoadException ("File doesn't exist: " + pluginsFile.Name, ex);
+            }catch(UnauthorizedAccessException ex){
+                throw new PluginLoadException($"File is read only. {pluginsFile.Name}", ex);
+            }catch(DirectoryNotFoundException ex){
+                throw new PluginLoadException ($"Path is invalid: {pluginsFile.FullName}", ex);
+            }catch(IOException ex){
+                throw new PluginLoadException ($"An IO Exception occurred reading the file: {pluginsFile.Name}");
+            }
+
             int num = 0;
             foreach (var pinfo in pPackage.Plugins){
                 var plugId = storeFilesForPlugin (pinfo, files);
@@ -59,6 +71,16 @@ namespace FaithEngage.Core.PluginManagers
             _fileMgr.FlushTempFolder (key);
             return num;
 		}
+
+        private PluginPackage getPluginPackage (FileInfo file)
+        {
+            string json;
+            using (var reader = file.OpenText ()) {
+                json = reader.ReadToEnd ();
+            }
+            var jobject = JObject.Parse (json);
+            return jobject.ToObject<PluginPackage> ();
+        }
 
         private Guid storeFilesForPlugin(PluginPackage.pluginInfo pinfo,IList<FileInfo> allFiles)
         {
@@ -92,15 +114,7 @@ namespace FaithEngage.Core.PluginManagers
             return plugin;
         }
 
-        private PluginPackage getPluginPackage (FileInfo file)
-        {
-            string json;
-            using (var reader = file.OpenText ()) {
-                json = reader.ReadToEnd ();
-            }
-            var jobject = JObject.Parse (json);
-            return jobject.ToObject<PluginPackage> ();
-        }
+
 
         private Assembly CurrentDomain_AssemblyResolve (object sender, ResolveEventArgs args)
         {

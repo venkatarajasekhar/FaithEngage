@@ -147,7 +147,7 @@ namespace FaithEngage.IntegrationTests
 					continue;
 				}
 			}	
-            Assert.That(numInstalled == 1);
+            Assert.That(numInstalled == 2);
         }
 
     }
