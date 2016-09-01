@@ -4,7 +4,11 @@ using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core
 {
-    public class FEFactory
+    /// <summary>
+    /// FEF actory.
+	/// This class is responsible for providing easy access access through a static method to the current IAppFactory.
+    /// </summary>
+	public class FEFactory
     {
         private static IAppFactory _fac;
 
