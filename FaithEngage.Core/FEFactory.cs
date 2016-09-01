@@ -5,13 +5,15 @@ using FaithEngage.Core.Factories;
 namespace FaithEngage.Core
 {
     /// <summary>
-    /// FEF actory.
 	/// This class is responsible for providing easy access access through a static method to the current IAppFactory.
     /// </summary>
 	public class FEFactory
     {
         private static IAppFactory _fac;
 
+		/// <summary>
+		/// Activates the appFactory so that it can thereafter be accessed using the static Get.</summary>
+		/// <param name="appFactory">App factory.</param>
         internal static void Activate(IAppFactory appFactory)
         {
             _fac = appFactory;
