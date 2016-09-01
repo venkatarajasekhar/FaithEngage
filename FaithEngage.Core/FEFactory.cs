@@ -16,7 +16,11 @@ namespace FaithEngage.Core
         {
             _fac = appFactory;
         }
-        public static IAppFactory Get{ get { return _fac;}}
+        /// <summary>
+        /// Exposes the application's current IAppFactory for access statically.
+        /// </summary>
+        /// <value>The get.</value>
+		public static IAppFactory Get{ get { return _fac;}}
     }
 }
 
