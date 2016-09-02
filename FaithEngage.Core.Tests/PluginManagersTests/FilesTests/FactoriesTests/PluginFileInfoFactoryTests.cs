@@ -72,6 +72,32 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
 
             Directory.Delete (newDir, true);
         }
+
+		[Test]
+		public void Convert_NonExistantFile_ReturnsNull()
+		{
+			var dto = new PluginFileInfoDTO()
+			{
+				Name = "TESTFILE.txt",
+				FileId = Guid.NewGuid(),
+				PluginId = Guid.NewGuid(),
+				RelativePath = "otherFolder\\TESTFILE.txt"
+			};
+
+			var fac = new PluginFileInfoFactory(_config);
+
+			var newDir = Path.Combine(fac.PluginsFolder.FullName, dto.PluginId.ToString(), "otherFolder");
+			Directory.CreateDirectory(newDir);
+
+			var newPath = Path.Combine(newDir, "TESTFILE.txt");
+
+			Assert.That(!File.Exists(newPath));
+
+			var pfile = fac.Convert(dto);
+
+			Assert.That(pfile, Is.Null);
+
+		}
     }
 }
 
