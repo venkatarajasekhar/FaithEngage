@@ -220,9 +220,13 @@ namespace FaithEngage.Core.PluginManagers.Files
                 list.Add (segs1 [index]);
             }
 
-            if(list[0] == ""){
+            if(list[0] == ""){ //In the case of a unix-based system
                 list [0] = Path.DirectorySeparatorChar.ToString();
-            }
+            }else if (Path.GetPathRoot(p1).Contains(list[0])) //In the case of windows-based system
+			{
+				list[0] += Path.DirectorySeparatorChar;
+			}
+				
 
             var commondir = Path.Combine (list.ToArray());
             return commondir;
