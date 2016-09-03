@@ -11,7 +11,8 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
         private IConfigManager _config;
 
         [SetUp]
-        public void Init(){
+        public void Init()
+        {
             _config = A.Fake<IConfigManager> ();
             A.CallTo (() => _config.PluginsFolderPath).Returns ("folder\\plugins");
             A.CallTo (() => _config.TempFolderPath).Returns ("folder/temp");
@@ -87,8 +88,6 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
 			var fac = new PluginFileInfoFactory(_config);
 
 			var newDir = Path.Combine(fac.PluginsFolder.FullName, dto.PluginId.ToString(), "otherFolder");
-			Directory.CreateDirectory(newDir);
-
 			var newPath = Path.Combine(newDir, "TESTFILE.txt");
 
 			Assert.That(!File.Exists(newPath));
@@ -134,12 +133,7 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
             var plugId = Guid.NewGuid ();
 
             var fac = new PluginFileInfoFactory (_config);
-
-            fac.PluginsFolder.CreateSubdirectory (plugId.ToString ());
-
             var newDir = Path.Combine (fac.PluginsFolder.FullName, plugId.ToString (), "otherFolder");
-            Directory.CreateDirectory (newDir);
-
             var newPath = Path.Combine (newDir, "TESTFILE.txt");
 
             Assert.That (!File.Exists (newPath));

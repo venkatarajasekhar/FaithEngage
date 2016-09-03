@@ -100,6 +100,7 @@
     <Compile Include="PluginManagersTests\DisplayUnitPluginsTests\DisplayUnitPluginContainerTests.cs" />
     <Compile Include="PluginManagersTests\FilesTests\PluginFileManagerTests.cs" />
     <Compile Include="PluginManagersTests\FilesTests\FactoriesTests\PluginFileInfoFactoryTests.cs" />
+    <Compile Include="PluginManagersTests\FilesTests\FactoriesTests\PluginFileInfoDTOFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestingFiles\levelcards.pdf">
