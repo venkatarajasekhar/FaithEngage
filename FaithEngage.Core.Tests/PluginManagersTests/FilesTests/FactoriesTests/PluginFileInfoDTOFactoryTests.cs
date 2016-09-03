@@ -18,9 +18,23 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
         }
 
         [Test]
-        public void Convert_ConvertsPluginFileInfo()
+        public void Convert_FileInPluginsPath_ConvertsPluginFileInfo()
         {
-            
+            var guid = Guid.NewGuid ();
+            var ds = Path.DirectorySeparatorChar;
+            var file = new FileInfo ($"folder{ds}plugins{ds}{guid}{ds}file.txt");
+
+            var pfile = new PluginFileInfo (guid, file);
+
+            var fac = new PluginFileInfoDTOFactory (_config);
+
+            var dto = fac.Convert (pfile);
+
+            Assert.That (dto, Is.Not.Null);
+            Assert.That (dto.RelativePath, Is.EqualTo("file.txt"));
+            Assert.That (dto.Name, Is.EqualTo("file.txt"));
+            Assert.That (dto.PluginId, Is.EqualTo(guid));
+
         }
     }
 }
