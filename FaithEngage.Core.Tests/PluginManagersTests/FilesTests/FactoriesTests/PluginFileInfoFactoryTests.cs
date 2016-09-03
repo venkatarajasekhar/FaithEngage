@@ -155,6 +155,40 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
             Directory.Delete (newDir, true);
         }
 
+        [Test]
+        public void GetBasePluginPath_ObtainsValidDirectory()
+        {
+            var fac = new PluginFileInfoFactory (_config);
+
+            var plugId = Guid.NewGuid ();
+
+            var expectedString = $"{fac.PluginsFolder.FullName}{Path.DirectorySeparatorChar}{plugId}";
+
+            var returnString = fac.GetBasePluginPath (plugId);
+            Assert.That (expectedString == returnString);
+        }
+
+        [Test]
+        public void GetRenamedPath_PluginFile_ObtainsValidPath()
+        {
+            var plugId = Guid.NewGuid ();
+            var fac = new PluginFileInfoFactory (_config);
+            fac.PluginsFolder.CreateSubdirectory (plugId.ToString ());
+            var newDir = Path.Combine (fac.PluginsFolder.FullName, plugId.ToString (), "otherFolder");
+            Directory.CreateDirectory (newDir);
+            var newPath = Path.Combine (newDir, "TESTFILE.txt");
+            var fileInfo = new FileInfo (newPath);
+            var pfile = fac.Create (fileInfo, plugId);
+
+            var ds = Path.DirectorySeparatorChar;
+            var basePath = fac.GetBasePluginPath (plugId);
+
+            var expectedString = $"{basePath}{ds}testing{ds}TestFile.text";
+            var returnPath = fac.GetRenamedPath (pfile, "testing\\TestFile.text");
+
+            Assert.That (expectedString == returnPath);
+        }
+
     }
 }
 
