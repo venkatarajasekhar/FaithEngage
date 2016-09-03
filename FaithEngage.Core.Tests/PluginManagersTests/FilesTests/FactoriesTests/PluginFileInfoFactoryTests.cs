@@ -127,6 +127,34 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
 
             Directory.Delete (newDir, true);
         }
+
+        [Test]
+        public void Create_NonExistantFile_createsPInfoFile()
+        {
+            var plugId = Guid.NewGuid ();
+
+            var fac = new PluginFileInfoFactory (_config);
+
+            fac.PluginsFolder.CreateSubdirectory (plugId.ToString ());
+
+            var newDir = Path.Combine (fac.PluginsFolder.FullName, plugId.ToString (), "otherFolder");
+            Directory.CreateDirectory (newDir);
+
+            var newPath = Path.Combine (newDir, "TESTFILE.txt");
+
+            Assert.That (!File.Exists (newPath));
+
+            var fileInfo = new FileInfo (newPath);
+
+            var pfile = fac.Create (fileInfo, plugId);
+
+            Assert.That (pfile, Is.Not.Null);
+            Assert.That (pfile.FileInfo == fileInfo);
+            Assert.That (pfile.PluginId == plugId);
+
+            Directory.Delete (newDir, true);
+        }
+
     }
 }
 
