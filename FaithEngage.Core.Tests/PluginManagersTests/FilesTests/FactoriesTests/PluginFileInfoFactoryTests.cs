@@ -3,6 +3,8 @@ using NUnit.Framework;
 using FaithEngage.Core.Config;
 using FakeItEasy;
 using System.IO;
+using FaithEngage.Core.Tests;
+using FaithEngage.Core.Exceptions;
 
 namespace FaithEngage.Core.PluginManagers.Files.Factories
 {
@@ -97,6 +99,16 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
 			Assert.That(pfile, Is.Null);
 
 		}
+
+        [Test]
+        public void Convert_NotFullDto_Fails()
+        {
+            var fac = new PluginFileInfoFactory (_config);
+            var dto = new PluginFileInfoDTO();
+            var e = TestHelpers.TryGetException(()=> fac.Convert (dto));
+            Assert.That (e, Is.Not.Null);
+            Assert.That (e, Is.InstanceOf<FactoryException> ());
+        }
 
         [Test]
         public void Create_ExistantFile_CreatesPInfoFile()
