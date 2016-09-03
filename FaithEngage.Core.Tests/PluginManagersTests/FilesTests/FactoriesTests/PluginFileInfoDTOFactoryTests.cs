@@ -3,6 +3,8 @@ using NUnit.Framework;
 using FaithEngage.Core.Config;
 using FakeItEasy;
 using System.IO;
+using FaithEngage.Core.Tests;
+using FaithEngage.Core.Exceptions;
 
 namespace FaithEngage.Core.PluginManagers.Files.Factories
 {
@@ -34,8 +36,25 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
             Assert.That (dto.RelativePath, Is.EqualTo("file.txt"));
             Assert.That (dto.Name, Is.EqualTo("file.txt"));
             Assert.That (dto.PluginId, Is.EqualTo(guid));
+        }
+
+        [Test]
+        public void Convert_FileNotInPluginsPath_ThrowsFactoryException()
+        {
+            var guid = Guid.NewGuid ();
+            var file = new FileInfo ("file.txt");
+
+            var pfile = new PluginFileInfo (guid, file);
+
+            var fac = new PluginFileInfoDTOFactory (_config);
+
+            var e = TestHelpers.TryGetException(()=> fac.Convert (pfile));
+
+            Assert.That (e, Is.Not.Null);
+            Assert.That (e, Is.InstanceOf<FactoryException> ());
 
         }
+
     }
 }
 

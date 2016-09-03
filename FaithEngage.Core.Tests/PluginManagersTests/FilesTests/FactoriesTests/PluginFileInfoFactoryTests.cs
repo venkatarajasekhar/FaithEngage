@@ -146,7 +146,6 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
             Assert.That (pfile.FileInfo == fileInfo);
             Assert.That (pfile.PluginId == plugId);
 
-            Directory.Delete (newDir, true);
         }
 
         [Test]
