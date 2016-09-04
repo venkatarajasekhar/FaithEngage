@@ -4,6 +4,8 @@ using FaithEngage.Core.Cards;
 using FaithEngage.Core.Cards.Interfaces;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
+using FaithEngage.Core.TemplatingService;
+using FaithEngage.Core.PluginManagers.Files;
 
 
 namespace FaithEngage.Core.DisplayUnits
@@ -106,10 +108,10 @@ namespace FaithEngage.Core.DisplayUnits
         abstract public DisplayUnitPlugin Plugin { get;}
 
         /// <summary>
-        /// Gets an ordered array of IRenderableCards that will be rendered.
+        /// Gets an IRenderableCard that will be rendered.
         /// </summary>
         /// <returns>The cards.</returns>
-        abstract public IRenderableCard GetCard ();
+        abstract public IRenderableCard GetCard (ITemplatingService service, IDictionary<Guid, PluginFileInfo> files);
 
         /// <summary>
         /// If a display unit type has actions that should be performed as response to

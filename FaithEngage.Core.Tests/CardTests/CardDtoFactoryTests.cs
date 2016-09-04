@@ -5,7 +5,12 @@ using FakeItEasy;
 using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.Cards.Interfaces;
 using System.Collections.Generic;
-
+using FaithEngage.Core.TemplatingService;
+using FaithEngage.Core.PluginManagers.Files;
+using System.Collections.Generic;
+using FaithEngage.Core.PluginManagers.Files.Interfaces;
+using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
+using FaithEngage.Core.PluginManagers;
 namespace FaithEngage.Core.Cards
 {
 	[TestFixture]
@@ -14,6 +19,8 @@ namespace FaithEngage.Core.Cards
         private IRenderableCard card;
         private IRenderableCardSection section;
         private IRenderableCardSection[] sections;
+        private ITemplatingService _tempService;
+        private IPluginFileManager _fileManager;
         private DisplayUnit du;
 
         [SetUp]
@@ -29,9 +36,11 @@ namespace FaithEngage.Core.Cards
             A.CallTo (() => card.Sections).Returns (sections);
             du = A.Fake<DisplayUnit> ();
             card.OriginatingDisplayUnit = du;
-            A.CallTo (() => du.GetCard ()).Returns (card);
-
-
+            _tempService = A.Fake<ITemplatingService> ();
+            _fileManager = A.Fake<IPluginFileManager> ();
+            A.CallTo (
+                () => du.GetCard (_tempService, A<Dictionary<Guid,PluginFileInfo>>.Ignored)
+            ).Returns (card);
         }
            
         [Test]
@@ -40,7 +49,7 @@ namespace FaithEngage.Core.Cards
             var i = 0;
             var dict = Enumerable.Repeat (du, 5).ToDictionary ((k) => i++, v => v);
 
-            var fac = new CardDtoFactory ();
+            var fac = new CardDtoFactory (_tempService,_fileManager);
             var dtos = fac.GetCards (dict);
 
 			Assert.That (dtos.Length == 5);
@@ -54,7 +63,7 @@ namespace FaithEngage.Core.Cards
 		public void GetCards_EmptyDict_ReturnsEmptyArray()
 		{
             var dict = new Dictionary<int,DisplayUnit> ();
-            var fac = new CardDtoFactory ();
+            var fac = new CardDtoFactory (_tempService, _fileManager);
             var cards = fac.GetCards (dict);
 
             Assert.That (cards, Is.Not.Null);
@@ -65,10 +74,10 @@ namespace FaithEngage.Core.Cards
 		public void GetCards_EncountersException_SkipsCardAndContinues()
         {
             var i = 0;
-            A.CallTo (() => du.GetCard ()).Throws<Exception> ().Once ();
+            A.CallTo (() => du.GetCard (_tempService, A<IDictionary<Guid,PluginFileInfo>>.Ignored)).Throws<Exception> ().Once ();
             var dict = Enumerable.Repeat (du, 5).ToDictionary ((k) => i++, v => v);
 
-            var fac = new CardDtoFactory ();
+            var fac = new CardDtoFactory (_tempService, _fileManager);
             var dtos = fac.GetCards (dict);
 
             Assert.That (dtos, Is.Not.Null);
@@ -78,7 +87,11 @@ namespace FaithEngage.Core.Cards
         [Test]
         public void GetCard_ValidDU_ReturnsDto()
         {
-            var fac = new CardDtoFactory ();
+            var fac = new CardDtoFactory (_tempService, _fileManager);
+            var plugin = A.Fake<DisplayUnitPlugin> ();
+            du.Plugin.PluginId = Guid.NewGuid ();
+            A.CallTo (() => du.Plugin).Returns (plugin);
+
             var dto = fac.GetCard(du);
 
             Assert.That (dto, Is.Not.Null);
@@ -91,8 +104,8 @@ namespace FaithEngage.Core.Cards
         [Test]
 		public void GetCard_EncountersException_ReturnsNull()
         {
-			A.CallTo (() => du.GetCard()).Throws<Exception> ().Once();
-			var fac = new CardDtoFactory ();
+			A.CallTo (() => du.GetCard(_tempService, A<IDictionary<Guid, PluginFileInfo>>.Ignored)).Throws<Exception> ().Once();
+			var fac = new CardDtoFactory (_tempService, _fileManager);
 			var dto = fac.GetCard (du);
 
 			Assert.That (dto, Is.Null);
@@ -115,7 +128,7 @@ namespace FaithEngage.Core.Cards
 			var id = Guid.NewGuid();
 			du.AssociatedEvent = id;
 
-			var fac = new CardDtoFactory();
+			var fac = new CardDtoFactory(_tempService, _fileManager);
 			var dto = fac.ConvertCard(card);
 
 			Assert.That(dto.AssociatedEvent, Is.EqualTo(id));
@@ -135,7 +148,7 @@ namespace FaithEngage.Core.Cards
 			card.OriginatingDisplayUnit = du;
 			A.CallTo(() => card.Title).Throws<Exception>();
 
-			var fac = new CardDtoFactory();
+			var fac = new CardDtoFactory(_tempService, _fileManager);
 			var dto = fac.ConvertCard(card);
 
 			Assert.That(dto, Is.Null);

@@ -68,4 +68,9 @@
     <None Include="DisplayUnits\TextUnit\TextUnit.cs" />
     <None Include="DisplayUnits\TextUnit\TextUnitPlugin.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

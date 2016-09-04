@@ -5,6 +5,9 @@ using FakeItEasy;
 using NUnit.Framework;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
+using FaithEngage.Core.Cards.Interfaces;
+using FaithEngage.Core.PluginManagers.Files;
+using FaithEngage.Core.TemplatingService;
 
 namespace FaithEngage.Core.DisplayUnits.Factories
 {
@@ -34,16 +37,16 @@ namespace FaithEngage.Core.DisplayUnits.Factories
 				throw new NotImplementedException ();
 			}
 
-			public override FaithEngage.Core.Cards.Interfaces.IRenderableCard GetCard ()
-			{
-				throw new NotImplementedException ();
-			}
-
 			public override void SetAttributes (Dictionary<string, string> attributes)
 			{
 			}
 
-			public override DisplayUnitPlugin Plugin {
+            public override IRenderableCard GetCard (ITemplatingService service, IDictionary<Guid, PluginFileInfo> files)
+            {
+                throw new NotImplementedException ();
+            }
+
+            public override DisplayUnitPlugin Plugin {
 				get {
 					return A.Fake<DisplayUnitPlugin> ();
 				}

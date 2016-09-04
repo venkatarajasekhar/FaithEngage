@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.Cards.Interfaces;
 using FaithEngage.Core.ActionProcessors.Interfaces;
+using FaithEngage.Core.TemplatingService;
+using FaithEngage.Core.PluginManagers.Files.Interfaces;
 
 namespace FaithEngage.Core.CardProcessor
 {
@@ -18,6 +20,8 @@ namespace FaithEngage.Core.CardProcessor
         private IDisplayUnitsRepoManager _mgr;
         private ICardDTOFactory _cardFactory;
 		private ICardActionProcessor _cap;
+        private ITemplatingService _tempService;
+        private IPluginFileManager _fileMgr;
         private Guid VALID_GUID = Guid.NewGuid();
         private Guid INVALID_GUID = Guid.NewGuid ();
 
@@ -28,12 +32,14 @@ namespace FaithEngage.Core.CardProcessor
             _mgr = A.Fake<IDisplayUnitsRepoManager> ();
             _cardFactory = A.Fake<ICardDTOFactory> ();
 			_cap = A.Fake<ICardActionProcessor>();
+            _tempService = A.Fake<ITemplatingService> ();
+            _fileMgr = A.Fake<IPluginFileManager> ();
         }
 
         [Test]
         public void GetLiveCardsByEvent_ValidEventId_ArrayOfRenderableCardDTOs()
         {
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr );
             var i = 0;
             var dummies = Enumerable
                 .Repeat (A.Dummy<DisplayUnit> (), 5)
@@ -53,7 +59,7 @@ namespace FaithEngage.Core.CardProcessor
         [Test]
         public void GetLiveCardsByEvent_InvalidEventId_ReturnsEmptyArray()
         {
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+            var cp = new CardProcessor (_mgr, _cardFactory, _cap,_tempService, _fileMgr);
             var dummies = new Dictionary<int,DisplayUnit> ();
             var emptyArray = new RenderableCardDTO[]{};
             A.CallTo (() => _mgr.GetByEvent (VALID_GUID, true)).Returns (dummies);
@@ -68,7 +74,7 @@ namespace FaithEngage.Core.CardProcessor
         [Test]
         public void GetLiveCardsByEvent_InvalidIdException_ReturnsEmptyArray()
         {
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
             A.CallTo (() => _mgr.GetByEvent (VALID_GUID, true)).Throws<InvalidIdException> ();
             var cards = cp.GetLiveCardsByEvent (VALID_GUID);
             Assert.That (cards, Is.Not.Null);
@@ -79,7 +85,7 @@ namespace FaithEngage.Core.CardProcessor
         [ExpectedException(typeof(RepositoryException))]
         public void GetLiveCardsByEvent_RepoException_Throws()
         {
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
             A.CallTo (() => _mgr.GetByEvent (VALID_GUID, true)).Throws<RepositoryException> ();
             var cards = cp.GetLiveCardsByEvent (VALID_GUID);
         }
@@ -87,7 +93,7 @@ namespace FaithEngage.Core.CardProcessor
         [Test]
         public void GetCard_ValidDuId_RenderableCardDTO()
         {
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
             var dummy = A.Dummy<DisplayUnit> ();
             var dummyCard = A.Dummy<RenderableCardDTO> ();
 
@@ -103,7 +109,7 @@ namespace FaithEngage.Core.CardProcessor
         [Test]
         public void GetCard_InvalidDuId_ReturnsNull()
         {
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
 
             A.CallTo (() => _mgr.GetById (INVALID_GUID)).Returns (null);
 
@@ -116,7 +122,7 @@ namespace FaithEngage.Core.CardProcessor
         [ExpectedException]
         public void GetCard_RepoMgrThrowsException_Throws()
         {
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
             A.CallTo (() => _mgr.GetById (VALID_GUID)).Throws<Exception> ();
             cp.GetCard (VALID_GUID);
         }
@@ -124,7 +130,7 @@ namespace FaithEngage.Core.CardProcessor
         [Test]
         public void PushCard_ValidDisplayUnitId_PushesCard()
         {
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
             var du = A.Dummy<DisplayUnit> ();
             du.AssociatedEvent = VALID_GUID;
             A.CallTo (() => _mgr.PushDU (VALID_GUID)).Returns (du);
@@ -150,7 +156,7 @@ namespace FaithEngage.Core.CardProcessor
         [ExpectedException(typeof(InvalidIdException))]
         public void PushCard_InvalidDisplayUnitId_ThrowsInvalidIdException()
         {
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
             A.CallTo (() => _mgr.PushDU (INVALID_GUID)).Returns (null);
 
             cp.PushCard (INVALID_GUID);
@@ -160,7 +166,7 @@ namespace FaithEngage.Core.CardProcessor
         [ExpectedException]
         public void PushCard_ExceptionThrown_NoAction()
         {
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
             A.CallTo (() => _mgr.PushDU (VALID_GUID)).Throws<Exception>();
 
             CardEventArgs args = null;
@@ -178,7 +184,7 @@ namespace FaithEngage.Core.CardProcessor
             A.CallTo (() => _cardFactory.GetCard (A<DisplayUnit>.Ignored)).Returns (card);
             CardEventArgs args = null;
             var dto = new DisplayUnitDTO (VALID_GUID, VALID_GUID);
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
             cp.onPushCard += (x) => args = x;
 			cp.PushNewCard (dto, factory);
 
@@ -194,7 +200,7 @@ namespace FaithEngage.Core.CardProcessor
             var factory = A.Fake<IDisplayUnitFactory> ();
             A.CallTo (() => factory.Convert (A<DisplayUnitDTO>.Ignored)).Returns (null);
             var dto = new DisplayUnitDTO (INVALID_GUID, INVALID_GUID);
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
 			cp.PushNewCard (dto, factory);
         }
 
@@ -204,7 +210,7 @@ namespace FaithEngage.Core.CardProcessor
         {
 			var factory = A.Fake<IDisplayUnitFactory> ();
 			A.CallTo (() => _mgr.SaveDtoToEvent (A<DisplayUnitDTO>.Ignored)).Throws<Exception> ();
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
             cp.PushNewCard (A.Dummy<DisplayUnitDTO> (), factory);
         }
 
@@ -216,7 +222,7 @@ namespace FaithEngage.Core.CardProcessor
             A.CallTo (() => _mgr.PullDu (VALID_GUID)).Returns (du);
             CardEventArgs args = null;
 
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
             cp.onPullCard += (e) => args = e;
             cp.PullCard (VALID_GUID);
 
@@ -232,7 +238,7 @@ namespace FaithEngage.Core.CardProcessor
 		public void PullCard_InvalidId_ThrowsInvalidIdException()
 		{
 			A.CallTo (() => _mgr.PullDu (INVALID_GUID)).Returns (null);
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
 			cp.PullCard (INVALID_GUID);
 		}
 
@@ -241,14 +247,14 @@ namespace FaithEngage.Core.CardProcessor
 		public void PullCard_EncountersException_BubblesUp()
 		{
 			A.CallTo (() => _mgr.PullDu (VALID_GUID)).Throws<Exception> ();
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
 			cp.PullCard (VALID_GUID);
 		}
 
 		[Test]
 		public void ExecuteCardActionAsync_ExcecutesCorrectly()
 		{
-			var cp = new CardProcessor (_mgr, _cardFactory, _cap);
+			var cp = new CardProcessor (_mgr, _cardFactory, _cap, _tempService, _fileMgr);
 			var action = new CardAction ();
 			CardAction receivedAction = null;
 			A.CallTo (() => _cap.ExecuteCardAction (action)).Invokes ((CardAction a) => receivedAction = a);

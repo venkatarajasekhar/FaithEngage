@@ -5,6 +5,9 @@ using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.DisplayUnits;
 using System.Collections.Generic;
 using FaithEngage.Core.Tests;
+using FaithEngage.Core.Cards.Interfaces;
+using FaithEngage.Core.PluginManagers.Files;
+using FaithEngage.Core.TemplatingService;
 
 namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
 {
@@ -44,14 +47,16 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
             {
                 throw new NotImplementedException ();
             }
-            public override FaithEngage.Core.Cards.Interfaces.IRenderableCard GetCard ()
-            {
-                throw new NotImplementedException ();
-            }
             public override void SetAttributes (Dictionary<string, string> attributes)
             {
                 throw new NotImplementedException ();
             }
+
+            public override IRenderableCard GetCard (ITemplatingService service, IDictionary<Guid, PluginFileInfo> files)
+            {
+                throw new NotImplementedException ();
+            }
+
             public override DisplayUnitPlugin Plugin {
                 get {
                     throw new NotImplementedException ();

@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using FakeItEasy;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
-
+using FaithEngage.Core.Cards.Interfaces;
+using FaithEngage.Core.PluginManagers.Files;
+using FaithEngage.Core.TemplatingService;
 
 namespace FaithEngage.Core.DisplayUnits
 {
@@ -30,14 +32,17 @@ namespace FaithEngage.Core.DisplayUnits
             {
                 return new Dictionary<string, string> () {{"key", "value"}};
             }
-            public override FaithEngage.Core.Cards.Interfaces.IRenderableCard GetCard ()
-            {
-                throw new NotImplementedException ();
-            }
+
             public override void SetAttributes (System.Collections.Generic.Dictionary<string, string> attributes)
             {
                 
             }
+
+            public override IRenderableCard GetCard (ITemplatingService service, IDictionary<Guid, PluginFileInfo> files)
+            {
+                throw new NotImplementedException ();
+            }
+
             public override DisplayUnitPlugin Plugin {
                 get {
                     var plugin = A.Fake<DisplayUnitPlugin> ();

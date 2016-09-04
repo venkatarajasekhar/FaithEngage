@@ -31,12 +31,10 @@ namespace FaithEngage.Plugins
 
 		public override void Initialize(IAppFactory FEFactory)
 		{
-            throw new NotImplementedException ();
 		}
 
 		public override void Install(IAppFactory FEFactory)
 		{
-			throw new NotImplementedException();
 		}
 
 		public override void RegisterDependencies(IRegistrationService regService)
@@ -46,7 +44,6 @@ namespace FaithEngage.Plugins
 
 		public override void Uninstall(IAppFactory FEFactory)
 		{
-			throw new NotImplementedException();
 		}
 	}
 }

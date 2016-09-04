@@ -4,9 +4,11 @@ using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.Cards.Interfaces;
-using FaithEngage.Core.ActionProcessors;
 using FaithEngage.Core.ActionProcessors.Interfaces;
 using System.Threading.Tasks;
+using FaithEngage.Core.TemplatingService;
+using FaithEngage.Core.PluginManagers.Files.Interfaces;
+using System.Linq;
 
 namespace FaithEngage.Core.CardProcessor
 {
@@ -21,17 +23,26 @@ namespace FaithEngage.Core.CardProcessor
         private readonly IDisplayUnitsRepoManager _duRepoMgr;
         private readonly ICardDTOFactory _cardFactory;
 		private readonly ICardActionProcessor _cap;
+        private readonly ITemplatingService _tempService;
+        private readonly IPluginFileManager _plugFileManager;
 
         public event PushPullEventHandler onPushCard;
         public event PushPullEventHandler onPullCard;
-		public event PushPullEventHandler onReRenderCard;
+        public event PushPullEventHandler onReRenderCard;
 
-		public CardProcessor (IDisplayUnitsRepoManager duRepoMgr, ICardDTOFactory cardFactory, ICardActionProcessor cap)
+        public CardProcessor (IDisplayUnitsRepoManager duRepoMgr,
+                              ICardDTOFactory cardFactory,
+                              ICardActionProcessor cap,
+                              ITemplatingService tempService,
+                              IPluginFileManager plugFileMgr
+                             )
         {
 			_duRepoMgr = duRepoMgr;
 			_cardFactory = cardFactory;
 			_cap = cap;
 			_cap.OnCardActionResult+= _cap_OnCardActionResult;
+            _tempService = tempService;
+            _plugFileManager = plugFileMgr;
         }
 
 		void _cap_OnCardActionResult (DisplayUnit sender, CardActionResultArgs e)
@@ -43,7 +54,9 @@ namespace FaithEngage.Core.CardProcessor
 				: _duRepoMgr.GetById (e.DestinationDisplayUnit.Value);
 			if (du == null)
 				return;
-			var card = du.GetCard ();
+            var plugId = du.Plugin.PluginId;
+            var files = _plugFileManager.GetFilesForPlugin (plugId.Value);
+            var card = du.GetCard (_tempService, files);
 			var newCard = card.ReRender (e);
 			var dto = _cardFactory.ConvertCard (newCard);
 			if (dto == null)

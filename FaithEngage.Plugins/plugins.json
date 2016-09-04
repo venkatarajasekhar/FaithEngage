@@ -1,0 +1,14 @@
+﻿{
+    "Plugins":[
+        {
+            "PluginTypeName":"RazorTemplatingPlugin",
+            "PluginTypeEnum": 1,
+            "DllName": "FaithEngage.Plugins.dll",
+            "Files" : [
+                "FaithEngage.Plugins.dll",
+                "System.Web.Razor.dll",
+                "RazorEngine.dll"
+            ]
+        }
+    ]
+}
