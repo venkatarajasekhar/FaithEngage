@@ -47,6 +47,11 @@ namespace FaithEngage.Core.Cards
 		public void GetCards_ValidDict_ReturnsCardDTOs()
         {
             var i = 0;
+            var plugin = A.Fake<DisplayUnitPlugin> ();
+            A.CallTo (() => du.Plugin).Returns (plugin);
+            du.Plugin.PluginId = Guid.NewGuid ();
+            A.CallTo (() => _fileManager.GetFilesForPlugin (A<Guid>.Ignored)).Returns (new Dictionary<Guid, PluginFileInfo> ());
+
             var dict = Enumerable.Repeat (du, 5).ToDictionary ((k) => i++, v => v);
 
             var fac = new CardDtoFactory (_tempService,_fileManager);
@@ -75,6 +80,10 @@ namespace FaithEngage.Core.Cards
         {
             var i = 0;
             A.CallTo (() => du.GetCard (_tempService, A<IDictionary<Guid,PluginFileInfo>>.Ignored)).Throws<Exception> ().Once ();
+            var plugin = A.Fake<DisplayUnitPlugin> ();
+            A.CallTo (() => du.Plugin).Returns (plugin);
+            du.Plugin.PluginId = Guid.NewGuid ();
+            A.CallTo (() => _fileManager.GetFilesForPlugin (A<Guid>.Ignored)).Returns (new Dictionary<Guid, PluginFileInfo> ());
             var dict = Enumerable.Repeat (du, 5).ToDictionary ((k) => i++, v => v);
 
             var fac = new CardDtoFactory (_tempService, _fileManager);
@@ -89,9 +98,9 @@ namespace FaithEngage.Core.Cards
         {
             var fac = new CardDtoFactory (_tempService, _fileManager);
             var plugin = A.Fake<DisplayUnitPlugin> ();
-            du.Plugin.PluginId = Guid.NewGuid ();
             A.CallTo (() => du.Plugin).Returns (plugin);
-
+            du.Plugin.PluginId = Guid.NewGuid ();
+            A.CallTo (() => _fileManager.GetFilesForPlugin (A<Guid>.Ignored)).Returns (new Dictionary<Guid, PluginFileInfo>());
             var dto = fac.GetCard(du);
 
             Assert.That (dto, Is.Not.Null);
