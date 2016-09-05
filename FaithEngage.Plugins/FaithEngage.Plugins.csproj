@@ -41,6 +41,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RazorTemplating\RazorTemplatingService.cs" />
     <Compile Include="RazorTemplating\RazorTemplatingPlugin.cs" />
+    <Compile Include="DisplayUnits\TextUnit\TextUnitPlugin.cs" />
+    <Compile Include="DisplayUnits\TextUnit\TextUnit.cs" />
+    <Compile Include="DisplayUnits\TextUnit\TextUnitEditorDefinition.cs" />
+    <Compile Include="Plugin Files\DisplayUnits\TextUnit\TextUnitEditorTemplate.cs">
+      <DependentUpon>TextUnitEditorTemplate.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Plugin Files\DisplayUnits\TextUnit\TextUnitCardTemplate.cs">
+      <DependentUpon>TextUnitCardTemplate.cshtml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -50,6 +59,9 @@
     <Folder Include="DisplayUnits\TextUnit\" />
     <Folder Include="DisplayUnits\Abstracts\" />
     <Folder Include="RazorTemplating\" />
+    <Folder Include="Plugin Files\" />
+    <Folder Include="Plugin Files\DisplayUnits\" />
+    <Folder Include="Plugin Files\DisplayUnits\TextUnit\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FaithEngage.Core\FaithEngage.Core.csproj">
@@ -63,13 +75,17 @@
     <None Include="DisplayUnits\ImageUnit\ImageUnit.cs" />
     <None Include="DisplayUnits\FileUnit.cs" />
     <None Include="packages.config" />
-    <None Include="DisplayUnits\TextUnit\TextCard.cs" />
-    <None Include="DisplayUnits\TextUnit\TextCardSection.cs" />
-    <None Include="DisplayUnits\TextUnit\TextUnit.cs" />
-    <None Include="DisplayUnits\TextUnit\TextUnitPlugin.cs" />
+    <None Include="Plugin Files\DisplayUnits\TextUnit\TextUnitEditorTemplate.cshtml">
+      <Generator>RazorTemplatePreprocessor</Generator>
+      <LastGenOutput>TextUnitEditorTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="Plugin Files\DisplayUnits\TextUnit\TextUnitCardTemplate.cshtml">
+      <Generator>RazorTemplatePreprocessor</Generator>
+      <LastGenOutput>TextUnitCardTemplate.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="plugins.json">
+    <Content Include="Plugin Files\plugins.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

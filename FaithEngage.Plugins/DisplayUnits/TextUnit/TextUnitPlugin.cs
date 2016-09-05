@@ -3,66 +3,83 @@ using System.Collections.Generic;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.DisplayUnitEditor;
 using FaithEngage.Core.Containers;
+using FaithEngage.Core.Factories;
+using System.Linq;
 
-namespace FaithEngage.Plugins.DisplayUnits.TextUnitPlugin
+namespace FaithEngage.Plugins.DisplayUnits.TextUnit
 {
     public class TextUnitPlugin : DisplayUnitPlugin
     {
         public TextUnitPlugin ()
         {
-            var def = new IDisplayUnitEditorDefinition ();
-            def.EnforceSectionOrder = false;
-            var secDef = new CardSectionDefinition ("Text", EditorFieldType.HtmlTextArea,1, 1);
-            secDef.EditorFieldType = EditorFieldType.HtmlTextArea;
-            secDef.Limit = 1;
-            secDef.NumberRequired = 1;
-            var secs = new CardSectionDefinition[] { secDef };
-            def.CardSectionDefinitions = secs;
-            EditorDefinition = def;
+            _attributeNames = new List<string> { "Text" };
+        }
+        public override Type DisplayUnitType {
+            get {
+                return typeof (TextUnit);
+            }
         }
 
-        #region implemented abstract members of Plugin
+        public override IDisplayUnitEditorDefinition EditorDefinition {
+            get {
+                return new TextUnitEditorDefinition ();
+            }
+        }
+
         public override string PluginName {
             get {
-                return "Text Unit";
+                return "Text Block";
             }
         }
-        public override int[] PluginVersion {
+
+        public override int [] PluginVersion {
             get {
-                return new int[]{0,0,1};
+                return new int [] { 1, 0, 0};
             }
         }
-        #endregion
-        #region implemented abstract members of DisplayUnitPlugin
+
+        private List<string> _attributeNames;
         public override List<string> GetAttributeNames ()
         {
-            return new List<string> (){ "Text" };
+            return _attributeNames;
         }
 
-        public override void Initialize (IContainer container)
+        public override void Initialize (IAppFactory FEFactory)
         {
-            throw new NotImplementedException ();
+            var fileMgr = FEFactory.PluginFileManager;
+            var tempService = FEFactory.TemplatingService;
+            var files = fileMgr.GetFilesForPlugin (this.PluginId.Value);
+            var editorTemplate = 
+                files
+                    .FirstOrDefault (p => p.Value.FileInfo.Name == "TextUnitEditorTemplate.cshtml")
+                    .Value
+                    .FileInfo;
+            string template;
+            using (var reader = editorTemplate.OpenText ())
+            {
+                template = reader.ReadToEnd ();
+            }
+            tempService.RegisterTemplate (template, "TextUnitEditor");
+            var cardTemplate = files.FirstOrDefault (p => p.Value.FileInfo.Name == "TextUnitCard.cshtml").Value.FileInfo;
+            string card;
+            using (var reader = cardTemplate.OpenText())
+            {
+                card = reader.ReadToEnd ();
+            }
+            tempService.RegisterTemplate (card, "TextUnitCard");
         }
 
-        public override void RegisterDependencies (IContainer container)
+        public override void Install (IAppFactory FEFactory)
         {
-            throw new NotImplementedException ();
         }
 
-        private Type _duType = typeof(TextUnit);
-        public override Type DisplayUnitType {
-			get{ return _duType; }
-        }
-            
-        public override IDisplayUnitEditorDefinition EditorDefinition {
-            get;
-            set;
+        public override void RegisterDependencies (IRegistrationService regService)
+        {
         }
 
-        #endregion
-
-
-
+        public override void Uninstall (IAppFactory FEFactory)
+        {
+        }
     }
 }
 

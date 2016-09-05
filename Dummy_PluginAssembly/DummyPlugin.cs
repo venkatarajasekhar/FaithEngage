@@ -55,9 +55,6 @@ namespace Dummy_PluginAssembly
 			get {
 				throw new NotImplementedException ();
 			}
-			set {
-				throw new NotImplementedException ();
-			}
 		}
 		#endregion
 		

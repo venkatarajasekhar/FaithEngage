@@ -28,7 +28,7 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
         /// Defines how the editor or this plugin type will function.
         /// </summary>
         /// <value>The editor definition.</value>
-        abstract public IDisplayUnitEditorDefinition EditorDefinition { get; set;}
+        abstract public IDisplayUnitEditorDefinition EditorDefinition { get;}
 
     }
 }

@@ -1,88 +1,67 @@
 ﻿using System;
-using FaithEngage.Core.Cards;
 using System.Collections.Generic;
 using FaithEngage.Core.Cards.Interfaces;
-using FaithEngage.Plugins.DisplayUnits.TextUnitPlugin;
-using FaithEngage.Core.Cards.DefaultImplementations;
 using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
+using FaithEngage.Core.PluginManagers.Files;
+using FaithEngage.Core.TemplatingService;
+using FaithEngage.Core.Cards.DefaultImplementations;
 
-namespace FaithEngage.Plugins.DisplayUnits.TextUnitPlugin
+namespace FaithEngage.Plugins.DisplayUnits.TextUnit
 {
     public class TextUnit : DisplayUnit
     {
-        public string Text {
-            get;
-            set;
-        }
-            
         public TextUnit (Dictionary<string, string> attributes) : base (attributes)
         {
-            SetAttributes (attributes);
-			_plugin = new TextUnitPlugin ();
+            string text;
+            attributes.TryGetValue ("Text", out text);
+            Text = text;
         }
-        
 
         public TextUnit (Guid id, Dictionary<string, string> attributes) : base (id, attributes)
         {
-            SetAttributes (attributes);
-			_plugin = new TextUnitPlugin ();
+            string text;
+            attributes.TryGetValue ("Text", out text);
+            Text = text;
         }
-        
 
+        public string Text { get; set; }
 
-//        public TextUnit (string text) : base()
-//        {
-//            this.Text = text;
-//        }
-//        public TextUnit (Guid guid, string text) : base(guid)
-//        {
-//            this.Text = text;
-//        }
-
-        #region implemented abstract members of DisplayUnit
+        public override DisplayUnitPlugin Plugin {
+            get {
+                return new TextUnitPlugin ();
+            }
+        }
 
         public override Dictionary<string, string> GetAttributes ()
         {
-            return new Dictionary<string,string> (){ { "Text",Text } };
+            return new Dictionary<string, string> { { "Text", this.Text}};
         }
 
-        /// <summary>
-        /// TextUnit produces a single card.
-        /// </summary>
-        /// <returns>The cards.</returns>
-        public override IRenderableCard GetCard ()
+        public override IRenderableCard GetCard (ITemplatingService service, IDictionary<Guid, PluginFileInfo> files)
         {
-            var card = new TextCard ();
-            card.Title = this.Name;
-            card.Description = this.Description;
-            card.OriginatingDisplayUnit = this;
-            var section = new RenderableCardSection ();
-            section.HeadingText = card.Title;
-            section.HtmlContents = this.Text;
-            card.Sections = new IRenderableCardSection[]{ section };
+            var contents = service.CompileHtmlFromTemplateKey ("TextUnitCard", this);
+            var card = new RenderableCard () 
+            { 
+                Description = Description, 
+                OriginatingDisplayUnit = this, 
+                Title = this.Name
+            };
+
+            var section = new RenderableCardSection () {
+                HeadingText = this.Name,
+                HtmlContents = contents
+            };
+            card.Sections = new RenderableCardSection [] { section };
             return card;
-        }
-
-        public override void ExecuteCardAction (CardAction Action)
-        {
         }
 
         public override void SetAttributes (Dictionary<string, string> attributes)
         {
             string text;
             attributes.TryGetValue ("Text", out text);
-            Text = text;
+            if (string.IsNullOrWhiteSpace (text)) Text = text;
         }
-            
-		private DisplayUnitPlugin _plugin;
-        public override DisplayUnitPlugin Plugin {
-			get{
-				return _plugin;
-			}
-        }
-
-        #endregion
     }
 }
 
