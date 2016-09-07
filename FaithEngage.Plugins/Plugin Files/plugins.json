@@ -17,7 +17,9 @@
             "Files":[
                 "FaithEngage.Plugins.dll",
                 "System.Web.Razor.dll",
-                "RazorEngine.dll"
+                "RazorEngine.dll",
+                "TextUnitCardTemplate.cshtml",
+                "TextUnitEditorTemplate.cshtml"
             ]
         }
     ]
