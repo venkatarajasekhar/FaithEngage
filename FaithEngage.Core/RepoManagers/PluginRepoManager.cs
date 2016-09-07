@@ -11,7 +11,7 @@ namespace FaithEngage.Core.RepoManagers
 	{
 		protected readonly IPluginRepository _repo;
 		protected readonly IConverterFactory<Plugin, PluginDTO> _dtoFactory;
-		IConverterFactory<PluginDTO, Plugin> _plugFac
+		IConverterFactory<PluginDTO, Plugin> _plugFac;
 		public PluginRepoManager(IPluginRepository repo,IConverterFactory<Plugin, PluginDTO> dtoFactory, IConverterFactory<PluginDTO,Plugin> plugFac)
 		{
 			_repo = repo;

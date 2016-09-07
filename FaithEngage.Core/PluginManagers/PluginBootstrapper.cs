@@ -35,7 +35,7 @@ namespace FaithEngage.Core.PluginManagers
             rs.Register<IPluginManager, PluginManager> (LifeCycle.Singleton);
 			rs.Register<IConverterFactory<Plugin, PluginDTO>, PluginDtoFactory>(LifeCycle.Transient);
             rs.Register<IPluginRepoManager, PluginRepoManager> (LifeCycle.Singleton);
-			rs.Register<IConverterFactory<PluginDTO,Plugin>, OtherPluginFactory>(LifeCycle.Transient);
+			rs.Register<IConverterFactory<PluginDTO,Plugin>, PluginFactory>(LifeCycle.Transient);
 		}
 	}
 }
