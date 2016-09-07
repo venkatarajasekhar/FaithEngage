@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using NUnit.Framework;
 using FaithEngage.Core.Config;
 using FakeItEasy;
@@ -90,6 +90,8 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
 			var fac = new PluginFileInfoFactory(_config);
 
 			var newDir = Path.Combine(fac.PluginsFolder.FullName, dto.PluginId.ToString(), "otherFolder");
+
+			Directory.CreateDirectory(newDir);
 			var newPath = Path.Combine(newDir, "TESTFILE.txt");
 
 			Assert.That(!File.Exists(newPath));

@@ -44,12 +44,6 @@
     <Compile Include="DisplayUnits\TextUnit\TextUnitPlugin.cs" />
     <Compile Include="DisplayUnits\TextUnit\TextUnit.cs" />
     <Compile Include="DisplayUnits\TextUnit\TextUnitEditorDefinition.cs" />
-    <Compile Include="Plugin Files\DisplayUnits\TextUnit\TextUnitEditorTemplate.cs">
-      <DependentUpon>TextUnitEditorTemplate.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Plugin Files\DisplayUnits\TextUnit\TextUnitCardTemplate.cs">
-      <DependentUpon>TextUnitCardTemplate.cshtml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -75,17 +69,17 @@
     <None Include="DisplayUnits\ImageUnit\ImageUnit.cs" />
     <None Include="DisplayUnits\FileUnit.cs" />
     <None Include="packages.config" />
-    <None Include="Plugin Files\DisplayUnits\TextUnit\TextUnitEditorTemplate.cshtml">
-      <Generator>RazorTemplatePreprocessor</Generator>
-      <LastGenOutput>TextUnitEditorTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="Plugin Files\DisplayUnits\TextUnit\TextUnitCardTemplate.cshtml">
-      <Generator>RazorTemplatePreprocessor</Generator>
-      <LastGenOutput>TextUnitCardTemplate.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Plugin Files\plugins.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\DisplayUnits\TextUnit\TextUnitCardTemplate.cshtml">
+      <LastGenOutput>TextUnitCardTemplate.cs</LastGenOutput>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\DisplayUnits\TextUnit\TextUnitEditorTemplate.cshtml">
+      <LastGenOutput>TextUnitEditorTemplate.cs</LastGenOutput>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
