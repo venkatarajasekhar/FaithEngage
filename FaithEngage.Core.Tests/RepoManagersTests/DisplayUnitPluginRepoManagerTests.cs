@@ -127,7 +127,7 @@ namespace FaithEngage.Core.RepoManagers
         public void GetAll_ReturnsPluginsIEnumerable()
         {
             var dtos = Enumerable.Repeat (new PluginDTO (), 5).ToList();
-            A.CallTo (() => _repo.GetAll()).Returns (dtos);
+			A.CallTo (() => _repo.GetAll(PluginTypeEnum.DisplayUnit)).Returns (dtos);
             var duPlugins = A.CollectionOfFake<DisplayUnitPlugin> (5);
             A.CallTo (() => _fac.LoadPluginsFromDtos (dtos)).Returns (duPlugins);
 
@@ -139,7 +139,7 @@ namespace FaithEngage.Core.RepoManagers
         [Test]
         public void GetAll_RepoThrowsException_ThrowsRepoException()
         {
-            A.CallTo (() => _repo.GetAll ()).Throws<Exception>();
+            A.CallTo (() => _repo.GetAll (PluginTypeEnum.DisplayUnit)).Throws<Exception>();
             var e = TestHelpers.TryGetException (() => mgr.GetAll ());
             Assert.That (e, Is.InstanceOf (typeof (RepositoryException)));
         }

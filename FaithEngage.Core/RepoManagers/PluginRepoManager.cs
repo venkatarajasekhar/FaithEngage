@@ -11,10 +11,12 @@ namespace FaithEngage.Core.RepoManagers
 	{
 		protected readonly IPluginRepository _repo;
 		protected readonly IConverterFactory<Plugin, PluginDTO> _dtoFactory;
-		public PluginRepoManager(IPluginRepository repo,IConverterFactory<Plugin, PluginDTO> dtoFactory)
+		IConverterFactory<PluginDTO, Plugin> _plugFac
+		public PluginRepoManager(IPluginRepository repo,IConverterFactory<Plugin, PluginDTO> dtoFactory, IConverterFactory<PluginDTO,Plugin> plugFac)
 		{
 			_repo = repo;
 			_dtoFactory = dtoFactory;
+			_plugFac = plugFac;
 		}
 
 		public void UninstallPlugin(Guid id)
@@ -60,6 +62,18 @@ namespace FaithEngage.Core.RepoManagers
                 throw new RepositoryException ("There was a problem registering this plugin.", ex);
             }
         }
-    }
+
+		public IDictionary<Guid, Plugin> GetAllPlugins()
+		{
+			var dtos = _repo.GetAll();
+			var dict = new Dictionary<Guid, Plugin>();
+			foreach (var dto in dtos)
+			{
+				var plug = _plugFac.Convert(dto);
+				dict.Add(plug.PluginId.Value, plug);
+			}
+			return dict;
+		}
+	}
 }
 

@@ -15,6 +15,7 @@ using FaithEngage.Core.RepoInterfaces;
 using FaithEngage.Facade;
 using FakeItEasy;
 using NUnit.Framework;
+using System.Linq;
 namespace FaithEngage.IntegrationTests
 {
 	public class FaithEngagePluginsTests
@@ -44,6 +45,8 @@ namespace FaithEngage.IntegrationTests
 		}
 		public class repo : IPluginRepository
 		{
+			private Dictionary<Guid, PluginDTO> dtoRepo = new Dictionary<Guid, PluginDTO>(); 
+
 			public void Delete(Guid pluginId)
 			{
 				throw new NotImplementedException();
@@ -51,16 +54,23 @@ namespace FaithEngage.IntegrationTests
 
 			public List<PluginDTO> GetAll()
 			{
-				throw new NotImplementedException();
+				return dtoRepo.Values.ToList();
+			}
+
+			public List<PluginDTO> GetAll(PluginTypeEnum pluginType)
+			{
+				return dtoRepo.Values.Where(p => p.PluginType == pluginType).ToList();
 			}
 
 			public PluginDTO GetById(Guid pluginId)
 			{
-				throw new NotImplementedException();
+				return dtoRepo[pluginId];
 			}
 
 			public void Register(PluginDTO plugin, Guid pluginId)
 			{
+				plugin.Id = pluginId;
+				dtoRepo.Add(pluginId, plugin);
 			}
 
 			public void Update(PluginDTO plugin)

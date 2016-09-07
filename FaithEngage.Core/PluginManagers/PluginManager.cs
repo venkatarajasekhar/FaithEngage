@@ -11,6 +11,7 @@ using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Linq;
 using FaithEngage.Core.Exceptions;
 using System.Security;
+using FaithEngage.Core.Containers;
 
 namespace FaithEngage.Core.PluginManagers
 {
@@ -19,7 +20,7 @@ namespace FaithEngage.Core.PluginManagers
 		private readonly IPluginFileManager _fileMgr;
         private readonly IPluginRepoManager _mgr;
         private readonly IAppFactory _factory;
-        public PluginManager (IPluginFileManager fileManager, IPluginRepoManager mgr, IAppFactory factory)
+		public PluginManager (IPluginFileManager fileManager, IPluginRepoManager mgr, IAppFactory factory)
 		{
 			_fileMgr = fileManager;
             _mgr = mgr;
@@ -51,7 +52,7 @@ namespace FaithEngage.Core.PluginManagers
             }catch(DirectoryNotFoundException ex){
                 throw new PluginLoadException ($"Path is invalid: {pluginsFile.FullName}", ex);
             }catch(IOException ex){
-                throw new PluginLoadException ($"An IO Exception occurred reading the file: {pluginsFile.Name}");
+                throw new PluginLoadException ($"An IO Exception occurred reading the file: {pluginsFile.Name}", ex);
             }
 
             int num = 0;
@@ -127,6 +128,24 @@ namespace FaithEngage.Core.PluginManagers
         public void Uninstall(Guid pluginId)
 		{
             _mgr.UninstallPlugin (pluginId);
+		}
+
+		public void RegisterAllPluginDependencies(IRegistrationService regService)
+		{
+			var plugins = _mgr.GetAllPlugins();
+			foreach (var plug in plugins)
+			{
+				plug.Value.RegisterDependencies(regService);
+			}
+		}
+
+		public void InitializeAllPlugins(IAppFactory appFactory)
+		{
+			var plugins = _mgr.GetAllPlugins();
+			foreach (var plug in plugins)
+			{
+				plug.Value.Initialize(appFactory);
+			}
 		}
 	}
 }

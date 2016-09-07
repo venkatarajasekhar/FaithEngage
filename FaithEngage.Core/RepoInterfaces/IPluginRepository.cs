@@ -11,7 +11,8 @@ namespace FaithEngage.Core.RepoInterfaces
 		void Update(PluginDTO plugin);
         void Delete(Guid pluginId);
         PluginDTO GetById(Guid pluginId);
-        List<PluginDTO> GetAll();
+		List<PluginDTO> GetAll(PluginTypeEnum pluginType);
+		List<PluginDTO> GetAll();
     }
 }
 

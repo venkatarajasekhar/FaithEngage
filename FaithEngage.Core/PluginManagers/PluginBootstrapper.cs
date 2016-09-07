@@ -16,7 +16,7 @@ namespace FaithEngage.Core.PluginManagers
 	{
         public BootPriority BootPriority {
             get {
-                return BootPriority.Normal;
+				return BootPriority.Normal;
             }
         }
 
@@ -35,6 +35,7 @@ namespace FaithEngage.Core.PluginManagers
             rs.Register<IPluginManager, PluginManager> (LifeCycle.Singleton);
 			rs.Register<IConverterFactory<Plugin, PluginDTO>, PluginDtoFactory>(LifeCycle.Transient);
             rs.Register<IPluginRepoManager, PluginRepoManager> (LifeCycle.Singleton);
+			rs.Register<IConverterFactory<PluginDTO,Plugin>, OtherPluginFactory>(LifeCycle.Transient);
 		}
 	}
 }

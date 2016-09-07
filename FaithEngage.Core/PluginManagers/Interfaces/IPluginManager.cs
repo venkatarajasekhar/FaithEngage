@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO.Compression;
+using FaithEngage.Core.Containers;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.PluginManagers.Interfaces
 {
@@ -7,6 +9,8 @@ namespace FaithEngage.Core.PluginManagers.Interfaces
     {
 		int Install(ZipArchive zipFile);
 		void Uninstall(Guid pluginId);
+		void RegisterAllPluginDependencies(IRegistrationService regService);
+		void InitializeAllPlugins(IAppFactory appFactory);
     }
 }
 

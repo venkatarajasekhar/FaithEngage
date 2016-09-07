@@ -25,7 +25,7 @@ namespace FaithEngage.Core.RepoManagers
 		{
             List<PluginDTO> dtos;
             try {
-                dtos = _repo.GetAll();
+				dtos = _repo.GetAll(PluginTypeEnum.DisplayUnit);
             } catch (Exception ex) {
                 throw new RepositoryException ("There was a problem obtaining plugins from the repository.", ex);
             }

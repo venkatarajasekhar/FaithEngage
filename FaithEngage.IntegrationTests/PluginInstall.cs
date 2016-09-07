@@ -47,7 +47,12 @@ namespace FaithEngage.IntegrationTests
                 throw new NotImplementedException ();
             }
 
-            public List<PluginDTO> GetAll ()
+			public List<PluginDTO> GetAll()
+			{
+				throw new NotImplementedException();
+			}
+
+			public List<PluginDTO> GetAll (PluginTypeEnum pluginType)
             {
                 throw new NotImplementedException ();
             }
