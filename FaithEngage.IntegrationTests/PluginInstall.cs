@@ -124,7 +124,7 @@ namespace FaithEngage.IntegrationTests
         [Test]
         public void InstallPlugin_StubbedRepoAndConfig()
         {
-            _mgr = _container.Resolve<PluginManager> ();
+            _mgr = _container.Resolve<IPluginManager> ();
 			var tempDirs = new DirectoryInfo("TEMP").EnumerateDirectories();
 			tempDirs.ToList().ForEach(p => p.Delete(true));
             int numInstalled;

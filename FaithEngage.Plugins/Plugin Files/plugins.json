@@ -7,7 +7,9 @@
             "Files" : [
                 "FaithEngage.Plugins.dll",
                 "System.Web.Razor.dll",
-                "RazorEngine.dll"
+                "RazorEngine.dll",
+                "System.Web.Razor.xml",
+                "RazorEngine.xml"
             ]
         },
         {

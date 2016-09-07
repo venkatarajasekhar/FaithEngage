@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="BootstrappersTests.cs" />
     <Compile Include="PluginInstall.cs" />
+    <Compile Include="FaithEngagePluginsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -80,6 +81,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestingFiles\pluginZip\plugins.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestingFiles\FaithEngage.Plugins.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

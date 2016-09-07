@@ -51,11 +51,11 @@
     <Folder Include="DisplayUnits\BibleUnit\" />
     <Folder Include="DisplayUnits\ImageUnit\" />
     <Folder Include="DisplayUnits\TextUnit\" />
-    <Folder Include="DisplayUnits\Abstracts\" />
     <Folder Include="RazorTemplating\" />
     <Folder Include="Plugin Files\" />
     <Folder Include="Plugin Files\DisplayUnits\" />
     <Folder Include="Plugin Files\DisplayUnits\TextUnit\" />
+    <Folder Include="Plugin Files\RazorTemplating\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FaithEngage.Core\FaithEngage.Core.csproj">
@@ -80,6 +80,24 @@
     </Content>
     <Content Include="Plugin Files\DisplayUnits\TextUnit\TextUnitEditorTemplate.cshtml">
       <LastGenOutput>TextUnitEditorTemplate.cs</LastGenOutput>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\RazorTemplating\RazorEngine.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\RazorTemplating\RazorEngine.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\RazorTemplating\System.Web.Razor.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\RazorTemplating\System.Web.Razor.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\FaithEngage.Plugins.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="plugins.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
