@@ -8,6 +8,7 @@ using FakeItEasy;
 using NUnit.Framework;
 using System.Linq;
 using FaithEngage.Core.PluginManagers;
+using FaithEngage.Core.PluginManagers.Interfaces;
 
 namespace FaithEngage.Core.RepoManagers
 {
@@ -17,6 +18,7 @@ namespace FaithEngage.Core.RepoManagers
 		private IPluginRepository _repo;
 		private IDisplayUnitPluginFactory _fac;
 		private IConverterFactory<Plugin,PluginDTO> _dtoFac;
+		private IPluginRepoManager _pRepoMgr;
 		private const string VALID_STRING = "VALID";
 		private const string INVALID_STRING = "INVALID";
 		private Guid VALID_GUID = Guid.NewGuid();
@@ -30,7 +32,8 @@ namespace FaithEngage.Core.RepoManagers
 			_fac = A.Fake<IDisplayUnitPluginFactory>();
 			_dtoFac = A.Fake<IConverterFactory<Plugin,PluginDTO>>();
 			_plgn = A.Fake<DisplayUnitPlugin>();
-            mgr = new DisplayUnitPluginRepoManager (_fac, _repo, _dtoFac);
+			_pRepoMgr = A.Fake<IPluginRepoManager>();
+			mgr = new DisplayUnitPluginRepoManager (_fac, _pRepoMgr, _repo);
 		}
 
         [Test]

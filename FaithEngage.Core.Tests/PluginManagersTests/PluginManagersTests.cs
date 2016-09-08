@@ -11,6 +11,7 @@ using FaithEngage.Core.Factories;
 using System.Collections.Generic;
 using FaithEngage.Core.Tests;
 using FaithEngage.Core.Exceptions;
+using FaithEngage.Core.Containers;
 
 namespace FaithEngage.Core.PluginManagers
 {
@@ -21,6 +22,7 @@ namespace FaithEngage.Core.PluginManagers
 		private IPluginRepoManager _mgr;
 		private PluginManager _pluginMgr;
         private IAppFactory _fac;
+		private IRegistrationService _regService;
 
 		[SetUp]
 		public void init()
@@ -28,7 +30,8 @@ namespace FaithEngage.Core.PluginManagers
 			_fileMgr = A.Fake<IPluginFileManager>();
 			_mgr = A.Fake<IPluginRepoManager>();
             _fac = A.Fake<IAppFactory> ();
-            _pluginMgr = new PluginManager(_fileMgr, _mgr, _fac);
+			_regService = A.Fake<IRegistrationService>();
+			_pluginMgr = new PluginManager(_fileMgr, _mgr, _fac,_regService);
 		}
 
         [Test]

@@ -26,17 +26,17 @@ namespace FaithEngage.IntegrationTests
 				return plugins;
 			}
 
+			public IDictionary<Guid, Plugin> GetAllPlugins()
+			{
+				throw new NotImplementedException();
+			}
+
 			public DisplayUnitPlugin GetById(Guid id)
 			{
 				throw new NotImplementedException();
 			}
 
-            public void RegisterNew (Plugin plugin, Guid pluginId)
-            {
-                throw new NotImplementedException ();
-            }
-
-            public Guid RegisterNew(DisplayUnitPlugin plugin)
+			public void RegisterNew(Plugin plugin, Guid pluginId)
 			{
 				throw new NotImplementedException();
 			}
@@ -46,12 +46,7 @@ namespace FaithEngage.IntegrationTests
 				throw new NotImplementedException();
 			}
 
-            public void UpdatePlugin (Plugin plugin)
-            {
-                throw new NotImplementedException ();
-            }
-
-            public void UpdatePlugin(DisplayUnitPlugin plugin)
+			public void UpdatePlugin(Plugin plugin)
 			{
 				throw new NotImplementedException();
 			}

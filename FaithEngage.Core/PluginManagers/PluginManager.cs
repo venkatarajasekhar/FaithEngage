@@ -20,11 +20,17 @@ namespace FaithEngage.Core.PluginManagers
 		private readonly IPluginFileManager _fileMgr;
         private readonly IPluginRepoManager _mgr;
         private readonly IAppFactory _factory;
-		public PluginManager (IPluginFileManager fileManager, IPluginRepoManager mgr, IAppFactory factory)
+		private readonly IRegistrationService _regService;
+		public PluginManager(IPluginFileManager fileManager,
+							  IPluginRepoManager mgr,
+							  IAppFactory factory,
+							  IRegistrationService regService
+		                     )
 		{
 			_fileMgr = fileManager;
             _mgr = mgr;
             _factory = factory;
+			_regService = regService;
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
@@ -133,18 +139,20 @@ namespace FaithEngage.Core.PluginManagers
 		public void RegisterAllPluginDependencies(IRegistrationService regService)
 		{
 			var plugins = _mgr.GetAllPlugins();
-			foreach (var plug in plugins)
-			{
-				plug.Value.RegisterDependencies(regService);
-			}
+
 		}
 
-		public void InitializeAllPlugins(IAppFactory appFactory)
+		public void InitializeAllPlugins()
 		{
 			var plugins = _mgr.GetAllPlugins();
 			foreach (var plug in plugins)
 			{
-				plug.Value.Initialize(appFactory);
+				plug.Value.RegisterDependencies(_regService);
+			}
+
+			foreach (var plug in plugins)
+			{
+				plug.Value.Initialize(_factory);
 			}
 		}
 	}

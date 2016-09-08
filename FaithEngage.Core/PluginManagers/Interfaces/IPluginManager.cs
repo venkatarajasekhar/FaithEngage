@@ -9,8 +9,7 @@ namespace FaithEngage.Core.PluginManagers.Interfaces
     {
 		int Install(ZipArchive zipFile);
 		void Uninstall(Guid pluginId);
-		void RegisterAllPluginDependencies(IRegistrationService regService);
-		void InitializeAllPlugins(IAppFactory appFactory);
+		void InitializeAllPlugins();
     }
 }
 
