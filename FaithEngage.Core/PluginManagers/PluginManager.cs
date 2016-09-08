@@ -136,12 +136,6 @@ namespace FaithEngage.Core.PluginManagers
             _mgr.UninstallPlugin (pluginId);
 		}
 
-		public void RegisterAllPluginDependencies(IRegistrationService regService)
-		{
-			var plugins = _mgr.GetAllPlugins();
-
-		}
-
 		public void InitializeAllPlugins()
 		{
 			var plugins = _mgr.GetAllPlugins();

@@ -28,9 +28,6 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
             var pluginBooter = new DisplayUnitPluginBootstrapper ();
             pluginBooter.Execute (appFac);
 
-
-			A.CallTo (() => plugin.RegisterDependencies (regService)).MustHaveHappened();
-			A.CallTo (() => plugin.Initialize (appFac)).MustHaveHappened();
             A.CallTo (() => pinContainer.Register (plugin)).MustHaveHappened();
         }
     }

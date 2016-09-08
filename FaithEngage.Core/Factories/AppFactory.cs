@@ -10,6 +10,7 @@ using FaithEngage.Core.TemplatingService;
 using FaithEngage.Core.PluginManagers.Files.Interfaces;
 using FaithEngage.Core.RepoInterfaces;
 using FaithEngage.Core.Exceptions;
+using FaithEngage.Core.PluginManagers.Interfaces;
 
 namespace FaithEngage.Core.Factories
 {
@@ -90,7 +91,15 @@ namespace FaithEngage.Core.Factories
             }
         }
 
-        public T GetOther<T>()
+		public IPluginManager PluginManager
+		{
+			get
+			{
+				return _container.Resolve<IPluginManager>();
+			}
+		}
+
+		public T GetOther<T>()
 		{
 			if (typeof(T) == typeof(IContainer)) throw new FactoryException("Accessing the IContainer from the AppFactory is not permitted.");
 			return _container.Resolve<T>();

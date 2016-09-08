@@ -16,12 +16,13 @@ namespace FaithEngage.Core.PluginManagers
 	{
         public BootPriority BootPriority {
             get {
-				return BootPriority.Normal;
+				return BootPriority.First;
             }
         }
 
-        public void Execute(IAppFactory container)
+        public void Execute(IAppFactory factory)
 		{
+			factory.PluginManager.InitializeAllPlugins();
 		}
 
         public void LoadBootstrappers (IBootList bootstrappers)

@@ -23,8 +23,6 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
             var repoManager = factory.DisplayUnitsPluginRepo;
             var regService = factory.RegistrationService;
 			foreach (var plugin in repoManager.GetAll()) {
-				plugin.RegisterDependencies (regService);
-                plugin.Initialize (factory);
                 pluginContainer.Register (plugin);
 			}
 		}

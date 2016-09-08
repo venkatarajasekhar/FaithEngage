@@ -115,6 +115,12 @@ namespace FaithEngage.Core.PluginManagers
 
             A.CallTo (() => _mgr.UninstallPlugin (key)).MustHaveHappened();
         }
+
+		[Test]
+		public void InitializeAllPlugins_RegistersAndInitializes()
+		{
+			Assert.Ignore("No test yet");
+		}
     }
 }
 
