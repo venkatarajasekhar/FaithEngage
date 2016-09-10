@@ -37,8 +37,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Test.cs" />
-    <Compile Include="DisplayUnitsTests\TextUnitTests\TextUnitTests.cs" />
     <Compile Include="DisplayUnitsTests\TextUnitTests\TextUnitPluginTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -47,11 +45,12 @@
     <None Include="BibleUnitTests.cs" />
     <None Include="FileUnitTests.cs" />
     <None Include="ImageUnitTests.cs" />
-    <None Include="TextUnitTests.cs" />
+    <None Include="DisplayUnitsTests\TextUnitTests\TextUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DisplayUnitsTests\" />
     <Folder Include="DisplayUnitsTests\TextUnitTests\" />
+    <Folder Include="Plugin Files\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FaithEngage.Plugins\FaithEngage.Plugins.csproj">
@@ -62,5 +61,33 @@
       <Project>{F94B6862-B7CC-4507-BC82-9093F97CDEC2}</Project>
       <Name>FaithEngage.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Plugin Files\DisplayUnits\TextUnit\TextUnitCardTemplate.cshtml">
+      <LastGenOutput>TextUnitCardTemplate.cs</LastGenOutput>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\DisplayUnits\TextUnit\TextUnitEditorTemplate.cshtml">
+      <LastGenOutput>TextUnitEditorTemplate.cs</LastGenOutput>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\FaithEngage.Plugins.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\plugins.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\RazorTemplating\RazorEngine.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\RazorTemplating\RazorEngine.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\RazorTemplating\System.Web.Razor.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\RazorTemplating\System.Web.Razor.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

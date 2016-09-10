@@ -32,6 +32,7 @@ namespace FaithEngage.Core.PluginManagers
             _factory = factory;
 			_regService = regService;
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            AppDomain.CurrentDomain.AssemblyResolve += pluginAssembly_Resolve;
         }
 
 		public int Install(ZipArchive zipFile)

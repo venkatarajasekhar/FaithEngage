@@ -1,31 +1,64 @@
 ﻿using NUnit.Framework;
-using FaithEngage.Plugins.DisplayUnits.TextUnitPlugin;
-using FaithEngage.Core.DisplayUnitEditor;
+using FaithEngage.Plugins.DisplayUnits.TextUnit;
+using FaithEngage.Core.Factories;
+using FakeItEasy;
+using FaithEngage.Core.TemplatingService;
+using FaithEngage.Core.PluginManagers.Files.Interfaces;
+using System.IO;
+using System.Linq;
+using FaithEngage.Core.PluginManagers.Files;
+using System;
 
 namespace FaithEngage.Plugins.Tests
 {
     [TestFixture]
     public class TextUnitPluginTests
     {
+        private IAppFactory _appFac;
+
+        [SetUp]
+        public void Init()
+        {
+            _appFac = A.Fake<IAppFactory> ();
+        }
+
         [Test]
         public void Ctor_InitializesAllProperties()
         {
             var tup = new TextUnitPlugin ();
-            var def = tup.EditorDefinition;
-            var secDef = def.CardSectionDefinitions [0];
-            Assert.That (tup.PluginName == "Text Unit");
-            Assert.That (tup.PluginVersion, Is.Not.Null);
-            Assert.That (tup.DisplayUnitType, Is.EqualTo (typeof(TextUnit)));
-            Assert.That (tup.PluginId, Is.Not.Null);
-            Assert.That (def.EnforceSectionOrder, Is.False);
-            Assert.That (def.CardSectionDefinitions.Length == 1);
-            Assert.That (secDef.EditorFieldType == EditorFieldType.HtmlTextArea);
-            Assert.That (secDef.Limit, Is.EqualTo(1));
-            Assert.That (secDef.Limit, Is.EqualTo (1));
-            Assert.That (secDef.HasLimit);
-            Assert.That (secDef.HasMinimum);
-            //Assert.That (secDef.Action, Is.Null);
+
+            Assert.That (tup.GetAttributeNames ().Count == 1);
+            Assert.That (tup.GetAttributeNames () [0] == "Text");
+            Assert.That (tup.DisplayUnitType == typeof (TextUnit));
+            Assert.That (tup.EditorDefinition, Is.InstanceOf<TextUnitEditorDefinition> ());
         }
+
+        [Test]
+        public void Initialize_RegistersTemplates()
+        {
+            var tup = new TextUnitPlugin ();
+
+            var tempService = A.Fake<ITemplatingService> ();
+            var fileMgr = A.Fake<IPluginFileManager> ();
+
+            A.CallTo (() => _appFac.TemplatingService).Returns (tempService);
+            A.CallTo (() => _appFac.PluginFileManager).Returns (fileMgr);
+
+            var plugDir = new DirectoryInfo (Path.Combine ("Plugin Files", "DisplayUnits", "TextUnit"));
+            var files = plugDir.EnumerateFiles ();
+            var plugId = Guid.NewGuid ();
+            var plugFiles = 
+                files
+                    .Select (p => new PluginFileInfo (plugId, p))
+                    .ToDictionary (p => p.FileId, p=> p);
+            A.CallTo (() => fileMgr.GetFilesForPlugin (A<Guid>.Ignored)).Returns (plugFiles);
+            tup.PluginId = Guid.NewGuid ();
+            tup.Initialize (_appFac);
+
+            A.CallTo (() => tempService.RegisterTemplate (A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+        }
+
+
     }
 }
 

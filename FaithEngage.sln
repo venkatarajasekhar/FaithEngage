@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.IntegrationTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.Plugins", "FaithEngage.Plugins\FaithEngage.Plugins.csproj", "{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}"
 EndProject
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "FaithEngage.Plugins.Tests", "FaithEngage.Plugins.Tests\FaithEngage.Plugins.Tests.csproj", "{B43C9B80-1DF9-4A16-ACC3-A108807B2BB9}"
+Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "FaithEngage.Plugins.Tests", "FaithEngage.Plugins.Tests\FaithEngage.Plugins.Tests.csproj", "{FDD0D600-580D-4263-9DF5-FA3B631B060C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,9 +69,5 @@ Global
 		{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B43C9B80-1DF9-4A16-ACC3-A108807B2BB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B43C9B80-1DF9-4A16-ACC3-A108807B2BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B43C9B80-1DF9-4A16-ACC3-A108807B2BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B43C9B80-1DF9-4A16-ACC3-A108807B2BB9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

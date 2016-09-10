@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using System.Collections.Generic;
-using FaithEngage.Plugins.DisplayUnits.TextUnitPlugin;
 using FaithEngage.Core.Exceptions;
 using FakeItEasy;
 using FaithEngage.Core.Cards;

@@ -60,7 +60,11 @@ namespace FaithEngage.Plugins.DisplayUnits.TextUnit
                 template = reader.ReadToEnd ();
             }
             tempService.RegisterTemplate (template, "TextUnitEditor");
-            var cardTemplate = files.FirstOrDefault (p => p.Value.FileInfo.Name == "TextUnitCard.cshtml").Value.FileInfo;
+            var cardTemplate = 
+                files
+                    .FirstOrDefault (p => p.Value.FileInfo.Name == "TextUnitCardTemplate.cshtml")
+                    .Value
+                    .FileInfo;
             string card;
             using (var reader = cardTemplate.OpenText())
             {
