@@ -140,7 +140,6 @@ namespace FaithEngage.IntegrationTests
 		[Test]
 		public void InstallFaithEngagePlugins_StubbedRepoAndConfig()
 		{
-
 			var mgr = _container.Resolve<IPluginManager>();
 			int numInstalled;
 			using (var zipFile = ZipFile.OpenRead(Path.Combine("TestingFiles", "FaithEngage.Plugins.zip")))
@@ -152,10 +151,10 @@ namespace FaithEngage.IntegrationTests
 			var pluginContainer = factory.GetOther<IDisplayUnitPluginContainer>();
 			var repoManager = factory.DisplayUnitsPluginRepo;
 			var regService = factory.RegistrationService;
+            mgr.InitializeAllPlugins ();
+
 			foreach (var plugin in repoManager.GetAll())
 			{
-				plugin.RegisterDependencies(regService);
-				plugin.Initialize(factory);
 				pluginContainer.Register(plugin);
 			}
 		}

@@ -16,6 +16,7 @@ namespace FaithEngage.Core.PluginManagers.Factories
 			var ctor = type.GetConstructor(new Type[] { });
 			//add null check
 			var plugin = (Plugin) ctor.Invoke(new Object[] { });
+            plugin.PluginId = source.Id;
 			return plugin;
 		}
 	}

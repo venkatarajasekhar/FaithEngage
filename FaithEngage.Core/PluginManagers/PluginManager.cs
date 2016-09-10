@@ -131,6 +131,16 @@ namespace FaithEngage.Core.PluginManagers
             return foundAssembly;
         }
 
+        private Assembly pluginAssembly_Resolve(object sender, ResolveEventArgs args)
+        {
+            var baseDir = Path.GetDirectoryName (args.RequestingAssembly.Location);
+            var name = args.Name.Split (',') [0];
+            var foundFile = Directory.EnumerateFiles (baseDir, "*", SearchOption.TopDirectoryOnly).FirstOrDefault (p => p.Contains (name));
+            if (foundFile == null) return null;
+            var assembly = Assembly.LoadFrom (foundFile);
+            return assembly;
+        }
+
         public void Uninstall(Guid pluginId)
 		{
             _mgr.UninstallPlugin (pluginId);
