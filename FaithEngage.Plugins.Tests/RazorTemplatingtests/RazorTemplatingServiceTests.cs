@@ -1,0 +1,49 @@
+﻿using System;
+using FaithEngage.Plugins.Tests;
+using NUnit.Framework;
+using FaithEngage.Plugins.Exceptions;
+namespace FaithEngage.Plugins.RazorTemplating
+{
+    public class RazorTemplatingServiceTests
+    {
+        [Test]
+        public void CompileHtmlFromTemplate_ValidTemplate_ValidObject_ReturnsString()
+        {
+            var template = @"<p>@Model.Text</p>";
+
+            var model = new { Text = "Hello" };
+
+            var tempService = new RazorTemplatingService ();
+
+            var html = tempService.CompileHtmlFromTemplate (template, "TestTemplate", model);
+
+            Assert.That (html == "<p>Hello</p>");
+        }
+
+        [Test]
+        public void CompileHtmlFromTemplate_InvalidTemplate_ValidObject_ThrowsTemplatingException()
+        {
+            string template = @"@Model.Text.bluga()";
+            var model = new { Text = "Hello" };
+            var tempService = new RazorTemplatingService ();
+            var e = TestHelpers.TryGetException(()=> tempService.CompileHtmlFromTemplate (template, "TestTemplate", model));
+
+            Assert.That (e, Is.InstanceOf<TemplatingException> ());
+        }
+
+        [Test]
+        public void RegisterTemplateAndCompileFromTemplateKey_ValidTemplate_ValidTemplateName_Registers()
+        {
+            var template = @"<p>@Model.Text</p>";
+            var tempService = new RazorTemplatingService ();
+            tempService.RegisterTemplate (template, "testTemplate");
+            var model = new { Text = "Hello" };
+            var html = tempService.CompileHtmlFromTemplateKey ("testTemplate", model);
+
+            Assert.That (html == "<p>Hello</p>");
+        }
+
+
+    }
+}
+
