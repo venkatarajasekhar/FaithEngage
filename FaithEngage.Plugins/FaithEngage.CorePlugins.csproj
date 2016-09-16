@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A2F8742B-964F-4162-AADA-F8A86DAC8EF4}</ProjectGuid>
+    <ProjectGuid>{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>FaithEngage.Plugins.Tests</RootNamespace>
-    <AssemblyName>FaithEngage.Plugins.Tests</AssemblyName>
+    <RootNamespace>FaithEngage.Plugins</RootNamespace>
+    <AssemblyName>FaithEngage.Plugins</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -20,6 +20,7 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -28,36 +29,56 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="FakeItEasy">
-      <HintPath>..\packages\FakeItEasy.2.2.0\lib\net40\FakeItEasy.dll</HintPath>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
+    <Reference Include="RazorEngine">
+      <HintPath>..\packages\RazorEngine.3.9.0\lib\net45\RazorEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RazorTemplating\RazorTemplatingService.cs" />
+    <Compile Include="RazorTemplating\RazorTemplatingPlugin.cs" />
+    <Compile Include="DisplayUnits\TextUnit\TextUnitPlugin.cs" />
+    <Compile Include="DisplayUnits\TextUnit\TextUnit.cs" />
+    <Compile Include="DisplayUnits\TextUnit\TextUnitEditorDefinition.cs" />
+    <Compile Include="Exceptions\TemplatingException.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="DisplayUnits\" />
+    <Folder Include="DisplayUnits\BibleUnit\" />
+    <Folder Include="DisplayUnits\TextUnit\" />
+    <Folder Include="RazorTemplating\" />
+    <Folder Include="Plugin Files\" />
+    <Folder Include="Plugin Files\DisplayUnits\" />
+    <Folder Include="Plugin Files\DisplayUnits\TextUnit\" />
+    <Folder Include="Plugin Files\RazorTemplating\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FaithEngage.Core\FaithEngage.Core.csproj">
       <Project>{F94B6862-B7CC-4507-BC82-9093F97CDEC2}</Project>
       <Name>FaithEngage.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FaithEngage.Plugins\FaithEngage.Plugins.csproj">
-      <Project>{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}</Project>
-      <Name>FaithEngage.CorePlugins</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DisplayUnitsTests\TextUnitTests\TextUnitPluginTests.cs" />
-    <Compile Include="RazorTemplatingtests\RazorTemplatingServiceTests.cs" />
-    <Compile Include="TestHelpers.cs" />
+    <None Include="DisplayUnits\BibleUnit\BibleUnit.cs" />
+    <None Include="DisplayUnits\BibleUnit\BibleUnitPlugin.cs" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Plugin Files\plugins.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Plugin Files\DisplayUnits\TextUnit\TextUnitCardTemplate.cshtml">
+      <LastGenOutput>TextUnitCardTemplate.cs</LastGenOutput>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Plugin Files\DisplayUnits\TextUnit\TextUnitEditorTemplate.cshtml">
+      <LastGenOutput>TextUnitEditorTemplate.cs</LastGenOutput>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Plugin Files\RazorTemplating\RazorEngine.dll">
@@ -75,12 +96,8 @@
     <Content Include="Plugin Files\FaithEngage.Plugins.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Plugin Files\plugins.json">
+    <Content Include="plugins.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RazorTemplatingtests\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

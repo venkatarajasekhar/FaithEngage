@@ -3,7 +3,7 @@ using FaithEngage.Core.DisplayUnitEditor;
 using FaithEngage.Core.TemplatingService;
 using System.Linq;
 
-namespace FaithEngage.Plugins.DisplayUnits.TextUnit
+namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
 {
     public class TextUnitEditorDefinition : IDisplayUnitEditorDefinition
     {

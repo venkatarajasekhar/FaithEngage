@@ -7,7 +7,7 @@ using FaithEngage.Core.PluginManagers.Files;
 using FaithEngage.Core.TemplatingService;
 using FaithEngage.Core.Cards.DefaultImplementations;
 
-namespace FaithEngage.Plugins.DisplayUnits.TextUnit
+namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
 {
     public class TextUnit : DisplayUnit
     {

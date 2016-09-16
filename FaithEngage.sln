@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.Facade.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.IntegrationTests", "FaithEngage.IntegrationTests\FaithEngage.IntegrationTests.csproj", "{8BB2671C-0B5D-4CA8-B2E6-0419C058C11B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.Plugins", "FaithEngage.Plugins\FaithEngage.Plugins.csproj", "{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.CorePlugins", "FaithEngage.Plugins\FaithEngage.CorePlugins.csproj", "{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.Plugins.Tests", "FaithEngage.Plugins.Tests\FaithEngage.Plugins.Tests.csproj", "{A2F8742B-964F-4162-AADA-F8A86DAC8EF4}"
 EndProject

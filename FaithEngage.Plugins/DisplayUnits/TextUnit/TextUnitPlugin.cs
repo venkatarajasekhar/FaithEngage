@@ -9,7 +9,7 @@ using System.IO;
 using FaithEngage.Core.PluginManagers.Files;
 using FaithEngage.Core.TemplatingService;
 
-namespace FaithEngage.Plugins.DisplayUnits.TextUnit
+namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
 {
     public class TextUnitPlugin : DisplayUnitPlugin
     {
