@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.IntegrationTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.CorePlugins", "FaithEngage.Plugins\FaithEngage.CorePlugins.csproj", "{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.Plugins.Tests", "FaithEngage.Plugins.Tests\FaithEngage.Plugins.Tests.csproj", "{A2F8742B-964F-4162-AADA-F8A86DAC8EF4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaithEngage.CorePlugins.Tests", "FaithEngage.Plugins.Tests\FaithEngage.CorePlugins.Tests.csproj", "{A2F8742B-964F-4162-AADA-F8A86DAC8EF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

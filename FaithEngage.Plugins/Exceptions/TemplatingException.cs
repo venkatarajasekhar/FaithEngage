@@ -1,5 +1,5 @@
 ﻿using System;
-namespace FaithEngage.Plugins.Exceptions
+namespace FaithEngage.CorePlugins.Exceptions
 {
     public class TemplatingException : Exception
     {

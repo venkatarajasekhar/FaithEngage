@@ -3,11 +3,11 @@ using FaithEngage.Core.Containers;
 using FaithEngage.Core.Factories;
 using FaithEngage.Core.PluginManagers;
 using FaithEngage.Core.TemplatingService;
-using FaithEngage.Plugins.RazorTemplating;
+using FaithEngage.CorePlugins.RazorTemplating;
 using System.Reflection;
 using System.Linq;
 
-namespace FaithEngage.Plugins
+namespace FaithEngage.CorePlugins.RazorTemplating
 {
 	public class RazorTemplatingPlugin : Plugin
 	{

@@ -1,8 +1,8 @@
 ﻿using System;
 using FaithEngage.Plugins.Tests;
 using NUnit.Framework;
-using FaithEngage.Plugins.Exceptions;
-namespace FaithEngage.Plugins.RazorTemplating
+using FaithEngage.CorePlugins.Exceptions;
+namespace FaithEngage.CorePlugins.RazorTemplating
 {
     public class RazorTemplatingServiceTests
     {

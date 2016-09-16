@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using FaithEngage.Plugins.DisplayUnits.TextUnit;
 using FaithEngage.Core.Factories;
 using FakeItEasy;
 using FaithEngage.Core.TemplatingService;
@@ -9,7 +8,7 @@ using System.Linq;
 using FaithEngage.Core.PluginManagers.Files;
 using System;
 
-namespace FaithEngage.Plugins.Tests
+namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
 {
     [TestFixture]
     public class TextUnitPluginTests

@@ -2,9 +2,9 @@
 using FaithEngage.Core.TemplatingService;
 using RazorEngine;
 using RazorEngine.Templating;
-using FaithEngage.Plugins.Exceptions;
+using FaithEngage.CorePlugins.Exceptions;
 
-namespace FaithEngage.Plugins.RazorTemplating
+namespace FaithEngage.CorePlugins.RazorTemplating
 {
 	public class RazorTemplatingService : ITemplatingService
 	{
