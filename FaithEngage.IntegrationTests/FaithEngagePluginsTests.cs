@@ -151,8 +151,8 @@ namespace FaithEngage.IntegrationTests
 			var pluginContainer = factory.GetOther<IDisplayUnitPluginContainer>();
 			var repoManager = factory.DisplayUnitsPluginRepo;
 			var regService = factory.RegistrationService;
-            mgr.InitializeAllPlugins ();
-
+            var e = TestHelpers.TryGetException (() => mgr.InitializeAllPlugins ());
+            Assert.That (e, Is.Null);
 			foreach (var plugin in repoManager.GetAll())
 			{
 				pluginContainer.Register(plugin);

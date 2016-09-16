@@ -143,7 +143,7 @@ namespace FaithEngage.Core.PluginManagers.Files
 
         public void StoreFilesForPlugin (IList<FileInfo> files, Guid pluginId, bool overWrite = false)
         {
-            var anchorDir = getCommonDir (files, 3);
+            var anchorDir = getCommonDir (files);
 
             foreach(var file in files)
             {
@@ -167,12 +167,14 @@ namespace FaithEngage.Core.PluginManagers.Files
             return Path.Combine (_factory.GetBasePluginPath (pluginId), relPath, file.Name);
         }
 
-        private DirectoryInfo getCommonDir(IList<FileInfo> files, int maxDepth)
+        private DirectoryInfo getCommonDir(IList<FileInfo> files)
         {
             string currentDir = Path.GetPathRoot (files [0].FullName);
-            if (files.All (p => p.FullName.Contains (_tempFolder.FullName))) {
-                return _tempFolder;
-            }
+
+            //var plugTempFolder = $"{_tempFolder.FullName}{Path.DirectorySeparatorChar}{pluginId}";
+            //if (files.All (p => p.FullName.Contains (_tempFolder.FullName))) {
+            //    return _tempFolder;
+            //}
 
             for (int i = 0; i < files.Count;i++)
             {

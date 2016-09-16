@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B7CC4797-099B-4871-94BD-30BDD5BEAD41}</ProjectGuid>
+    <ProjectGuid>{A2F8742B-964F-4162-AADA-F8A86DAC8EF4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>FaithEngage.Plugins.Tests</RootNamespace>
     <AssemblyName>FaithEngage.Plugins.Tests</AssemblyName>
@@ -20,7 +20,6 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -29,52 +28,34 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="FakeItEasy">
-      <HintPath>..\packages\FakeItEasy.1.25.3\lib\net40\FakeItEasy.dll</HintPath>
+      <HintPath>..\packages\FakeItEasy.2.2.0\lib\net40\FakeItEasy.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="DisplayUnitsTests\TextUnitTests\TextUnitPluginTests.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="BibleUnitTests.cs" />
-    <None Include="FileUnitTests.cs" />
-    <None Include="ImageUnitTests.cs" />
-    <None Include="DisplayUnitsTests\TextUnitTests\TextUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DisplayUnitsTests\" />
-    <Folder Include="DisplayUnitsTests\TextUnitTests\" />
-    <Folder Include="Plugin Files\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FaithEngage.Plugins\FaithEngage.Plugins.csproj">
-      <Project>{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}</Project>
-      <Name>FaithEngage.Plugins</Name>
-    </ProjectReference>
     <ProjectReference Include="..\FaithEngage.Core\FaithEngage.Core.csproj">
       <Project>{F94B6862-B7CC-4507-BC82-9093F97CDEC2}</Project>
       <Name>FaithEngage.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FaithEngage.Plugins\FaithEngage.Plugins.csproj">
+      <Project>{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}</Project>
+      <Name>FaithEngage.Plugins</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DisplayUnitsTests\TextUnitTests\TextUnitPluginTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Plugin Files\DisplayUnits\TextUnit\TextUnitCardTemplate.cshtml">
-      <LastGenOutput>TextUnitCardTemplate.cs</LastGenOutput>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Plugin Files\DisplayUnits\TextUnit\TextUnitEditorTemplate.cshtml">
-      <LastGenOutput>TextUnitEditorTemplate.cs</LastGenOutput>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Plugin Files\FaithEngage.Plugins.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Plugin Files\plugins.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Plugin Files\RazorTemplating\RazorEngine.dll">
@@ -89,5 +70,12 @@
     <Content Include="Plugin Files\RazorTemplating\System.Web.Razor.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Plugin Files\FaithEngage.Plugins.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plugin Files\plugins.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

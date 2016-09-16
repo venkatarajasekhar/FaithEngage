@@ -5,6 +5,9 @@ using FaithEngage.Core.DisplayUnitEditor;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.Factories;
 using System.Linq;
+using System.IO;
+using FaithEngage.Core.PluginManagers.Files;
+using FaithEngage.Core.TemplatingService;
 
 namespace FaithEngage.Plugins.DisplayUnits.TextUnit
 {
@@ -44,33 +47,39 @@ namespace FaithEngage.Plugins.DisplayUnits.TextUnit
             return _attributeNames;
         }
 
+        private ITemplatingService _tempService;
+        private IDictionary<Guid, PluginFileInfo> _files;
+
+
         public override void Initialize (IAppFactory FEFactory)
         {
             var fileMgr = FEFactory.PluginFileManager;
-            var tempService = FEFactory.TemplatingService;
-            var files = fileMgr.GetFilesForPlugin (this.PluginId.Value);
-            var editorTemplate = 
-                files
-                    .FirstOrDefault (p => p.Value.FileInfo.Name == "TextUnitEditorTemplate.cshtml")
-                    .Value
-                    .FileInfo;
-            string template;
-            using (var reader = editorTemplate.OpenText ())
-            {
-                template = reader.ReadToEnd ();
+            _tempService = FEFactory.TemplatingService;
+            _files = fileMgr.GetFilesForPlugin (this.PluginId.Value);
+            var editorTemplate = getTemplateString ("TextUnitEditorTemplate.cshtml");
+            registerTemplate ("TextUnitEditor", editorTemplate);
+            var cardTemplate = getTemplateString ("TextUnitCardTemplate.cshtml");
+            registerTemplate ("TextUnitCard", cardTemplate);
+        }
+
+        private string getTemplateString(string fileName){
+            var template = _files.FirstOrDefault (p => p.Value.FileInfo.Name == fileName);
+            FileInfo obtainedFile = null;
+            if (template.Value != null) return null;
+            obtainedFile = template.Value.FileInfo;
+            obtainedFile.Refresh ();
+            if (!obtainedFile.Exists) return null;
+            string templateString = null;
+            using (var reader = obtainedFile.OpenText ()) {
+                templateString = reader.ReadToEnd ();
             }
-            tempService.RegisterTemplate (template, "TextUnitEditor");
-            var cardTemplate = 
-                files
-                    .FirstOrDefault (p => p.Value.FileInfo.Name == "TextUnitCardTemplate.cshtml")
-                    .Value
-                    .FileInfo;
-            string card;
-            using (var reader = cardTemplate.OpenText())
-            {
-                card = reader.ReadToEnd ();
-            }
-            tempService.RegisterTemplate (card, "TextUnitCard");
+            return templateString;
+        }
+
+        private void registerTemplate(string templateName, string template)
+        {
+            if (!string.IsNullOrWhiteSpace (template)) return;
+            _tempService.RegisterTemplate (template, templateName);
         }
 
         public override void Install (IAppFactory FEFactory)

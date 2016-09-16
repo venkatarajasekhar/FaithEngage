@@ -41,6 +41,7 @@
     <Compile Include="BootstrappersTests.cs" />
     <Compile Include="PluginInstall.cs" />
     <Compile Include="FaithEngagePluginsTests.cs" />
+    <Compile Include="TestHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

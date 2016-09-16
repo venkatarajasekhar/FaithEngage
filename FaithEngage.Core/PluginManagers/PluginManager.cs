@@ -136,7 +136,8 @@ namespace FaithEngage.Core.PluginManagers
         {
             var baseDir = Path.GetDirectoryName (args.RequestingAssembly.Location);
             var name = args.Name.Split (',') [0];
-            var foundFile = Directory.EnumerateFiles (baseDir, "*", SearchOption.TopDirectoryOnly).FirstOrDefault (p => p.Contains (name));
+            var baseDirFiles = Directory.EnumerateFiles (baseDir, "*", SearchOption.AllDirectories).ToList ();
+            var foundFile = baseDirFiles.FirstOrDefault (p => p.Contains (name + ".dll"));
             if (foundFile == null) return null;
             var assembly = Assembly.LoadFrom (foundFile);
             return assembly;
@@ -152,12 +153,21 @@ namespace FaithEngage.Core.PluginManagers
 			var plugins = _mgr.GetAllPlugins();
 			foreach (var plug in plugins)
 			{
-				plug.Value.RegisterDependencies(_regService);
+				try {
+                    plug.Value.RegisterDependencies (_regService);
+                } catch (Exception ex) {
+                    throw new PluginDependencyRegistrationException ($"There was a problem registering dependencies on the plugin: {plug.Value.PluginName}.", ex);
+                }
 			}
 
 			foreach (var plug in plugins)
 			{
-				plug.Value.Initialize(_factory);
+				try {
+                    plug.Value.Initialize (_factory);
+                } catch (Exception ex) {
+                    throw new PluginInitializationException ($"There was a problem initializing the plugin: {plug.Value.PluginName}.", ex);
+                }
+
 			}
 		}
 	}

@@ -44,7 +44,7 @@ namespace FaithEngage.Plugins.Tests
             A.CallTo (() => _appFac.TemplatingService).Returns (tempService);
             A.CallTo (() => _appFac.PluginFileManager).Returns (fileMgr);
 
-            var plugDir = new DirectoryInfo (Path.Combine ("Plugin Files", "DisplayUnits", "TextUnit"));
+            var plugDir = new DirectoryInfo (Path.Combine (AppDomain.CurrentDomain.BaseDirectory,"Plugin Files", "DisplayUnits", "TextUnit"));
             var files = plugDir.EnumerateFiles ();
             var plugId = Guid.NewGuid ();
             var plugFiles = 

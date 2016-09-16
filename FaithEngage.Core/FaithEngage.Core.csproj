@@ -179,6 +179,8 @@
     <Compile Include="PluginManagers\PluginPackage.cs" />
     <Compile Include="Exceptions\PluginLoadException.cs" />
     <Compile Include="PluginManagers\Factories\PluginFactory.cs" />
+    <Compile Include="Exceptions\PluginDependencyRegistrationException.cs" />
+    <Compile Include="Exceptions\PluginInitializationException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
