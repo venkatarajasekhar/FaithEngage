@@ -78,6 +78,7 @@ namespace FaithEngage.Plugins.DisplayUnits.TextUnit
 
         private void registerTemplate(string templateName, string template)
         {
+            Console.WriteLine()
             if (!string.IsNullOrWhiteSpace (template)) return;
             _tempService.RegisterTemplate (template, templateName);
         }
