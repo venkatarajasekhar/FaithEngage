@@ -5,12 +5,28 @@ using FaithEngage.Core.Factories;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using FaithEngage.CorePlugins.DisplayUnits.TextUnit;
 
 namespace FaithEngage.CorePlugins.DisplayUnits
 {
 	public class DisplayUnitsBootstrapper : IBootstrapper
 	{
-		public BootPriority BootPriority
+		protected class templateDef
+        {
+            public string fname
+            {
+                get;
+                set;
+            }
+
+            public string name
+            {
+                get;
+                set;
+            }
+        }
+
+        public BootPriority BootPriority
 		{
 			get
 			{
@@ -20,20 +36,16 @@ namespace FaithEngage.CorePlugins.DisplayUnits
 
 		public void Execute(IAppFactory factory)
 		{
-			registerTemplates(factory);
+			
 		}
 
-		private void registerTemplates(IAppFactory factory)
+        protected void registerTemplates(IAppFactory factory, templateDef[] filesNeeded)
 		{
 			var tempService = factory.TemplatingService;
 			var curretDir = AppDomain.CurrentDomain.BaseDirectory;
 			var dir = new DirectoryInfo(Path.Combine(curretDir, "Plugin Files"));
 			var files = dir.EnumerateFiles("*", SearchOption.AllDirectories);
-			var filesNeeded = new[]
-			{
-				new{fname = "TextUnitEditorTemplate.cshtml", name = "TextUnitEditor"},
-				new{fname = "TextUnitCardTemplate.cshtml", name="TextUnitCard" }
-			};
+			
 			var filesObtained =
 				from f in files
 				from fn in filesNeeded
@@ -59,7 +71,7 @@ namespace FaithEngage.CorePlugins.DisplayUnits
 
 		}
 
-		private string getTemplateString(FileInfo file)
+        protected string getTemplateString(FileInfo file)
 		{
 			string templateString = null;
 			using (var reader = file.OpenText())
@@ -71,6 +83,7 @@ namespace FaithEngage.CorePlugins.DisplayUnits
 
 		public void LoadBootstrappers(IBootList bootstrappers)
 		{
+            bootstrappers.Load<TextUnitBootstrapper>();
 		}
 
 		public void RegisterDependencies(IRegistrationService regService)
