@@ -48,10 +48,6 @@
       <Project>{F94B6862-B7CC-4507-BC82-9093F97CDEC2}</Project>
       <Name>FaithEngage.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FaithEngage.Plugins\FaithEngage.CorePlugins.csproj">
-      <Project>{EFA9E5D5-8965-4138-9CA8-631CD8D389F6}</Project>
-      <Name>FaithEngage.CorePlugins</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
