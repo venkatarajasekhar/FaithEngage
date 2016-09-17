@@ -1,5 +1,5 @@
 ﻿using System;
-using FaithEngage.Core;
+using FaithEngage.CorePlugins;
 using FaithEngage.Core.Bootstrappers;
 using FaithEngage.Core.Containers;
 using FaithEngage.Facade.Interfaces;
@@ -15,6 +15,7 @@ namespace FaithEngage.Facade
                 if(_bootlist == null){
                     _bootlist = new BootList (this.Container);
                     _bootlist.Load<Bootloader> ();
+                    _bootlist.Load<CorePluginsBootstrapper> ();
                 }
                 return _bootlist;
             }
