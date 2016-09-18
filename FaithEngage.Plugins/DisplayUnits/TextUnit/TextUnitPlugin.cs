@@ -53,7 +53,10 @@ namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
 
         public override void Initialize (IAppFactory FEFactory)
         {
-            var allFiles = GetFiles().Where(p =>
+            var fileMgr = FEFactory.PluginFileManager;
+            var files = fileMgr.GetFilesForPlugin(this.PluginId.Value).Select(p => p.Value.FileInfo);
+
+            var allFiles = files.Where(p =>
             {
                 p.Refresh();
                 if (p.Exists) return true;

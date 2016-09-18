@@ -68,6 +68,16 @@ namespace FaithEngage.Core.RepoManagers
 		{
 			_pRepoMgr.UpdatePlugin(plugin);
 		}
-	}
+
+        bool IPluginRepoManager.CheckRegistered (Guid pluginId)
+        {
+            return _pRepoMgr.CheckRegistered (pluginId);
+        }
+
+        bool IPluginRepoManager.CheckRegistered<TPlugin> ()
+        {
+            return _pRepoMgr.CheckRegistered<TPlugin> ();
+        }
+    }
 }
 

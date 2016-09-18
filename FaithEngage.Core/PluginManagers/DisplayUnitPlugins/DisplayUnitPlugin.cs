@@ -50,7 +50,8 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
         protected void registerTemplates (IAppFactory factory, templateDef [] filesNeeded)
         {
             var tempService = factory.TemplatingService;
-            var files = this.GetFiles ();
+            var fileMgr = factory.PluginFileManager;
+            var files = fileMgr.GetFilesForPlugin (this.PluginId.Value).Select (p => p.Value.FileInfo);
 
             var filesObtained =
                 from f in files
