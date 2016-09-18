@@ -7,7 +7,7 @@ namespace FaithEngage.Core.Tests
 		[Test]
 		public void Execute_InitializesPlugins()
 		{
-			Assert.Ignore();
+            Assert.Inconclusive ("No Test yet");
 		}
 	}
 }

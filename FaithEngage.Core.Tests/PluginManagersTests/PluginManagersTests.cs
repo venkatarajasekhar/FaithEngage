@@ -108,8 +108,39 @@ namespace FaithEngage.Core.PluginManagers
         }
 
         [Test]
+        public void Install_HasFiles_StoresRegistersAndInstalls()
+        {
+            Assert.Inconclusive ("No test yet");
+        }
+
+        [Test]
+        public void Install_HasNoFiles_RegistersAndInstalls ()
+        {
+            Assert.Inconclusive ("No test yet");
+        }
+
+        [Test]
+        public void Install_HasFiles_FileSystemException_ThrowsPluginLoadException ()
+        {
+            Assert.Inconclusive ("No test yet");
+        }
+
+        [Test]
+        public void Install_RepoException_ThrowsPluginLoadException ()
+        {
+            Assert.Inconclusive ("No test yet");
+        }
+
+        [Test]
+        public void Install_ExceptionFromPluginInstall_ThrowsPluginLoadException ()
+        {
+            Assert.Inconclusive ("No test yet");
+        }
+
+        [Test]
         public void Uninstall_CallsUninstall()
         {
+            Assert.Inconclusive ("Needs additional testing.");
             var key = Guid.NewGuid ();
             _pluginMgr.Uninstall(key);
 
@@ -119,8 +150,32 @@ namespace FaithEngage.Core.PluginManagers
 		[Test]
 		public void InitializeAllPlugins_RegistersAndInitializes()
 		{
-			Assert.Ignore("No test yet");
+            Assert.Inconclusive("No test yet");
 		}
+
+        [Test]
+        public void CheckRegistered_RegisteredId_ReturnsTrue()
+        {
+            Assert.Inconclusive ("No test yet");
+        }
+
+        [Test]
+        public void CheckRegistered_UnRegisteredId_ReturnsFalse ()
+        {
+            Assert.Inconclusive ("No test yet");
+        }
+
+        [Test]
+        public void CheckRegistered_RegisteredType_ReturnsTrue ()
+        {
+            Assert.Inconclusive ("No test yet");
+        }
+
+        [Test]
+        public void CheckRegistered_UnRegisteredType_ReturnsFalse ()
+        {
+            Assert.Inconclusive ("No test yet");
+        }
     }
 }
 

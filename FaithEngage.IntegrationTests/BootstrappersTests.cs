@@ -21,8 +21,8 @@ namespace FaithEngage.IntegrationTests
         [Test]
 		public void TestBootLoader_FakePluginRepoMgr()
 		{
-            Assert.Ignore ();
-			var initializer = new Initializer();
+            Assert.Ignore ("Needed dependencies not created yet.");
+            var initializer = new Initializer();
             Console.WriteLine ("Loading Bootstrappers...");
             var bootlist = initializer.LoadedBootList;
             foreach(var booter in bootlist){

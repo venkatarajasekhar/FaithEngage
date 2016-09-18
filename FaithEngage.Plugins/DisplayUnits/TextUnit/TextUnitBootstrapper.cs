@@ -18,14 +18,13 @@ namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
 
         public void Execute(IAppFactory factory)
         {
-
             var plugMgr = factory.PluginManager;
             if (!plugMgr.CheckRegistered<TextUnitPlugin>()) install(plugMgr);
         } 
 
         private void install(IPluginManager pluginManager)
         {
-            var files = pluginFiles
+            var files = this.pluginFiles
                 .Where(p => p.Name == "TextUnitEditorTemplate.cshtml" || p.Name == "TextUnitCardTemplate.cshtml")
                 .ToList();
             pluginManager.Install<TextUnitPlugin>(files);

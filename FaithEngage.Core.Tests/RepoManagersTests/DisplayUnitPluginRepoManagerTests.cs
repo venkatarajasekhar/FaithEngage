@@ -89,6 +89,30 @@ namespace FaithEngage.Core.RepoManagers
             var e = TestHelpers.TryGetException (() => mgr.GetById (VALID_GUID));
             Assert.That (e, Is.InstanceOf (typeof (InvalidIdException)));
         }
+
+        [Test]
+        public void CheckRegistered_RegisteredId_ReturnsTrue()
+        {
+            Assert.Inconclusive ("No test yet.");
+        }
+
+        [Test]
+        public void CheckRegistered_UnRegisteredId_ReturnsFalse ()
+        {
+            Assert.Inconclusive ("No test yet.");
+        }
+
+        [Test]
+        public void CheckRegistered_RegisteredType_ReturnsTrue ()
+        {
+            Assert.Inconclusive ("No test yet.");
+        }
+
+        [Test]
+        public void CheckRegistered_UnRegisteredType_ReturnsFalse ()
+        {
+            Assert.Inconclusive ("No test yet.");
+        }
 	}
 }
 

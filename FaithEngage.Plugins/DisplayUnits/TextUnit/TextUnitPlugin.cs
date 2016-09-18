@@ -47,10 +47,6 @@ namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
             return _attributeNames;
         }
 
-        private ITemplatingService _tempService;
-        private IDictionary<Guid, PluginFileInfo> _files;
-
-
         public override void Initialize (IAppFactory FEFactory)
         {
             var fileMgr = FEFactory.PluginFileManager;

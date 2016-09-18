@@ -167,6 +167,9 @@ namespace FaithEngage.Core.PluginManagers
 
         public void Uninstall(Guid pluginId)
 		{
+            Plugin plug;
+            var success = _mgr.GetAllPlugins ().TryGetValue (pluginId, out plug);
+            if (success) plug.Uninstall (_factory);
             _mgr.UninstallPlugin (pluginId);
 		}
 
