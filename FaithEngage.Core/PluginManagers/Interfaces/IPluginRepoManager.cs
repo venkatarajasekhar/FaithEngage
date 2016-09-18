@@ -9,6 +9,8 @@ namespace FaithEngage.Core.PluginManagers.Interfaces
 		void UninstallPlugin(Guid id);
 		void UpdatePlugin(Plugin plugin);
 		IDictionary<Guid, Plugin> GetAllPlugins();
+        bool CheckRegistered (Guid pluginId);
+        bool CheckRegistered<TPlugin> () where TPlugin : Plugin;
 	}
 }
 

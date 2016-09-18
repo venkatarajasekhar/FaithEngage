@@ -18,6 +18,8 @@ namespace FaithEngage.CorePlugins.RazorTemplating
 
 		public void Execute(IAppFactory factory)
 		{
+            var plugMgr = factory.PluginManager;
+            if (!plugMgr.CheckRegistered<RazorTemplatingPlugin>()) plugMgr.Install<RazorTemplatingPlugin>();
 		}
 
 		public void LoadBootstrappers(IBootList bootstrappers)

@@ -80,6 +80,16 @@ namespace FaithEngage.Core.PluginManagers
             return num;
 		}
 
+        public void Install<TPlugin>(IList<FileInfo> files = null) where TPlugin : Plugin, new()
+        {
+            var plugin = new TPlugin ();
+            Guid plugId;
+            if (files != null) plugId = storeFilesForPlugin (files);
+            else plugId = Guid.NewGuid ();
+            _mgr.RegisterNew (plugin, plugId);
+            plugin.Install (_factory);
+        }
+
         private PluginPackage getPluginPackage (FileInfo file)
         {
             string json;
@@ -98,6 +108,18 @@ namespace FaithEngage.Core.PluginManagers
             var pFiles = allFiles.Where (p => relPaths.Any (q => p.FullName.Contains (q)));
             _fileMgr.StoreFilesForPlugin (pFiles.ToList (), plugId, true);
             return plugId;
+        }
+
+        private Guid storeFilesForPlugin(IList<FileInfo> files){
+            var existentFiles = files.Where (p => {
+                p.Refresh ();
+                if (p.Exists) return true;
+                return false;
+            }).ToList ();
+            var pluginId = Guid.NewGuid ();
+            _fileMgr.StoreFilesForPlugin (existentFiles, pluginId, true);
+
+            return pluginId;
         }
 
         private FileInfo getDll(PluginPackage.pluginInfo pinfo, Guid plugId){
@@ -170,6 +192,16 @@ namespace FaithEngage.Core.PluginManagers
 
 			}
 		}
-	}
+
+        public bool CheckRegistered (Guid pluginId)
+        {
+            return _mgr.CheckRegistered (pluginId);
+        }
+
+        public bool CheckRegistered<TPlugin> () where TPlugin : Plugin
+        {
+            return _mgr.CheckRegistered<TPlugin> ();
+        }
+    }
 }
 

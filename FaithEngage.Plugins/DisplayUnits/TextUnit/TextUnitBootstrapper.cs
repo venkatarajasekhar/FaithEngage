@@ -1,7 +1,8 @@
-﻿using System;
+﻿using System.Linq;
 using FaithEngage.Core.Bootstrappers;
 using FaithEngage.Core.Containers;
 using FaithEngage.Core.Factories;
+using FaithEngage.Core.PluginManagers.Interfaces;
 
 namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
 {
@@ -17,15 +18,17 @@ namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
 
         public void Execute(IAppFactory factory)
         {
-            var filesNeeded = new[]
-            {
-                new templateDef{fname = "TextUnitEditorTemplate.cshtml", name = "TextUnitEditor"},
-                new templateDef{fname = "TextUnitCardTemplate.cshtml", name="TextUnitCard" }
-            };
 
-            registerTemplates(factory, filesNeeded);
+            var plugMgr = factory.PluginManager;
+            if (!plugMgr.CheckRegistered<TextUnitPlugin>()) install(plugMgr);
+        }
 
-            var pluginContainer = factory
+        private void install(IPluginManager pluginManager)
+        {
+            var files = pluginFiles
+                .Where(p => p.Name == "TextUnitEditorTemplate.cshtml" || p.Name == "TextUnitCardTemplate.cshtml")
+                .ToList();
+            pluginManager.Install<TextUnitPlugin>(files);
         }
 
         public void LoadBootstrappers(IBootList bootstrappers)
