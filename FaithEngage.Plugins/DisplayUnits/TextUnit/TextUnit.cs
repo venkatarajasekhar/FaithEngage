@@ -60,7 +60,7 @@ namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
         {
             string text;
             attributes.TryGetValue ("Text", out text);
-            if (string.IsNullOrWhiteSpace (text)) Text = text;
+            if (!string.IsNullOrWhiteSpace (text)) Text = text;
         }
     }
 }
