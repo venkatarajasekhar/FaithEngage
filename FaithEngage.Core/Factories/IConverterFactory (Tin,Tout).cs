@@ -1,5 +1,5 @@
 ﻿using System;
-namespace FaithEngage.Core
+namespace FaithEngage.Core.Factories
 {
 	public interface IConverterFactory<Tin,Tout>
 	{

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using FaithEngage.Core.Factories;
+
 namespace FaithEngage.Core.PluginManagers.Files.Interfaces
 {
     public interface IPluginFileInfoFactory : IConverterFactory<PluginFileInfoDTO, PluginFileInfo>

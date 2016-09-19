@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Collections.Generic;
 using FaithEngage.Core.Factories;
 using System.IO;
-using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Linq;
 using FaithEngage.Core.Exceptions;
 using System.Security;
@@ -15,7 +14,7 @@ using FaithEngage.Core.Containers;
 
 namespace FaithEngage.Core.PluginManagers
 {
-	public class PluginManager : IPluginManager
+    public class PluginManager : IPluginManager
 	{
 		private readonly IPluginFileManager _fileMgr;
         private readonly IPluginRepoManager _mgr;
@@ -69,16 +68,44 @@ namespace FaithEngage.Core.PluginManagers
                 if (dll == null){
                     _fileMgr.FlushTempFolder (key);
                     _fileMgr.DeleteAllFilesForPlugin (plugId);
-                    throw new PluginLoadException ("Dll not found for plugin: " + pinfo.PluginTypeName);
+                    throw new PluginLoadException 
+                    ("Dll not found for plugin: " + pinfo.PluginTypeName);
                 }
                 var plugin = getPlugin (pinfo, dll);
                 num++;
                 _mgr.RegisterNew (plugin, plugId);
-                plugin.Install (_factory);
+                try {
+                    plugin.Install (_factory);
+                } catch (Exception ex) {
+                    throw new PluginInstallException 
+                    ($"There was a problem installing the plugin {plugin.PluginName}", ex);
+                }
+
             }
             _fileMgr.FlushTempFolder (key);
             return num;
 		}
+
+        public void Install<TPlugin>(IList<FileInfo> files = null) where TPlugin : Plugin, new()
+        {
+            var plugin = new TPlugin ();
+            Guid plugId;
+            if (files != null) plugId = storeFilesForPlugin (files);
+            else plugId = Guid.NewGuid ();
+            try {
+                _mgr.RegisterNew (plugin, plugId);
+            } catch (RepositoryException ex) {
+                throw new PluginLoadException 
+                ($"There was a problem registering the {plugin.PluginName} plugin to the database.", ex);
+            }
+            try {
+                plugin.Install (_factory);
+            } catch (Exception ex) {
+                throw new PluginInstallException 
+                ("There was a problem installing the {plugin.PluginName} plugin", ex);
+            }
+
+        }
 
         private PluginPackage getPluginPackage (FileInfo file)
         {
@@ -96,8 +123,30 @@ namespace FaithEngage.Core.PluginManagers
             var relPaths = pinfo.Files.Select (p => Path.Combine (p.Split ('/', '\\')));
 
             var pFiles = allFiles.Where (p => relPaths.Any (q => p.FullName.Contains (q)));
-            _fileMgr.StoreFilesForPlugin (pFiles.ToList (), plugId, true);
+            try {
+                _fileMgr.StoreFilesForPlugin (pFiles.ToList (), plugId, true);
+            } catch (PluginFileException ex) {
+                throw new PluginLoadException($"There was a problem storing files for {pinfo.PluginTypeName}.", ex);
+            }
+           
             return plugId;
+        }
+
+        private Guid storeFilesForPlugin(IList<FileInfo> files){
+            var existentFiles = files.Where (p => {
+                p.Refresh ();
+                if (p.Exists) return true;
+                return false;
+            }).ToList ();
+            var pluginId = Guid.NewGuid ();
+
+            try {
+                if (existentFiles.Count != 0)
+                    _fileMgr.StoreFilesForPlugin (existentFiles, pluginId, true);
+            } catch (PluginFileException ex) {
+                throw new PluginLoadException ("There was a problem storing files.", ex);
+            }
+            return pluginId;
         }
 
         private FileInfo getDll(PluginPackage.pluginInfo pinfo, Guid plugId){
@@ -145,7 +194,27 @@ namespace FaithEngage.Core.PluginManagers
 
         public void Uninstall(Guid pluginId)
 		{
-            _mgr.UninstallPlugin (pluginId);
+            Plugin plug;
+
+			try
+			{
+				var success = _mgr.GetAllPlugins().TryGetValue(pluginId, out plug);
+				if (!success) throw new PluginUninstallException($"Couldn't locate plugin with id {pluginId}");
+				plug.Uninstall(_factory);
+				_mgr.UninstallPlugin(pluginId);
+			}
+			catch (PluginUninstallException)
+			{
+				throw;
+			}
+			catch (RepositoryException ex)
+			{
+				throw new PluginUninstallException($"There was a problem registering the uninstallation with the db.", ex);
+			}
+			catch (Exception ex)
+			{
+				throw new PluginUninstallException($"There was a problem uninstalling the plugin.", ex); 
+			}
 		}
 
 		public void InitializeAllPlugins()
@@ -170,6 +239,16 @@ namespace FaithEngage.Core.PluginManagers
 
 			}
 		}
-	}
+
+        public bool CheckRegistered (Guid pluginId)
+        {
+            return _mgr.CheckRegistered (pluginId);
+        }
+
+        public bool CheckRegistered<TPlugin> () where TPlugin : Plugin
+        {
+            return _mgr.CheckRegistered<TPlugin> ();
+        }
+    }
 }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces;
 using FaithEngage.Core.Exceptions;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.PluginManagers.Factories
 {

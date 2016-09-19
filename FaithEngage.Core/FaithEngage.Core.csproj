@@ -181,6 +181,8 @@
     <Compile Include="PluginManagers\Factories\PluginFactory.cs" />
     <Compile Include="Exceptions\PluginDependencyRegistrationException.cs" />
     <Compile Include="Exceptions\PluginInitializationException.cs" />
+    <Compile Include="Exceptions\PluginInstallException.cs" />
+    <Compile Include="Exceptions\PluginUninstallException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -225,4 +227,13 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="FileFormatDefault" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>

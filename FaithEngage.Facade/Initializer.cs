@@ -3,6 +3,7 @@ using FaithEngage.Core;
 using FaithEngage.Core.Bootstrappers;
 using FaithEngage.Core.Containers;
 using FaithEngage.Facade.Interfaces;
+using FaithEngage.CorePlugins;
 namespace FaithEngage.Facade
 {
     public class Initializer : IInitializer
@@ -15,6 +16,7 @@ namespace FaithEngage.Facade
                 if(_bootlist == null){
                     _bootlist = new BootList (this.Container);
                     _bootlist.Load<Bootloader> ();
+                    _bootlist.Load<CorePluginsBootstrapper> ();
                 }
                 return _bootlist;
             }

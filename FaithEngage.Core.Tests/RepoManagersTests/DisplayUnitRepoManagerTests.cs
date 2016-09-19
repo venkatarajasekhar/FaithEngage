@@ -11,6 +11,7 @@ using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FaithEngage.Core.RepoInterfaces;
 using FaithEngage.Core.Tests;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.RepoManagers
 {

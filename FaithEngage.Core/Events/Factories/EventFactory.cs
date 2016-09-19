@@ -2,6 +2,7 @@
 using FaithEngage.Core.Events.EventSchedules.Interfaces;
 using FaithEngage.Core.Events.Interfaces;
 using FaithEngage.Core.Exceptions;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.Events.Factories
 {

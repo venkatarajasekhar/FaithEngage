@@ -52,30 +52,15 @@
     <Compile Include="DisplayUnitsTests\TextUnitTests\TextUnitPluginTests.cs" />
     <Compile Include="RazorTemplatingtests\RazorTemplatingServiceTests.cs" />
     <Compile Include="TestHelpers.cs" />
+    <Compile Include="DisplayUnitsTests\TextUnitTests\TextUnitBootstrapperTests.cs" />
+    <Compile Include="DisplayUnitsTests\TextUnitTests\TextUnitEditorDefinitionTests.cs" />
+    <Compile Include="DisplayUnitsTests\TextUnitTests\TextUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Plugin Files\DisplayUnits\TextUnit\TextUnitCardTemplate.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Plugin Files\DisplayUnits\TextUnit\TextUnitEditorTemplate.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Plugin Files\RazorTemplating\RazorEngine.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Plugin Files\RazorTemplating\RazorEngine.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Plugin Files\RazorTemplating\System.Web.Razor.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Plugin Files\RazorTemplating\System.Web.Razor.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Plugin Files\FaithEngage.Plugins.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Plugin Files\plugins.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

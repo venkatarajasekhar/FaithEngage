@@ -47,39 +47,24 @@ namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
             return _attributeNames;
         }
 
-        private ITemplatingService _tempService;
-        private IDictionary<Guid, PluginFileInfo> _files;
-
-
         public override void Initialize (IAppFactory FEFactory)
         {
             var fileMgr = FEFactory.PluginFileManager;
-            _tempService = FEFactory.TemplatingService;
-            _files = fileMgr.GetFilesForPlugin (this.PluginId.Value);
-            var editorTemplate = getTemplateString ("TextUnitEditorTemplate.cshtml");
-            registerTemplate ("TextUnitEditor", editorTemplate);
-            var cardTemplate = getTemplateString ("TextUnitCardTemplate.cshtml");
-            registerTemplate ("TextUnitCard", cardTemplate);
-        }
+            var files = fileMgr.GetFilesForPlugin(this.PluginId.Value).Select(p => p.Value.FileInfo);
 
-        private string getTemplateString(string fileName){
-            var template = _files.FirstOrDefault (p => p.Value.FileInfo.Name == fileName);
-            FileInfo obtainedFile = null;
-            if (template.Value != null) return null;
-            obtainedFile = template.Value.FileInfo;
-            obtainedFile.Refresh ();
-            if (!obtainedFile.Exists) return null;
-            string templateString = null;
-            using (var reader = obtainedFile.OpenText ()) {
-                templateString = reader.ReadToEnd ();
-            }
-            return templateString;
-        }
+            var allFiles = files.Where(p =>
+            {
+                p.Refresh();
+                if (p.Exists) return true;
+                return false;
+            });
+            var filesNeeded = allFiles.Select(
+                p => new templateDef { 
+                    FileName = p.Name, 
+                    TemplateName = p.Name.Replace("Template.cshtml", "") 
+            }).ToArray();
 
-        private void registerTemplate(string templateName, string template)
-        {
-            if(!string.IsNullOrWhiteSpace (template)) return;
-            _tempService.RegisterTemplate (template, templateName);
+            this.registerTemplates(FEFactory, filesNeeded);
         }
 
         public override void Install (IAppFactory FEFactory)
@@ -95,4 +80,3 @@ namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
         }
     }
 }
-

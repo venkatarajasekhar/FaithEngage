@@ -26,7 +26,20 @@ namespace FaithEngage.IntegrationTests
 
         public class config : IConfigManager
         {
-            public string PluginsFolderPath { get { return "PLUGINS";} set { return; } }
+			public string this[string key]
+			{
+				get
+				{
+					return GetValue(key);
+				}
+
+				set
+				{
+					SetValue(key, value);
+				}
+			}
+
+			public string PluginsFolderPath { get { return "PLUGINS";} set { return; } }
 
             public string TempFolderPath { get { return "TEMP";} set { return; } }
 

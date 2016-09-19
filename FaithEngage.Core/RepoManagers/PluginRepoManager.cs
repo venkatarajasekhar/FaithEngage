@@ -4,6 +4,8 @@ using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.PluginManagers;
 using FaithEngage.Core.PluginManagers.Interfaces;
 using FaithEngage.Core.RepoInterfaces;
+using System.Linq;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.RepoManagers
 {
@@ -74,6 +76,20 @@ namespace FaithEngage.Core.RepoManagers
 			}
 			return dict;
 		}
-	}
+
+        public bool CheckRegistered (Guid pluginId)
+        {
+            var plug = _repo.GetById (pluginId);
+            if(plug == null) return false;
+            return true;
+        }
+
+        public bool CheckRegistered<TPlugin> () where TPlugin : Plugin
+        {
+            var plug = _repo.GetAll ().Where (p => p.FullName == typeof (TPlugin).FullName);
+            if (plug.Count () > 0) return true;
+            return false;
+        }
+    }
 }
 

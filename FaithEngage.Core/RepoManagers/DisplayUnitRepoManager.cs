@@ -5,6 +5,7 @@ using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.DisplayUnits;
 using FaithEngage.Core.RepoInterfaces;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.RepoManagers
 {

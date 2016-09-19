@@ -1,4 +1,6 @@
 ﻿using System;
+using FaithEngage.Core.Factories;
+
 namespace FaithEngage.Core.Events.EventSchedules.Factories
 {
     public class EventScheduleDTOFactory : IConverterFactory<EventSchedule,EventScheduleDTO>

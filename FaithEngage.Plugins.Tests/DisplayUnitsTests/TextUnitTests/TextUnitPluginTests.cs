@@ -43,7 +43,8 @@ namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
             A.CallTo (() => _appFac.TemplatingService).Returns (tempService);
             A.CallTo (() => _appFac.PluginFileManager).Returns (fileMgr);
 
-            var plugDir = new DirectoryInfo (Path.Combine (AppDomain.CurrentDomain.BaseDirectory,"Plugin Files", "DisplayUnits", "TextUnit"));
+			var path = Path.Combine(Path.GetDirectoryName(this.GetType().Assembly.Location), "Plugin Files", "DisplayUnits", "TextUnit");
+			var plugDir = new DirectoryInfo (path);
             var files = plugDir.EnumerateFiles ();
             var plugId = Guid.NewGuid ();
             var plugFiles = 
@@ -60,4 +61,3 @@ namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
 
     }
 }
-

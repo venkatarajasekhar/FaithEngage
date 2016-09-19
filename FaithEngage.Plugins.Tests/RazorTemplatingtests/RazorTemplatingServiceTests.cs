@@ -15,7 +15,7 @@ namespace FaithEngage.CorePlugins.RazorTemplating
 
             var tempService = new RazorTemplatingService ();
 
-            var html = tempService.CompileHtmlFromTemplate (template, "TestTemplate", model);
+            var html = tempService.CompileHtmlFromTemplate (template, "TestTemplate1", model);
 
             Assert.That (html == "<p>Hello</p>");
         }
@@ -26,7 +26,7 @@ namespace FaithEngage.CorePlugins.RazorTemplating
             string template = @"@Model.Text.bluga()";
             var model = new { Text = "Hello" };
             var tempService = new RazorTemplatingService ();
-            var e = TestHelpers.TryGetException(()=> tempService.CompileHtmlFromTemplate (template, "TestTemplate", model));
+            var e = TestHelpers.TryGetException(()=> tempService.CompileHtmlFromTemplate (template, "TestTemplate2", model));
 
             Assert.That (e, Is.InstanceOf<TemplatingException> ());
         }
@@ -36,9 +36,9 @@ namespace FaithEngage.CorePlugins.RazorTemplating
         {
             var template = @"<p>@Model.Text</p>";
             var tempService = new RazorTemplatingService ();
-            tempService.RegisterTemplate (template, "testTemplate");
+            tempService.RegisterTemplate (template, "testTemplate3");
             var model = new { Text = "Hello" };
-            var html = tempService.CompileHtmlFromTemplateKey ("testTemplate", model);
+            var html = tempService.CompileHtmlFromTemplateKey ("testTemplate3", model);
 
             Assert.That (html == "<p>Hello</p>");
         }
@@ -46,4 +46,3 @@ namespace FaithEngage.CorePlugins.RazorTemplating
 
     }
 }
-

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.DisplayUnits.Interfaces
 {

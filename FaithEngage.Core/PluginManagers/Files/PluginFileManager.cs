@@ -8,6 +8,7 @@ using System.Linq;
 using FaithEngage.Core.RepoInterfaces;
 using FaithEngage.Core.Exceptions;
 using System.Security;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.PluginManagers.Files
 {

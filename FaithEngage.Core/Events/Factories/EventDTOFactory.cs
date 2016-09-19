@@ -1,4 +1,5 @@
 ﻿using System;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.Events.Factories
 {

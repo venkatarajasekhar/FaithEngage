@@ -4,9 +4,13 @@ using System.Collections.Generic;
 using FaithEngage.Core.Exceptions;
 using FakeItEasy;
 using FaithEngage.Core.Cards;
+using FaithEngage.Plugins.Tests;
+using FaithEngage.Core.TemplatingService;
+using System.IO;
+using System.Linq;
+using FaithEngage.Core.PluginManagers.Files;
 
-
-namespace FaithEngage.Plugins.Tests
+namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
 {
 
     [TestFixture]
@@ -58,10 +62,11 @@ namespace FaithEngage.Plugins.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(EmptyGuidException))]
-        public void Ctor_LoadedAttributes_EmptyGuid()
+        public void Ctor_LoadedAttributes_EmptyGuid_ThrowsEmptyGuidException()
         {
-            var tu = new TextUnit (Guid.Empty, loadedDict);
+            
+			var e = TestHelpers.TryGetException(()=> new TextUnit(Guid.Empty, loadedDict));
+			Assert.That(e, Is.InstanceOf<EmptyGuidException>());
         }
 
         [Test]
@@ -78,31 +83,32 @@ namespace FaithEngage.Plugins.Tests
         [Test]
         public void GetCard_ReturnsFullyFunctionalTextCard()
         {
-            var tu = new TextUnit (loadedDict) { 
+			var tService = A.Fake<ITemplatingService>();
+
+
+			var tu = new TextUnit (loadedDict) { 
                 AssociatedEvent = VALID_GUID,
                 DateCreated = DateTime.Now,
                 Description = "My Lovely Description",
-                PositionInEvent = 1
+                PositionInEvent = 1,
+				Text = "This is my text."
             };
-            var card = tu.GetCard ();
+
+			var dict = new Dictionary<Guid, PluginFileInfo>();
+
+
+			A.CallTo(() => tService.CompileHtmlFromTemplateKey("TextUnitCard", tu)).Returns(
+				$"<p>{tu.Text}</p>");
+
+			var card = tu.GetCard (tService, dict);
 
             Assert.That (card, Is.Not.Null);
-            Assert.That (card, Is.InstanceOf (typeof(TextCard)));
             Assert.That (card.Title == "My Text Unit");
             Assert.That (card.Description == "My Lovely Description");
-            Assert.That (card.OriginatingDisplayUnit, Is.EqualTo (tu));
+			Assert.That (card.OriginatingDisplayUnit, Is.EqualTo(tu));
             Assert.That (card.Sections.Length == 1);
             Assert.That (card.Sections [0].HeadingText == card.Title);
-            Assert.That (card.Sections [0].HtmlContents == TEST_TEXT);
-        }
-
-        [Test]
-        public void ExecuteCardAction_ReturnsNull()
-        {
-            var tu = new TextUnit (loadedDict);
-            var actionResult = tu.ExecuteCardAction (A.Dummy<CardAction> ());
-
-            Assert.That (actionResult, Is.Null);
+            Assert.That (card.Sections [0].HtmlContents == $"<p>{tu.Text}</p>");
         }
 
         [Test]
