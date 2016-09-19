@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FaithEngage.Core.Events.EventSchedules;
 using FaithEngage.Core.Events.EventSchedules.Interfaces;
+using FaithEngage.Core.Factories;
 using FaithEngage.Core.RepoInterfaces;
 
 namespace FaithEngage.Core.RepoManagers

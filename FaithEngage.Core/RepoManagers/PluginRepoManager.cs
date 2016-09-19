@@ -5,6 +5,7 @@ using FaithEngage.Core.PluginManagers;
 using FaithEngage.Core.PluginManagers.Interfaces;
 using FaithEngage.Core.RepoInterfaces;
 using System.Linq;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.RepoManagers
 {

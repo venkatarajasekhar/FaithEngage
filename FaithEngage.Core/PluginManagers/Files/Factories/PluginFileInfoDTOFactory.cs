@@ -2,6 +2,8 @@
 using FaithEngage.Core.Config;
 using System.IO;
 using FaithEngage.Core.Exceptions;
+using FaithEngage.Core.Factories;
+
 namespace FaithEngage.Core.PluginManagers.Files.Factories
 {
 	public class PluginFileInfoDTOFactory : IConverterFactory<PluginFileInfo, PluginFileInfoDTO>

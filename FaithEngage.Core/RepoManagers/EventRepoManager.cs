@@ -5,6 +5,8 @@ using FaithEngage.Core.Events.Interfaces;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.RepoInterfaces;
 using System.Linq;
+using FaithEngage.Core.Factories;
+
 namespace FaithEngage.Core.RepoManagers
 {
 	public class EventRepoManager : IEventRepoManager

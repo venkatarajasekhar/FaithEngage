@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.PluginManagers.Factories
 {

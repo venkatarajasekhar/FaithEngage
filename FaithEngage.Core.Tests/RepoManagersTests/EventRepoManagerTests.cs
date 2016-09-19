@@ -8,6 +8,7 @@ using System.Linq;
 using System.Collections.Generic;
 using FaithEngage.Core.Events.EventSchedules;
 using FaithEngage.Core.Tests;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.RepoManagers
 {

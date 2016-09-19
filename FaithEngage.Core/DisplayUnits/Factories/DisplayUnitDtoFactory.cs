@@ -1,5 +1,7 @@
 ﻿using System;
 using FaithEngage.Core.DisplayUnits.Interfaces;
+using FaithEngage.Core.Factories;
+
 namespace FaithEngage.Core.DisplayUnits.Factories
 {
     public class DisplayUnitDtoFactory : IConverterFactory<DisplayUnit,DisplayUnitDTO>

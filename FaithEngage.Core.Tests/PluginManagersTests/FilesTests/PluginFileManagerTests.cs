@@ -9,6 +9,7 @@ using System.Linq;
 using FaithEngage.Core.Exceptions;
 using FaithEngage.Core.Tests;
 using System.Collections.Generic;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.PluginManagers.Files
 {
