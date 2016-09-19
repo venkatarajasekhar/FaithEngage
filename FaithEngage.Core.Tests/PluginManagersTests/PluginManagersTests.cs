@@ -40,7 +40,8 @@ namespace FaithEngage.Core.PluginManagers
 
             public override void Initialize (IAppFactory FEFactory)
             {
-                throw new NotImplementedException ();
+				var config = FEFactory.ConfigManager;
+				if (config.Get("throw") == "yes") throw new Exception();
             }
 
             public override void Install (IAppFactory FEFactory)
@@ -51,12 +52,13 @@ namespace FaithEngage.Core.PluginManagers
 
             public override void RegisterDependencies (IRegistrationService regService)
             {
-                throw new NotImplementedException ();
+				regService.Register<Plugin, dumbPlugin>();
             }
 
             public override void Uninstall (IAppFactory FEFactory)
             {
-                throw new NotImplementedException ();
+				var config = FEFactory.ConfigManager;
+				if (config.Get("throw") == "yes") throw new Exception();
             }
         }
 
@@ -227,41 +229,155 @@ namespace FaithEngage.Core.PluginManagers
         [Test]
         public void Uninstall_CallsUninstall()
         {
-            Assert.Inconclusive ("Needs additional testing.");
             var key = Guid.NewGuid ();
-            _pluginMgr.Uninstall(key);
+			var dict = new Dictionary<Guid, Plugin> { { key, new dumbPlugin()} };
+
+			A.CallTo(() => _mgr.GetAllPlugins()).Returns(dict);
+
+
+			_pluginMgr.Uninstall(key);
 
             A.CallTo (() => _mgr.UninstallPlugin (key)).MustHaveHappened();
+			A.CallTo(() => _fac.ConfigManager).MustHaveHappened();
+
         }
+
+		[Test]
+		public void Uninstall_RepoThrowsException_ThrowsPluginUninstallException()
+		{
+			var key = Guid.NewGuid();
+
+			A.CallTo(() => _mgr.GetAllPlugins()).Throws<RepositoryException>();
+
+
+			var e = TestHelpers.TryGetException(()=> _pluginMgr.Uninstall(key));
+			Assert.That(e, Is.Not.Null);
+			Assert.That(e, Is.InstanceOf<PluginUninstallException>());
+			Assert.That(e.InnerException, Is.InstanceOf<RepositoryException>());
+		}
+
+		[Test]
+		public void Uninstall_NoPluginFound_ThrowsPluginUninstallException()
+		{
+			var key = Guid.NewGuid();
+			var dict = new Dictionary<Guid, Plugin>();
+
+			A.CallTo(() => _mgr.GetAllPlugins()).Returns(dict);
+
+			var e = TestHelpers.TryGetException(() => _pluginMgr.Uninstall(key));
+
+			Assert.That(e, Is.Not.Null);
+			Assert.That(e, Is.InstanceOf<PluginUninstallException>());
+		}
+
+		[Test]
+		public void Uninstall_PluginThrowsException_ThrowsPluginUninstallException()
+		{
+			var key = Guid.NewGuid();
+			var dict = new Dictionary<Guid, Plugin> { { key, new dumbPlugin() } };
+
+			A.CallTo(() => _mgr.GetAllPlugins()).Returns(dict);
+			A.CallTo(() => _fac.ConfigManager.Get("throw")).Returns("yes");
+
+			var e = TestHelpers.TryGetException(()=> _pluginMgr.Uninstall(key));
+
+			Assert.That(e, Is.InstanceOf<PluginUninstallException>());
+		}
 
 		[Test]
 		public void InitializeAllPlugins_RegistersAndInitializes()
 		{
-            Assert.Inconclusive("No test yet");
+            var key = Guid.NewGuid();
+			var dict = new Dictionary<Guid, Plugin> { { key, new dumbPlugin() } };
+			A.CallTo(() => _mgr.GetAllPlugins()).Returns(dict);
+
+			_pluginMgr.InitializeAllPlugins();
+
+			A.CallTo(() => _regService.Register<Plugin, dumbPlugin>()).MustHaveHappened();
+			A.CallTo(() => _fac.ConfigManager).MustHaveHappened();
+		}
+
+		[Test]
+		public void InitializeAllPlugins_ExceptionInRegistering_ThrowsPluginDependencyRegException()
+		{
+			var key = Guid.NewGuid();
+			var dict = new Dictionary<Guid, Plugin> { { key, new dumbPlugin() } };
+			A.CallTo(() => _mgr.GetAllPlugins()).Returns(dict);
+			A.CallTo(() => _regService.Register<Plugin, dumbPlugin>()).Throws<Exception>();
+
+			var e = TestHelpers.TryGetException(()=> _pluginMgr.InitializeAllPlugins());
+			Assert.That(e, Is.InstanceOf<PluginDependencyRegistrationException>());
+		}
+
+		[Test]
+		public void InitializeAllPlugins_ExceptionInInitialization_ThrowsPluginDependencyRegException()
+		{
+			var key = Guid.NewGuid();
+			var dict = new Dictionary<Guid, Plugin> { { key, new dumbPlugin() } };
+			A.CallTo(() => _mgr.GetAllPlugins()).Returns(dict);
+			A.CallTo(() => _fac.ConfigManager.Get("throw")).Returns("yes");
+
+			var e = TestHelpers.TryGetException(() => _pluginMgr.InitializeAllPlugins());
+
+			A.CallTo(() => _regService.Register<Plugin, dumbPlugin>()).MustHaveHappened();
+			Assert.That(e, Is.InstanceOf<PluginInitializationException>());
+		}
+
+		[Test]
+		public void InitializeAllPlugins_NoPlugins_NoInitialization()
+		{
+			var key = Guid.NewGuid();
+			var dict = new Dictionary<Guid, Plugin>();
+			A.CallTo(() => _mgr.GetAllPlugins()).Returns(dict);
+
+			_pluginMgr.InitializeAllPlugins();
+
+			A.CallTo(() => _regService.Register<Plugin, dumbPlugin>()).MustNotHaveHappened();
+			A.CallTo(() => _fac.ConfigManager).MustNotHaveHappened();
 		}
 
         [Test]
         public void CheckRegistered_RegisteredId_ReturnsTrue()
         {
-            Assert.Inconclusive ("No test yet");
+			var id = Guid.NewGuid();
+			A.CallTo(() => _mgr.CheckRegistered(id)).Returns(true);
+
+			var check = _pluginMgr.CheckRegistered(id);
+
+			Assert.That(check);
         }
 
         [Test]
         public void CheckRegistered_UnRegisteredId_ReturnsFalse ()
         {
-            Assert.Inconclusive ("No test yet");
+            var id = Guid.NewGuid();
+			A.CallTo(() => _mgr.CheckRegistered(id)).Returns(false);
+
+			var check = _pluginMgr.CheckRegistered(id);
+
+			Assert.That(!check);
         }
 
         [Test]
         public void CheckRegistered_RegisteredType_ReturnsTrue ()
         {
-            Assert.Inconclusive ("No test yet");
+            var id = Guid.NewGuid();
+			A.CallTo(() => _mgr.CheckRegistered<dumbPlugin>()).Returns(true);
+
+			var check = _pluginMgr.CheckRegistered<dumbPlugin>();
+
+			Assert.That(check);
         }
 
         [Test]
         public void CheckRegistered_UnRegisteredType_ReturnsFalse ()
         {
-            Assert.Inconclusive ("No test yet");
+            var id = Guid.NewGuid();
+			A.CallTo(() => _mgr.CheckRegistered<dumbPlugin>()).Returns(false);
+
+			var check = _pluginMgr.CheckRegistered<dumbPlugin>();
+
+			Assert.That(!check);
         }
     }
 }

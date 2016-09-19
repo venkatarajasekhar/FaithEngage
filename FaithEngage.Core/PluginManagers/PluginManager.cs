@@ -195,9 +195,26 @@ namespace FaithEngage.Core.PluginManagers
         public void Uninstall(Guid pluginId)
 		{
             Plugin plug;
-            var success = _mgr.GetAllPlugins ().TryGetValue (pluginId, out plug);
-            if (success) plug.Uninstall (_factory);
-            _mgr.UninstallPlugin (pluginId);
+
+			try
+			{
+				var success = _mgr.GetAllPlugins().TryGetValue(pluginId, out plug);
+				if (!success) throw new PluginUninstallException($"Couldn't locate plugin with id {pluginId}");
+				plug.Uninstall(_factory);
+				_mgr.UninstallPlugin(pluginId);
+			}
+			catch (PluginUninstallException)
+			{
+				throw;
+			}
+			catch (RepositoryException ex)
+			{
+				throw new PluginUninstallException($"There was a problem registering the uninstallation with the db.", ex);
+			}
+			catch (Exception ex)
+			{
+				throw new PluginUninstallException($"There was a problem uninstalling the plugin.", ex); 
+			}
 		}
 
 		public void InitializeAllPlugins()
