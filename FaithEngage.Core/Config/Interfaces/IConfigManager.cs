@@ -7,7 +7,7 @@ namespace FaithEngage.Core.Config
         string PluginsFolderPath { get; set;}
 
 
-
+		string this[string key] { get; set; }
         string GetValue (string key);
         string SetValue (string Key, string value);
 
