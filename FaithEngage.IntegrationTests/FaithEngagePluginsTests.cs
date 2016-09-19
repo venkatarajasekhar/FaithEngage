@@ -16,6 +16,9 @@ using FaithEngage.Facade;
 using FakeItEasy;
 using NUnit.Framework;
 using System.Linq;
+using FaithEngage.Core;
+using FaithEngage.CorePlugins.DisplayUnits.TextUnit;
+
 namespace FaithEngage.IntegrationTests
 {
 	public class FaithEngagePluginsTests
@@ -143,7 +146,6 @@ namespace FaithEngage.IntegrationTests
 			_container.Register<IPluginFileInfoRepository, fileRepo>();
 			_bootlist.Load<PluginBootstrapper>();
 			Console.Write(_bootlist.RegisterAllDependencies(true));
-
 		}
 
 
@@ -153,18 +155,21 @@ namespace FaithEngage.IntegrationTests
 		[Test]
 		public void InstallFaithEngagePlugins_StubbedRepoAndConfig()
 		{
-			var mgr = _container.Resolve<IPluginManager>();
-			int numInstalled;
-			using (var zipFile = ZipFile.OpenRead(Path.Combine("TestingFiles", "FaithEngage.Plugins.zip")))
-			{
-				numInstalled = mgr.Install(zipFile);
-			}
+			_bootlist.ExecuteAllBootstrappers();
 
-			var factory = _container.Resolve<IAppFactory>();
-			var pluginContainer = factory.GetOther<IDisplayUnitPluginContainer>();
-			var repoManager = factory.DisplayUnitsPluginRepo;
-			var regService = factory.RegistrationService;
+			var mgr = _container.Resolve<IPluginManager>();
+			var fac = _container.Resolve<IConverterFactory<Plugin, PluginDTO>>();
+			var tup = new TextUnitPlugin();
+			var dto = fac.Convert(tup);
+
+			var repo = _container.Resolve<IPluginRepository>();
+			repo.Register(dto, Guid.NewGuid());
+
+			var pluginContainer = _container.Resolve<IDisplayUnitPluginContainer>();
+			var repoManager = _container.Resolve<IDisplayUnitPluginRepoManager>();
+
             var e = TestHelpers.TryGetException (() => mgr.InitializeAllPlugins ());
+
             Assert.That (e, Is.Null);
 			foreach (var plugin in repoManager.GetAll())
 			{
