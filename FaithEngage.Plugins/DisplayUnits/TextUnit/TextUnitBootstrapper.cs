@@ -18,7 +18,7 @@ namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
 
         public void Execute(IAppFactory factory)
         {
-            var plugMgr = factory.PluginManager;
+			var plugMgr = factory.PluginManager;
             if (!plugMgr.CheckRegistered<TextUnitPlugin>()) install(plugMgr);
         } 
 

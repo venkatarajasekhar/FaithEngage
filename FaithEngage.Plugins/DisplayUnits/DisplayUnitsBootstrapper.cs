@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 using FaithEngage.CorePlugins.DisplayUnits.TextUnit;
 using FaithEngage.Core.PluginManagers;
+using System.Reflection;
 
 namespace FaithEngage.CorePlugins.DisplayUnits
 {
@@ -15,7 +16,9 @@ namespace FaithEngage.CorePlugins.DisplayUnits
 		
         public DisplayUnitsBootstrapper()
         {
-            var pluginFilesDir = new DirectoryInfo("Plugin Files");
+			var currentDir = Path.GetDirectoryName(this.GetType().Assembly.Location);
+			var path = Path.Combine(currentDir, "Plugin Files");
+			var pluginFilesDir = new DirectoryInfo(path);
             pluginFiles = pluginFilesDir.EnumerateFiles("*", SearchOption.AllDirectories);                                ;
         }
 
