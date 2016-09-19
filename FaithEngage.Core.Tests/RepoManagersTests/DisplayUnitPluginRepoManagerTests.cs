@@ -9,6 +9,8 @@ using NUnit.Framework;
 using System.Linq;
 using FaithEngage.Core.PluginManagers;
 using FaithEngage.Core.PluginManagers.Interfaces;
+using FaithEngage.Core.Containers;
+using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.RepoManagers
 {
@@ -24,7 +26,44 @@ namespace FaithEngage.Core.RepoManagers
 		private DisplayUnitPlugin _plgn;
         private DisplayUnitPluginRepoManager mgr;
 
-		[SetUp]
+        private class dumbPlug : Plugin
+        {
+            public override string PluginName {
+                get {
+                    throw new NotImplementedException ();
+                }
+            }
+
+            public override int [] PluginVersion {
+                get {
+                    throw new NotImplementedException ();
+                }
+            }
+
+            public override void Initialize (IAppFactory FEFactory)
+            {
+                throw new NotImplementedException ();
+            }
+
+            public override void Install (IAppFactory FEFactory)
+            {
+                throw new NotImplementedException ();
+            }
+
+            public override void RegisterDependencies (IRegistrationService regService)
+            {
+                throw new NotImplementedException ();
+            }
+
+            public override void Uninstall (IAppFactory FEFactory)
+            {
+                throw new NotImplementedException ();
+            }
+        }
+
+
+
+        [SetUp]
 		public void Init()
 		{
 			_repo = A.Fake<IPluginRepository>();
@@ -93,25 +132,42 @@ namespace FaithEngage.Core.RepoManagers
         [Test]
         public void CheckRegistered_RegisteredId_ReturnsTrue()
         {
-            Assert.Inconclusive ("No test yet.");
+            A.CallTo (() => _pRepoMgr.CheckRegistered (VALID_GUID)).Returns (true);
+            IDisplayUnitPluginRepoManager repo = mgr;
+
+            var regd = repo.CheckRegistered (VALID_GUID);
+            Assert.That (regd);
         }
 
         [Test]
         public void CheckRegistered_UnRegisteredId_ReturnsFalse ()
         {
-            Assert.Inconclusive ("No test yet.");
+            A.CallTo (() => _pRepoMgr.CheckRegistered (VALID_GUID)).Returns (false);
+            IDisplayUnitPluginRepoManager repo = mgr;
+
+            var regd = repo.CheckRegistered (VALID_GUID);
+            Assert.That (!regd);
         }
 
         [Test]
         public void CheckRegistered_RegisteredType_ReturnsTrue ()
         {
-            Assert.Inconclusive ("No test yet.");
+            
+            A.CallTo (() => _pRepoMgr.CheckRegistered<dumbPlug>()).Returns (true);
+            IDisplayUnitPluginRepoManager repo = mgr;
+
+            var regd = repo.CheckRegistered<dumbPlug>();
+            Assert.That (regd);
         }
 
         [Test]
         public void CheckRegistered_UnRegisteredType_ReturnsFalse ()
         {
-            Assert.Inconclusive ("No test yet.");
+            A.CallTo (() => _pRepoMgr.CheckRegistered<dumbPlug> ()).Returns (false);
+            IDisplayUnitPluginRepoManager repo = mgr;
+
+            var regd = repo.CheckRegistered<dumbPlug> ();
+            Assert.That (!regd);
         }
 	}
 }
