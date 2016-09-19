@@ -65,7 +65,6 @@ namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
             }).ToArray();
 
             this.registerTemplates(FEFactory, filesNeeded);
-
         }
 
         public override void Install (IAppFactory FEFactory)
