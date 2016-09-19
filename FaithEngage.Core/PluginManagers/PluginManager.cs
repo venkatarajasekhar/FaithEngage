@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Collections.Generic;
 using FaithEngage.Core.Factories;
 using System.IO;
-using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Linq;
 using FaithEngage.Core.Exceptions;
 using System.Security;
@@ -15,7 +14,7 @@ using FaithEngage.Core.Containers;
 
 namespace FaithEngage.Core.PluginManagers
 {
-	public class PluginManager : IPluginManager
+    public class PluginManager : IPluginManager
 	{
 		private readonly IPluginFileManager _fileMgr;
         private readonly IPluginRepoManager _mgr;
