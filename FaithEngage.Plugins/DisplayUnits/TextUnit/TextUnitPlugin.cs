@@ -81,4 +81,3 @@ namespace FaithEngage.CorePlugins.DisplayUnits.TextUnit
         }
     }
 }
-
