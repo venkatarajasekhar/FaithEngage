@@ -24,7 +24,47 @@ namespace FaithEngage.Core.PluginManagers
         private IAppFactory _fac;
 		private IRegistrationService _regService;
 
-		[SetUp]
+        private class dumbPlugin : Plugin
+        {
+            public override string PluginName {
+                get {
+                    return "Test Plugin";
+                }
+            }
+
+            public override int [] PluginVersion {
+                get {
+                    throw new NotImplementedException ();
+                }
+            }
+
+            public override void Initialize (IAppFactory FEFactory)
+            {
+                throw new NotImplementedException ();
+            }
+
+            public override void Install (IAppFactory FEFactory)
+            {
+                var config = FEFactory.ConfigManager;
+                if (config.Get ("throw") == "yes") throw new Exception ();
+            }
+
+            public override void RegisterDependencies (IRegistrationService regService)
+            {
+                throw new NotImplementedException ();
+            }
+
+            public override void Uninstall (IAppFactory FEFactory)
+            {
+                throw new NotImplementedException ();
+            }
+        }
+
+
+
+
+
+        [SetUp]
 		public void init()
 		{
 			_fileMgr = A.Fake<IPluginFileManager>();
@@ -108,33 +148,80 @@ namespace FaithEngage.Core.PluginManagers
         }
 
         [Test]
-        public void Install_HasFiles_StoresRegistersAndInstalls()
+        public void InstallGeneric_HasFiles_StoresRegistersAndInstalls()
         {
-            Assert.Inconclusive ("No test yet");
+            var filesDir = new DirectoryInfo ("TestingFiles");
+            var files = filesDir.EnumerateFiles ("*.jpg", SearchOption.AllDirectories).ToList ();
+
+            Assert.That (files.All (p => p.Exists));
+
+            _pluginMgr.Install<dumbPlugin> (files);
+
+            A.CallTo (() => _fileMgr.StoreFilesForPlugin (A<List<FileInfo>>.Ignored, A<Guid>.Ignored, true)).MustHaveHappened();
+            A.CallTo (() => _mgr.RegisterNew (A<dumbPlugin>.Ignored, A<Guid>.Ignored)).MustHaveHappened();
+            A.CallTo (() => _fac.ConfigManager).MustHaveHappened ();
         }
 
         [Test]
-        public void Install_HasNoFiles_RegistersAndInstalls ()
+        public void InstallGeneric_HasFilesButAreNonExistant_StoresRegistersAndInstalls ()
         {
-            Assert.Inconclusive ("No test yet");
+            var files = new List<FileInfo> { new FileInfo ("TestText.txt")};
+
+            Assert.That (files.All (p => !p.Exists));
+
+            _pluginMgr.Install<dumbPlugin> (files);
+
+            A.CallTo (() => _fileMgr.StoreFilesForPlugin (A<List<FileInfo>>.Ignored, A<Guid>.Ignored, true)).MustNotHaveHappened ();
+            A.CallTo (() => _mgr.RegisterNew (A<dumbPlugin>.Ignored, A<Guid>.Ignored)).MustHaveHappened ();
+            A.CallTo (() => _fac.ConfigManager).MustHaveHappened ();
         }
 
         [Test]
-        public void Install_HasFiles_FileSystemException_ThrowsPluginLoadException ()
+        public void InstallGeneric_HasNoFiles_RegistersAndInstalls ()
         {
-            Assert.Inconclusive ("No test yet");
+            _pluginMgr.Install<dumbPlugin> ();
+
+            A.CallTo (() => _fileMgr.StoreFilesForPlugin (A<List<FileInfo>>.Ignored, A<Guid>.Ignored, true)).MustNotHaveHappened ();
+            A.CallTo (() => _mgr.RegisterNew (A<dumbPlugin>.Ignored, A<Guid>.Ignored)).MustHaveHappened ();
+            A.CallTo (() => _fac.ConfigManager).MustHaveHappened ();
         }
 
         [Test]
-        public void Install_RepoException_ThrowsPluginLoadException ()
+        public void InstallGeneric_HasFiles_FileSystemException_ThrowsPluginLoadException ()
         {
-            Assert.Inconclusive ("No test yet");
+            var filesDir = new DirectoryInfo ("TestingFiles");
+            var files = filesDir.EnumerateFiles ("*.jpg", SearchOption.AllDirectories).ToList ();
+
+            Assert.That (files.All (p => p.Exists));
+
+            A.CallTo (() => _fileMgr.StoreFilesForPlugin (A<List<FileInfo>>.Ignored, A<Guid>.Ignored, true)).Throws<PluginFileException> ();
+            var e = TestHelpers.TryGetException(()=> _pluginMgr.Install<dumbPlugin> (files));
+
+            Assert.That (e, Is.InstanceOf<PluginLoadException>());
+            Assert.That (e.InnerException, Is.InstanceOf<PluginFileException> ());
+            A.CallTo (() => _fileMgr.StoreFilesForPlugin (A<List<FileInfo>>.Ignored, A<Guid>.Ignored, true)).MustHaveHappened ();
         }
 
         [Test]
-        public void Install_ExceptionFromPluginInstall_ThrowsPluginLoadException ()
+        public void InstallGeneric_RepoException_ThrowsPluginLoadException ()
         {
-            Assert.Inconclusive ("No test yet");
+            A.CallTo (() => _mgr.RegisterNew (A<dumbPlugin>.Ignored, A<Guid>.Ignored)).Throws<RepositoryException> ();
+            var e = TestHelpers.TryGetException (() => _pluginMgr.Install<dumbPlugin> ());
+
+            Assert.That (e, Is.InstanceOf<PluginLoadException> ());
+            Assert.That (e.InnerException, Is.InstanceOf<RepositoryException> ());
+            A.CallTo (() => _mgr.RegisterNew (A<dumbPlugin>.Ignored, A<Guid>.Ignored)).MustHaveHappened();
+        }
+
+        [Test]
+        public void InstallGeneric_ExceptionFromPluginInstall_ThrowsPluginInstallException ()
+        {
+            A.CallTo (() => _fac.ConfigManager.Get ("throw")).Returns ("yes");
+            var e = TestHelpers.TryGetException (() => _pluginMgr.Install<dumbPlugin> ());
+
+            Assert.That (e, Is.InstanceOf<PluginInstallException> ());
+            Assert.That (e.InnerException, Is.InstanceOf<Exception> ());
+            A.CallTo (() => _mgr.RegisterNew (A<dumbPlugin>.Ignored, A<Guid>.Ignored)).MustHaveHappened ();
         }
 
         [Test]

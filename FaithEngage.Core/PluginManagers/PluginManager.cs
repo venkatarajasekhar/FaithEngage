@@ -69,12 +69,19 @@ namespace FaithEngage.Core.PluginManagers
                 if (dll == null){
                     _fileMgr.FlushTempFolder (key);
                     _fileMgr.DeleteAllFilesForPlugin (plugId);
-                    throw new PluginLoadException ("Dll not found for plugin: " + pinfo.PluginTypeName);
+                    throw new PluginLoadException 
+                    ("Dll not found for plugin: " + pinfo.PluginTypeName);
                 }
                 var plugin = getPlugin (pinfo, dll);
                 num++;
                 _mgr.RegisterNew (plugin, plugId);
-                plugin.Install (_factory);
+                try {
+                    plugin.Install (_factory);
+                } catch (Exception ex) {
+                    throw new PluginInstallException 
+                    ($"There was a problem installing the plugin {plugin.PluginName}", ex);
+                }
+
             }
             _fileMgr.FlushTempFolder (key);
             return num;
@@ -86,8 +93,19 @@ namespace FaithEngage.Core.PluginManagers
             Guid plugId;
             if (files != null) plugId = storeFilesForPlugin (files);
             else plugId = Guid.NewGuid ();
-            _mgr.RegisterNew (plugin, plugId);
-            plugin.Install (_factory);
+            try {
+                _mgr.RegisterNew (plugin, plugId);
+            } catch (RepositoryException ex) {
+                throw new PluginLoadException 
+                ($"There was a problem registering the {plugin.PluginName} plugin to the database.", ex);
+            }
+            try {
+                plugin.Install (_factory);
+            } catch (Exception ex) {
+                throw new PluginInstallException 
+                ("There was a problem installing the {plugin.PluginName} plugin", ex);
+            }
+
         }
 
         private PluginPackage getPluginPackage (FileInfo file)
@@ -106,7 +124,12 @@ namespace FaithEngage.Core.PluginManagers
             var relPaths = pinfo.Files.Select (p => Path.Combine (p.Split ('/', '\\')));
 
             var pFiles = allFiles.Where (p => relPaths.Any (q => p.FullName.Contains (q)));
-            _fileMgr.StoreFilesForPlugin (pFiles.ToList (), plugId, true);
+            try {
+                _fileMgr.StoreFilesForPlugin (pFiles.ToList (), plugId, true);
+            } catch (PluginFileException ex) {
+                throw new PluginLoadException($"There was a problem storing files for {pinfo.PluginTypeName}.", ex);
+            }
+           
             return plugId;
         }
 
@@ -117,8 +140,13 @@ namespace FaithEngage.Core.PluginManagers
                 return false;
             }).ToList ();
             var pluginId = Guid.NewGuid ();
-            _fileMgr.StoreFilesForPlugin (existentFiles, pluginId, true);
 
+            try {
+                if (existentFiles.Count != 0)
+                    _fileMgr.StoreFilesForPlugin (existentFiles, pluginId, true);
+            } catch (PluginFileException ex) {
+                throw new PluginLoadException ("There was a problem storing files.", ex);
+            }
             return pluginId;
         }
 
