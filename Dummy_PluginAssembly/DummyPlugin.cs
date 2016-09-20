@@ -8,6 +8,10 @@ using FaithEngage.Core.Factories;
 
 namespace Dummy_PluginAssembly
 {
+	/// <summary>
+	/// Dummy plugin.
+	/// This class exists entirely for testing purposes. Not necessary for actual use.
+	/// </summary>
 	public class DummyPlugin : DisplayUnitPlugin
 	{
 		#region implemented abstract members of Plugin

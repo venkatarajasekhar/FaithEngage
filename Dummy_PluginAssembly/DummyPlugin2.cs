@@ -1,7 +1,10 @@
 ﻿using System;
 namespace Dummy_PluginAssembly
 {
-    public class DummyPlugin2 : DummyPlugin
+    /// <summary>
+    /// This class is entirely for testing purposes. Not necessary for regular use.
+    /// </summary>
+	public class DummyPlugin2 : DummyPlugin
     {
 
     }
