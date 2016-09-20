@@ -10,6 +10,9 @@ using FaithEngage.Core.ActionProcessors;
 
 namespace FaithEngage.Core.Bootstrappers
 {
+    /// <summary>
+    /// This is the root bootstrapper for FaithEngage.Core.
+    /// </summary>
     public class FaithEngageBootLoader : IBootstrapper
     {
         public BootPriority BootPriority {
@@ -20,6 +23,7 @@ namespace FaithEngage.Core.Bootstrappers
 
         public void Execute (IAppFactory factory)
         {
+            //Activate FEFactory to enable static access to the IAppFactory
             FEFactory.Activate (factory);
         }
 
