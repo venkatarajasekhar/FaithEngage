@@ -4,7 +4,11 @@ using FaithEngage.Core.DisplayUnits;
 
 namespace FaithEngage.Core.Cards.DefaultImplementations
 {
-	public class RenderableCard : IRenderableCard
+	/// <summary>
+    /// This is a default implementation of IRenderableCard. It is simple and
+    /// only rerenders to itself. For simple cards, this is all that is necessary.
+    /// </summary>
+    public class RenderableCard : IRenderableCard
     {
         #region IRenderableCard implementation
         public IRenderableCardSection[] Sections {
