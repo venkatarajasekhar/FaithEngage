@@ -1,8 +1,6 @@
-﻿using System;
-using FaithEngage.Core.Containers;
+﻿using FaithEngage.Core.Containers;
 using FaithEngage.Core.PluginManagers;
 using FaithEngage.Core.DisplayUnits;
-using System.Collections.Generic;
 using FaithEngage.Core.Factories;
 using FaithEngage.Core.CardProcessor;
 using FaithEngage.Core.Events;
@@ -12,23 +10,23 @@ using FaithEngage.Core.ActionProcessors;
 
 namespace FaithEngage.Core.Bootstrappers
 {
-	public class FaithEngageBootLoader : IBootstrapper
-	{
+    public class FaithEngageBootLoader : IBootstrapper
+    {
         public BootPriority BootPriority {
             get {
                 return BootPriority.First;
             }
         }
 
-        public void Execute(IAppFactory factory)
-		{
+        public void Execute (IAppFactory factory)
+        {
             FEFactory.Activate (factory);
-		}
+        }
 
-        public void RegisterDependencies(IRegistrationService rs)
-		{
+        public void RegisterDependencies (IRegistrationService rs)
+        {
             rs.Register<IAppFactory, AppFactory> (LifeCycle.Singleton);
-		}
+        }
 
         public void LoadBootstrappers (IBootList bootstrappers)
         {
