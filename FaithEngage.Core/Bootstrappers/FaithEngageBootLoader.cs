@@ -8,6 +8,7 @@ using FaithEngage.Core.CardProcessor;
 using FaithEngage.Core.Events;
 using FaithEngage.Core.Cards;
 using FaithEngage.Core.Userclasses;
+using FaithEngage.Core.ActionProcessors;
 
 namespace FaithEngage.Core.Bootstrappers
 {

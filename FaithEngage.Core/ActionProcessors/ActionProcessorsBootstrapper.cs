@@ -6,8 +6,11 @@ using FaithEngage.Core.ActionProcessors;
 using FaithEngage.Core.Factories;
 using FaithEngage.Core.Bootstrappers;
 
-namespace FaithEngage.Core
+namespace FaithEngage.Core.ActionProcessors
 {
+	/// <summary>
+	/// Bootstraps all ActionProcessors
+	/// </summary>
     public class ActionProcessorsBootstrapper : IBootstrapper
     {
         public BootPriority BootPriority {
