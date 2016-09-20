@@ -6,7 +6,7 @@ using FaithEngage.Core.PluginManagers.Files;
 namespace FaithEngage.Core.Cards.Interfaces
 {
     /// <summary>
-    /// A subsection of a renderable card. It can have subsections as well.
+    /// A subsection of a renderable card.
     /// </summary>
     public interface IRenderableCardSection
     {
