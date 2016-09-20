@@ -42,7 +42,8 @@ namespace FaithEngage.Core.Bootstrappers
         /// <summary>
         /// Adds a Bootstrapper to the list. This method operates recursively, so that
         /// once added to the list, that bootstrapper's "LoadBootstrappers" method is
-        /// called, down until all bootstrappers are loaded in that tree.
+        /// called, down until all bootstrappers are loaded in that tree. Duplicate
+        /// registrations will be ignored.
         /// </summary>
         /// <param name="item">The bootstrapper to add.</param>
         public void Add (IBootstrapper item)
