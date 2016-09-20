@@ -67,7 +67,6 @@
     <Compile Include="Exceptions\CouldNotFindException.cs" />
     <Compile Include="Cards\Interfaces\IRenderableCard.cs" />
     <Compile Include="Cards\Interfaces\IRenderableCardSection.cs" />
-    <Compile Include="Cards\Interfaces\ICardEditorAction.cs" />
     <Compile Include="DisplayUnitEditor\IDisplayUnitEditorDefinition.cs" />
     <Compile Include="RepoManagers\DisplayUnitRepoManager.cs" />
     <Compile Include="DisplayUnits\DisplayUnitGrouping.cs" />
