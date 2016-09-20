@@ -9,7 +9,8 @@ using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.RepoManagers
 {
-	public class DisplayUnitsRepoManager : IDisplayUnitsRepoManager
+	//TODO: Implement Caching for currently live events.
+    public class DisplayUnitsRepoManager : IDisplayUnitsRepoManager
     {
         private readonly IDisplayUnitsRepository _duRepo;
         private readonly IDisplayUnitFactory _factory;
