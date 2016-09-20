@@ -11,6 +11,9 @@ using FaithEngage.Core.PluginManagers.Files.Interfaces;
 
 namespace FaithEngage.Core.Cards
 {
+	/// <summary>
+	/// Obtains RenderableCardDTOs from varous sources.
+	/// </summary>
 	public class CardDtoFactory : ICardDTOFactory
     {
         private readonly ITemplatingService _tempService;
@@ -22,19 +25,32 @@ namespace FaithEngage.Core.Cards
             _fileMgr = fileMgr;
         }
 
-        public RenderableCardDTO[] GetCards(Dictionary<int,DisplayUnit> units)
+        /// <summary>
+        /// Obtains an array of RenderableCrdDTOs from a dictionary of display
+        /// units, ordered by the integer key used.
+        /// </summary>
+        /// <returns>The cards.</returns>
+        /// <param name="units">A dictionary of DisplayUnits with integer keys indicating
+        /// their positions in the event.</param>
+		public RenderableCardDTO[] GetCards(Dictionary<int,DisplayUnit> units)
         {
             return getCards(units)
                 .Select (v => convert(v))
                 .ToArray();
         }
-
-        public RenderableCardDTO GetCard(DisplayUnit unit)
+		/// <summary>
+		/// Obtains a single card from a DisplayUnit.
+		/// </summary>
+		/// <returns>The card.</returns>
+		/// <param name="unit">Unit.</param>
+		public RenderableCardDTO GetCard(DisplayUnit unit)
         {
             IRenderableCard card;
 			try {
-                var files = _fileMgr.GetFilesForPlugin (unit.Plugin.PluginId.Value);
-                card = unit.GetCard (_tempService, files);
+                //Get the files for the display unit's plugin
+				var files = _fileMgr.GetFilesForPlugin (unit.Plugin.PluginId.Value);
+                //Get the card from the display unit
+				card = unit.GetCard (_tempService, files);
             } catch(Exception ex){
 				return null;
 			}
@@ -43,14 +59,18 @@ namespace FaithEngage.Core.Cards
 
         private IEnumerable<IRenderableCard> getCards(Dictionary<int,DisplayUnit> dict)
         {
-            dict.OrderBy (p => p.Key);
-            foreach(var du in dict.Values)
+            //Order the display units by their integer key value
+			dict.OrderBy (p => p.Key);
+            //Loop through the display units
+			foreach(var du in dict.Values)
             {
                 IRenderableCard card;
                 try {
-                    var files = _fileMgr.GetFilesForPlugin (du.Plugin.PluginId.Value);
-                    card = du.GetCard(_tempService, files);
-                }catch{
+                    //Get the files for the du
+					var files = _fileMgr.GetFilesForPlugin (du.Plugin.PluginId.Value);
+                    //Get the card from the du
+					card = du.GetCard(_tempService, files);
+                }catch{ //If an error is encountered, fail silently and move on to th next.
                     continue;
                 }
                 yield return card;  
@@ -66,7 +86,12 @@ namespace FaithEngage.Core.Cards
 			}
 		}
 
-        private RenderableCardDTO convert(IRenderableCard card)
+		/// <summary>
+		/// Converts an IRenderableCard to a RenderableCardDTO.
+		/// </summary>
+		/// <returns>The card.</returns>
+		/// <param name="card">Card.</param>
+		private RenderableCardDTO convert(IRenderableCard card)
         {
             var dto = new RenderableCardDTO ();
             dto.Title = card.Title;

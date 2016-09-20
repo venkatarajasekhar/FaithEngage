@@ -3,7 +3,10 @@ using System.Collections.Generic;
 
 namespace FaithEngage.Core.Cards
 {
-    public class CardActionResultArgs
+    /// <summary>
+    /// Key/Value pairs sent as a result of executing a card action.
+    /// </summary>
+	public class CardActionResultArgs
     {
         public Dictionary<string,string> Responses {
             get;
