@@ -1,7 +1,10 @@
 ﻿using System;
 namespace FaithEngage.Core.Config
 {
-    public interface IConfigManager
+    /// <summary>
+    /// The ConfigManager provides get/set access to configurations throughout the application.
+    /// </summary>
+	public interface IConfigManager
     {
         string TempFolderPath { get; set;}
         string PluginsFolderPath { get; set;}

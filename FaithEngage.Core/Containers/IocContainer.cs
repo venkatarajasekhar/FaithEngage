@@ -15,12 +15,12 @@ namespace FaithEngage.Core.Containers
 
         private readonly List<RegisteredObject> _registry = new List<RegisteredObject>();
 
-        public void Register<Tabstract, Tconcrete> ()
+		public void Register<Tabstract, Tconcrete> ()
         {
             Register<Tabstract,Tconcrete> (LifeCycle.Singleton);
         }
 
-        public void Register<Tabstract,Tconcrete>(LifeCycle lifecycle)
+		public void Register<Tabstract,Tconcrete>(LifeCycle lifecycle)
         {
             if (!typeof (Tabstract).IsAssignableFrom (typeof (Tconcrete)))
                 throw new InvalidTypeRelationshipException (typeof (Tabstract), typeof (Tconcrete));
