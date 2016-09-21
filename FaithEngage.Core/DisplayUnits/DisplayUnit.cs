@@ -11,27 +11,36 @@ using FaithEngage.Core.PluginManagers.Files;
 namespace FaithEngage.Core.DisplayUnits
 {
     /// <summary>
-    /// This is the base display unit from which all other units are derived.
+    /// This is the base display unit from which all other units are derived. A DisplayUnit is an object
+	/// with information about itself and with methods that allow it to produce a renderable card that
+	/// will ultimately produce the rendered front end visual for a given DisplayUnit
     /// </summary>
     abstract public class DisplayUnit
     {
             
         /// <summary>
-        /// Initializes a new instance of the <see cref="AbstractClasses.DisplayUnit"/> class.
+        /// Initializes a new instance of the <see cref="AbstractClasses.DisplayUnit"/> class, 
+		/// assigning a new id.
         /// </summary>
-        protected DisplayUnit (Dictionary<string,string> attributes)
+		protected DisplayUnit (Dictionary<string,string> attributes) : this(Guid.NewGuid(),attributes)
         {
-            this.Id = Guid.NewGuid ();
-            tryApplyAttributes (attributes);
-            SetAttributes (attributes);
         }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:FaithEngage.Core.DisplayUnits.DisplayUnit"/> class
+		/// with a preexisting id.
+		/// </summary>
+		/// <param name="id">Identifier.</param>
+		/// <param name="attributes">Attributes.</param>
         protected DisplayUnit(Guid id, Dictionary<string,string> attributes)
         {
-            if (id == Guid.Empty)
+            //Fail on empty Guid
+			if (id == Guid.Empty)
                 throw new EmptyGuidException ();
-            this.Id = id;
-            tryApplyAttributes (attributes);
+            //Assign the id to the DisplayUnit
+			this.Id = id;
+            //Attempt 
+			tryApplyAttributes (attributes);
             SetAttributes (attributes);
         }
 
