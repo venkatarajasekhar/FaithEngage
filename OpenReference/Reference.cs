@@ -1,4 +1,6 @@
-﻿using System;
+﻿//TODO:JF: Change OpenReference project to submodule tracking the ReferenceParser repo on my github
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
