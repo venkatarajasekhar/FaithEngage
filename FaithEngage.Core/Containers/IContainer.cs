@@ -63,7 +63,7 @@ namespace FaithEngage.Core.Containers
         /// Checks whether the specified abstract/interface type is currently registered.
         /// </summary>
         /// <returns><c>true</c>, if registered already, <c>false</c> otherwise.</returns>
-        /// <typeparam name="Tabstract">The 1st type parameter.</typeparam>
+        /// <typeparam name="Tabstract">The type to check</typeparam>
 		bool CheckRegistered<Tabstract> ();
         /// <summary>
         /// Runs through all currently registered concrete types and checks their constructor dependencies, recursively,
