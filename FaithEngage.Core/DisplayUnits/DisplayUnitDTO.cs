@@ -39,7 +39,7 @@ namespace FaithEngage.Core.DisplayUnits
             get;
             set;
         }
-
+		//Todo: Associate DTOs with their du plugin by type fullname rather than id
         public Guid PluginId {
             get;
             set;

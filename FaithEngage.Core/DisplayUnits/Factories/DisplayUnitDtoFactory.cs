@@ -4,7 +4,10 @@ using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.DisplayUnits.Factories
 {
-    public class DisplayUnitDtoFactory : IConverterFactory<DisplayUnit,DisplayUnitDTO>
+    /// <summary>
+    /// Converts DisplayUnits to DisplayUnitDTOs
+    /// </summary>
+	public class DisplayUnitDtoFactory : IConverterFactory<DisplayUnit,DisplayUnitDTO>
     {
         public DisplayUnitDTO Convert (DisplayUnit unit)
         {
