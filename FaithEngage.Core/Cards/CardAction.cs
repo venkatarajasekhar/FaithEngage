@@ -4,13 +4,26 @@ using FaithEngage.Core.UserClasses;
 
 namespace FaithEngage.Core.Cards
 {
-    public class CardAction
+    /// <summary>
+	/// The CardAction is generated through an API (TBD) and fed to a DisplayUnit's
+	/// ExecuteCardAction() method to produce a cardActionResult.
+    /// </summary>
+	public class CardAction
     {
-        public string ActionName {
+        public CardAction ()
+		{
+			this.Parameters = new Dictionary<string, string> ();
+		}
+
+		public string ActionName {
             get;
             set;
         }
 
+		/// <summary>
+		/// Key/Value pairs used by the Display Unit to process the action.
+		/// </summary>
+		/// <value>The parameters.</value>
         public Dictionary<string,string> Parameters {
             get;
             set;

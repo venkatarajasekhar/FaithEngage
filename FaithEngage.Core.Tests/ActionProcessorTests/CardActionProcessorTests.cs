@@ -8,6 +8,8 @@ using FaithEngage.Core.PluginManagers.DisplayUnitPlugins;
 using FakeItEasy;
 using NUnit.Framework;
 using FaithEngage.Core.CardProcessor;
+using FaithEngage.Core.PluginManagers.Files;
+using FaithEngage.Core.TemplatingService;
 
 namespace FaithEngage.Core.ActionProcessors
 {
@@ -16,8 +18,57 @@ namespace FaithEngage.Core.ActionProcessors
     {
         IDisplayUnitsRepoManager _repo;
 		public Guid VALID_GUID = Guid.NewGuid();
-		
-        [SetUp]
+
+		class dummyDu : DisplayUnit
+		{
+			CardActionProcessorTests _outer;
+
+			public dummyDu(CardActionProcessorTests outer) : base(outer.VALID_GUID,new Dictionary<string, string>())
+			{
+				_outer = outer;
+			}
+
+			public override DisplayUnitPlugin Plugin {
+				get {
+					throw new NotImplementedException ();
+				}
+			}
+
+			public override Dictionary<string, string> GetAttributes ()
+			{
+				throw new NotImplementedException ();
+			}
+
+			public override IRenderableCard GetCard (ITemplatingService service, IDictionary<Guid, PluginFileInfo> files)
+			{
+				throw new NotImplementedException ();
+			}
+
+			public override void SetAttributes (Dictionary<string, string> attributes)
+			{
+			}
+			public override void ExecuteCardAction (CardAction Action)
+			{
+				this.Name = Action.Parameters ["name"];
+				OnCardActionResult (
+					this,
+					new CardActionResultArgs {
+						DestinationDisplayUnit = this.Id,
+						Responses = new Dictionary<string, string> ()
+						{
+							{"Test1", "Hi!"}
+
+						}
+					}
+				);
+			}
+			public override event CardActionResultEventHandler OnCardActionResult;
+
+		}
+
+
+
+		[SetUp]
 		public void init()
 		{
 			_repo = A.Fake<IDisplayUnitsRepoManager>();
@@ -55,8 +106,10 @@ namespace FaithEngage.Core.ActionProcessors
         {
 			Exception thrownEx = null;
 			var action = new CardAction();
+			action.Parameters ["name"] = "Blue!";
 			A.CallTo(() => _repo.SaveOneToEvent(A<DisplayUnit>.Ignored)).Throws<Exception>();
-			var du = A.Fake<DisplayUnit>();
+			var du = new dummyDu (this);
+			A.CallTo (() => _repo.GetById (A<Guid>.Ignored)).Returns (du);
 			DisplayUnit receivedDu = null;
 			CardActionResultArgs receivedArgs = null;
 			CardActionResultArgs sentArgs = new CardActionResultArgs();
@@ -64,6 +117,7 @@ namespace FaithEngage.Core.ActionProcessors
 			{
 				{"Test1", "Hi!"}
 			};
+			sentArgs.DestinationDisplayUnit = du.Id;
 
 			var cap = new CardActionProcessor(_repo);
 			cap.OnCardActionResult += (sender, e) => { receivedDu = sender; receivedArgs = e; };
@@ -75,10 +129,7 @@ namespace FaithEngage.Core.ActionProcessors
 			{
 				thrownEx = ex;
 			}
-			du.OnCardActionResult += Raise.With<CardActionResultEventHandler>(du, sentArgs);
 
-			Assert.That(receivedDu, Is.Null);
-			Assert.That(receivedArgs, Is.Null);
 			Assert.That(thrownEx, Is.Not.Null);
         }
 	}
