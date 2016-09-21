@@ -38,14 +38,8 @@ namespace FaithEngage.Core.ActionProcessors
 				//Add it to the list to hold on to the reference
 				_awaitingResponse.Add(du);
 				//Execute the card action on the display unit
-				var preHash = du.GetHashCode ();
 				du.ExecuteCardAction(action);
-				var postHash = du.GetHashCode ();
-
-				if (preHash != postHash) {
-					_repo.SaveOneToEvent (du);
-					//TODO: Add event notification for changed DU
-				}	
+				_repo.SaveOneToEvent(du);
 			}
 			catch (Exception ex)
 			{

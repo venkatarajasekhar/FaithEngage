@@ -10,7 +10,12 @@ namespace FaithEngage.Core.Cards
     /// </summary>
 	public class CardAction
     {
-        public string ActionName {
+        public CardAction ()
+		{
+			this.Parameters = new Dictionary<string, string> ();
+		}
+
+		public string ActionName {
             get;
             set;
         }
