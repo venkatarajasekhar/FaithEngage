@@ -3,8 +3,15 @@ using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.Events.EventSchedules.Factories
 {
-    public class EventScheduleDTOFactory : IConverterFactory<EventSchedule,EventScheduleDTO>
+    /// <summary>
+    /// Converts EventSchedules to EventScheduleDTOs.
+    /// </summary>
+	public class EventScheduleDTOFactory : IConverterFactory<EventSchedule,EventScheduleDTO>
 	{
+		/// <summary>
+		/// Converts an EventSchedule to an EventScheduleDTO. All DateTimes are converted to universal time.
+		/// </summary>
+		/// <param name="evnt">The event to be converted.</param>
 		public EventScheduleDTO Convert (EventSchedule evnt)
         {
             var dto = new EventScheduleDTO (); 
