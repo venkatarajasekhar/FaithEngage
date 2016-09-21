@@ -103,7 +103,7 @@ namespace FaithEngage.Core.DisplayUnits.Factories
             unit.Name = dto.Name;
             unit.Description = dto.Description;
             unit.DateCreated = dto.DateCreated;
-            unit.AssociatedEvent = dto.AssociatedEvent;
+            unit.AssociatedEvent = dto.AssociatedEventId;
             unit.PositionInEvent = dto.PositionInEvent;
 			unit.Plugin.PluginId = dto.PluginId;
             if(dto.GroupId.HasValue && dto.PositionInGroup.HasValue){

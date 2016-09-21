@@ -210,7 +210,7 @@ namespace FaithEngage.Core.RepoManagers
 
 			Assert.That(receivedUnits, Is.Not.Null);
 			Assert.That(receivedUnits.Count == 4);
-			Assert.That(receivedUnits.All(p => p.Value.AssociatedEvent == VALID_GUID));
+			Assert.That(receivedUnits.All(p => p.Value.AssociatedEventId == VALID_GUID));
 			foreach (var key in receivedUnits.Keys.ToArray())
 			{
 				Assert.That(receivedUnits[key].PositionInEvent, Is.EqualTo(key));
