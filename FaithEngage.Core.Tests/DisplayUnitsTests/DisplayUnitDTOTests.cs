@@ -15,7 +15,7 @@ namespace FaithEngage.Core.DisplayUnits
 			var dto = new DisplayUnitDTO(VALID_GUID, VALID_GUID);
 
 			Assert.That (dto.Id, Is.EqualTo (VALID_GUID));
-			Assert.That (dto.AssociatedEvent, Is.EqualTo (VALID_GUID));
+			Assert.That (dto.AssociatedEventId, Is.EqualTo (VALID_GUID));
 			Assert.That (dto.Attributes, Is.Not.Null);
 		}
 

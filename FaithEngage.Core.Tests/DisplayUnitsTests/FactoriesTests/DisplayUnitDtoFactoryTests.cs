@@ -47,7 +47,7 @@ namespace FaithEngage.Core.DisplayUnits.Factories
             var dto = _fac.Convert(_du);
 
 			Assert.That(dto, Is.Not.Null);
-			Assert.That(dto.AssociatedEvent, Is.EqualTo(VALID_GUID));
+			Assert.That(dto.AssociatedEventId, Is.EqualTo(VALID_GUID));
 			Assert.That(dto.Attributes["First"], Is.EqualTo("First"));
 			Assert.That(dto.DateCreated, Is.EqualTo(DateTime.Now.Date));
 			Assert.That(dto.Description, Is.EqualTo(VALID_STRING));
