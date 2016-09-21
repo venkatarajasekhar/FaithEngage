@@ -7,6 +7,10 @@ using FaithEngage.Core.UserClasses;
 
 namespace FaithEngage.Core.DisplayUnitEditor
 {
+	/// <summary>
+	/// This is passed into the display unit editor definition's GetHtmlEditorForm() method
+	/// to provide all the context necessary to generate an HTML editor for a given display unit type.
+	/// </summary>
 	public class DisplayUnitEditorContext
 	{
 		public DisplayUnit DisplayUnit
