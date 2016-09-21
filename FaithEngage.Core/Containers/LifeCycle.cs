@@ -2,10 +2,13 @@
 
 namespace FaithEngage.Core.Containers
 {
-    public enum LifeCycle
+    /// <summary>
+    /// The specification of dependency lifecycle.
+    /// </summary>
+	public enum LifeCycle
     {
-        Transient,
-        Singleton
+        Transient, //Object is created anew every time requested
+        Singleton //A single instance is stored in memory and shared across the application
     }
 }
 
