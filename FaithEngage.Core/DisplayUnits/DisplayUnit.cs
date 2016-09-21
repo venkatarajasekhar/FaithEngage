@@ -44,6 +44,10 @@ namespace FaithEngage.Core.DisplayUnits
             SetAttributes (attributes);
         }
 
+		/// <summary>
+		/// Apply the attributes for this base class's properties.
+		/// </summary>
+		/// <param name="attributes">Attributes.</param>
         private void tryApplyAttributes(Dictionary<string,string> attributes)
         {
             string name;
@@ -102,6 +106,11 @@ namespace FaithEngage.Core.DisplayUnits
         /// <returns>The attributes.</returns>
         abstract public Dictionary<string,string> GetAttributes ();
 
+		/// <summary>
+		/// Obtains an attribute specified by the given key.
+		/// </summary>
+		/// <returns>The attribute.</returns>
+		/// <param name="key">Key.</param>
         public string GetAttribute(string key)
         {
             var dict = this.GetAttributes ();
@@ -123,22 +132,30 @@ namespace FaithEngage.Core.DisplayUnits
         abstract public IRenderableCard GetCard (ITemplatingService service, IDictionary<Guid, PluginFileInfo> files);
 
         /// <summary>
-        /// If a display unit type has actions that should be performed as response to
+        /// If a display unit type has actions that should be performed as a response to
         /// interaction with a renderable card (i.e. external service calls, etc...),
-        /// it will be sent to this method. These calls will be made via a respons API.
+        /// it will be sent to this method. These calls will be made via a response API.
+		/// (TBD)
         /// </summary>
         /// <param name="Action">Action.</param>
         public virtual void ExecuteCardAction (CardAction Action)
         {
         }
 
+		/// <summary>
+		/// Any card action executed, if a response is to be sent back, is done via this event.
+		/// </summary>
         public virtual event CardActionResultEventHandler OnCardActionResult;
 
-        public DisplayUnitGrouping? UnitGroup {get;set;}
+        /// <summary>
+        /// If this Display Unit is part of a larger group (such as a series of slides that correspond to
+		/// each other in a certain order), this will be the grouping.
+        /// </summary>
+        /// <value>The unit group.</value>
+		public DisplayUnitGrouping? UnitGroup {get;set;}
 
         /// <summary>
-        /// Each display unit type must know how to receive a dictionary of attributes
-        /// and apply its contents.
+        /// Sets the attributes on the DisplayUnit.
         /// </summary>
         /// <param name="attributes">Attributes.</param>
         abstract public void SetAttributes (Dictionary<string,string> attributes);
@@ -163,19 +180,30 @@ namespace FaithEngage.Core.DisplayUnits
             set;
         }
 
+		/// <summary>
+		/// Gets or sets the date created.
+		/// </summary>
+		/// <value>The date created.</value>
         public DateTime DateCreated {
             get;
             set;
         }
 
-
+		/// <summary>
+		/// Gets or sets the associated event's ID
+		/// </summary>
+		/// <value>The associated event.</value>
         public Guid AssociatedEvent {
             get;
             set;
         }
 
         private int _positionInEvent;
-        public int PositionInEvent {
+        /// <summary>
+        /// Gets or sets the position in the event.
+        /// </summary>
+        /// <value>The position in event.</value>
+		public int PositionInEvent {
             get{
                 return _positionInEvent;
             }
@@ -187,6 +215,9 @@ namespace FaithEngage.Core.DisplayUnits
             }
         }
 
+		/// <summary>
+		/// This creates a duplicate of this display unit with a brand new Id.
+		/// </summary>
         public virtual DisplayUnit Clone(){
             var ctor = this.Plugin.DisplayUnitType.GetConstructor (new Type[]{ typeof(Dictionary<string,string>)});
             DisplayUnit unit = ctor.Invoke (new object[]{ this.GetAttributes () }) as DisplayUnit;
