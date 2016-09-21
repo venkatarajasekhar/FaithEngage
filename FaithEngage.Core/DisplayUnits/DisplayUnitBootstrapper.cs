@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using FaithEngage.Core.Containers;
+﻿using FaithEngage.Core.Containers;
 using FaithEngage.Core.DisplayUnits.Factories;
 using FaithEngage.Core.DisplayUnits.Interfaces;
 using FaithEngage.Core.RepoManagers;
@@ -11,26 +9,26 @@ namespace FaithEngage.Core.DisplayUnits
 {
 	public class DisplayUnitBootstrapper : IBootstrapper
 	{
-        public BootPriority BootPriority {
-            get {
-                return BootPriority.Normal;
-            }
-        }
-
-        public void Execute(IAppFactory container)
-		{
-			
+		public BootPriority BootPriority {
+			get {
+				return BootPriority.Normal;
+			}
 		}
 
-        public void LoadBootstrappers (IBootList bootstrappers)
-        {
-        }
-
-        public void RegisterDependencies(IRegistrationService rs)
+		public void Execute (IAppFactory container)
 		{
-            rs.Register<IDisplayUnitFactory, DisplayUnitFactory>(LifeCycle.Transient);
-            rs.Register<IDisplayUnitsRepoManager, DisplayUnitsRepoManager> (LifeCycle.Transient);
-            rs.Register<IConverterFactory<DisplayUnit,DisplayUnitDTO>, DisplayUnitDtoFactory> (LifeCycle.Transient);
+
+		}
+
+		public void LoadBootstrappers (IBootList bootstrappers)
+		{
+		}
+
+		public void RegisterDependencies (IRegistrationService rs)
+		{
+			rs.Register<IDisplayUnitFactory, DisplayUnitFactory> (LifeCycle.Transient);
+			rs.Register<IDisplayUnitsRepoManager, DisplayUnitsRepoManager> (LifeCycle.Transient);
+			rs.Register<IConverterFactory<DisplayUnit, DisplayUnitDTO>, DisplayUnitDtoFactory> (LifeCycle.Transient);
 		}
 	}
 }
