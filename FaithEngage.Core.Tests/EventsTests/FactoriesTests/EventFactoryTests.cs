@@ -27,7 +27,7 @@ namespace FaithEngage.Core.Events.Factories
         {
             var dto = new EventDTO ();
             dto.AssociatedOrg = VALID_GUID;
-            dto.EventDate = DateTime.Now.Date;
+            dto.UtcEventDate = DateTime.Now.Date;
             dto.EventId = VALID_GUID;
             dto.EventScheduleId = VALID_GUID;
             var sched = new EventSchedule ();
