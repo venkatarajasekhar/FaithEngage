@@ -27,7 +27,7 @@ namespace FaithEngage.Core.Events.Factories
         {
             var dto = new EventDTO ();
             dto.AssociatedOrg = VALID_GUID;
-            dto.UtcEventDate = DateTime.Now.Date;
+			dto.UtcEventDate = DateTime.UtcNow.Date;
             dto.EventId = VALID_GUID;
             dto.EventScheduleId = VALID_GUID;
             var sched = new EventSchedule ();
@@ -36,7 +36,7 @@ namespace FaithEngage.Core.Events.Factories
             var evnt = _fac.Convert (dto);
 
             Assert.That (evnt.AssociatedOrg, Is.EqualTo (VALID_GUID));
-            Assert.That (evnt.EventDate, Is.EqualTo (DateTime.Now.Date));
+			Assert.That (evnt.EventDate.Value.Date, Is.EqualTo (DateTimeOffset.Now.Date));
             Assert.That (evnt.EventId, Is.EqualTo (VALID_GUID));
             Assert.That (evnt.Schedule, Is.EqualTo (sched));
         }
