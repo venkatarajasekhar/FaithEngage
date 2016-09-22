@@ -57,13 +57,13 @@ namespace FaithEngage.Core.RepoManagers
 		[Test]
 		public void GetByDate_ValidDateAndOrgId_ReturnsValidList()
 		{
-            var dto = new EventDTO () { AssociatedOrg = VALID_GUID, UtcEventDate = DateTime.Now.Date, EventId = VALID_GUID, EventScheduleId = VALID_GUID };
+			var dto = new EventDTO () { AssociatedOrg = VALID_GUID, UtcEventDate = DateTime.UtcNow.Date, EventId = VALID_GUID, EventScheduleId = VALID_GUID };
 
             var dtos = Enumerable.Repeat (dto, 5).ToList ();
             var evnt = new Event ();
 
             A.CallTo (() => _fac.Convert (A<EventDTO>.Ignored)).Returns (evnt);
-            A.CallTo(() => _repo.GetByDate(A<DateTime>.Ignored, A<Guid>.Ignored)).Returns(dtos);
+			A.CallTo(() => _repo.GetByDate(A<DateTimeOffset>.Ignored, A<Guid>.Ignored)).Returns(dtos);
 
 			var evnts = mgr.GetByDate(DateTime.Now.Date, VALID_GUID);
 			Assert.That(evnts, Is.Not.Null);
@@ -84,7 +84,7 @@ namespace FaithEngage.Core.RepoManagers
 		[Test]
 		public void GetByDate_InvalidId_ThrowsInvalidIdException()
 		{
-			A.CallTo(() => _repo.GetByDate(A<DateTime>.Ignored, A<Guid>.Ignored)).Throws<InvalidIdException>();
+			A.CallTo(() => _repo.GetByDate(A<DateTimeOffset>.Ignored, A<Guid>.Ignored)).Throws<InvalidIdException>();
 			var e = TestHelpers.TryGetException(() => mgr.GetByDate(DateTime.Now.Date, INVALID_GUID));
 
 			Assert.That(e, Is.InstanceOf(typeof(InvalidIdException)));
@@ -93,7 +93,7 @@ namespace FaithEngage.Core.RepoManagers
 		[Test]
 		public void GetByDate_RepoThrowsException_ThrowsRepoException()
 		{
-			A.CallTo(() => _repo.GetByDate(A<DateTime>.Ignored, A<Guid>.Ignored)).Throws<Exception>();
+			A.CallTo(() => _repo.GetByDate(A<DateTimeOffset>.Ignored, A<Guid>.Ignored)).Throws<Exception>();
 			var e = TestHelpers.TryGetException(() => mgr.GetByDate(DateTime.Now.Date, INVALID_GUID));
 
 			Assert.That(e, Is.InstanceOf(typeof(RepositoryException)));
