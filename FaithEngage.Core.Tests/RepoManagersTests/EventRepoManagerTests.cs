@@ -57,7 +57,7 @@ namespace FaithEngage.Core.RepoManagers
 		[Test]
 		public void GetByDate_ValidDateAndOrgId_ReturnsValidList()
 		{
-            var dto = new EventDTO () { AssociatedOrg = VALID_GUID, EventDate = DateTime.Now.Date, EventId = VALID_GUID, EventScheduleId = VALID_GUID };
+            var dto = new EventDTO () { AssociatedOrg = VALID_GUID, UtcEventDate = DateTime.Now.Date, EventId = VALID_GUID, EventScheduleId = VALID_GUID };
 
             var dtos = Enumerable.Repeat (dto, 5).ToList ();
             var evnt = new Event ();
@@ -102,7 +102,7 @@ namespace FaithEngage.Core.RepoManagers
         [Test]
         public void GetById_ValidId_ReturnsValidEvent ()
         {
-            var dto = new EventDTO () { AssociatedOrg = VALID_GUID, EventDate = DateTime.Now.Date, EventId = VALID_GUID, EventScheduleId = VALID_GUID };
+            var dto = new EventDTO () { AssociatedOrg = VALID_GUID, UtcEventDate = DateTime.Now.Date, EventId = VALID_GUID, EventScheduleId = VALID_GUID };
             var evnt = new Event();
             A.CallTo(() => _repo.GetById(VALID_GUID)).Returns(dto);
             A.CallTo (() => _fac.Convert (dto)).Returns (evnt);
@@ -132,7 +132,7 @@ namespace FaithEngage.Core.RepoManagers
 		[Test]
 		public void GetByOrgId_ValidId_ReturnsValidEvent()
 		{
-			var dto = new EventDTO () { AssociatedOrg = VALID_GUID, EventDate = DateTime.Now.Date, EventId = VALID_GUID, EventScheduleId = VALID_GUID };
+			var dto = new EventDTO () { AssociatedOrg = VALID_GUID, UtcEventDate = DateTime.Now.Date, EventId = VALID_GUID, EventScheduleId = VALID_GUID };
 			var dtos = Enumerable.Repeat(dto, 5).ToList();
             var evnt = new Event ();
 			A.CallTo(() => _repo.GetByOrgId(VALID_GUID)).Returns(dtos);
