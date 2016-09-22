@@ -149,7 +149,7 @@ namespace FaithEngage.Core.Containers
                 //Attempt to obtain the first constructor for the registered object.
 				constructorInfo = registeredObject.ConcreteType.GetConstructors ().First ();
             } catch (InvalidOperationException) {
-                throw new NoPublicConstructorsException ("Type has no public constructors: " + registeredObject.ConcreteType.Name);
+				throw new NoPublicConstructorsException (registeredObject.ConcreteType, "Type has no public constructors: " + registeredObject.ConcreteType.Name);
             }
 			//Loop through the constructor parameters...
             foreach(var parameter in constructorInfo.GetParameters())
