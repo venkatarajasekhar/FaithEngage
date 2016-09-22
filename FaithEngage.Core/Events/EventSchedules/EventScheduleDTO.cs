@@ -1,7 +1,10 @@
 ﻿using System;
 namespace FaithEngage.Core.Events.EventSchedules
 {
-    public class EventScheduleDTO
+    /// <summary>
+    /// A data transfer object to carry EventSchedules between application layers.
+    /// </summary>
+	public class EventScheduleDTO
     {
         public Guid Id { get; set; }
         public DayOfWeek Day { get; set; }
