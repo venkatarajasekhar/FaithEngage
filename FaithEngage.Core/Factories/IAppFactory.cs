@@ -12,20 +12,78 @@ using FaithEngage.Core.PluginManagers.Interfaces;
 
 namespace FaithEngage.Core.Factories
 {
-    public interface IAppFactory
+    /// <summary>
+    /// This is the centralized means by which the application's registered dependencies can be accessed, particularly
+	/// within bootstrappers and within plugins.
+    /// </summary>
+	public interface IAppFactory
     {
-        IDisplayUnitsRepoManager DisplayUnitsRepo {get;}
-        IDisplayUnitPluginRepoManager DisplayUnitsPluginRepo {get;}
-        IOrganizationRepoManager OrganizationRepo { get; }
-        IUserRepoManager UserRepo{ get; }
-        IEventRepoManager EventRepo{ get; }
-        IEventScheduleRepoManager EventScheduleRepo{ get; }
-        ICardProcessor CardProcessor { get; }
-        ITemplatingService TemplatingService{ get; }
-        IPluginFileManager PluginFileManager{ get; }
+        /// <summary>
+		/// Obtains the application's DisplayUnitsRepositoryManager
+		/// </summary>
+		/// <value>The display units repo.</value>
+		IDisplayUnitsRepoManager DisplayUnitsRepo {get;}
+        /// <summary>
+		/// Gets the application's DisplayUnitPluginRepositoryManager
+		/// </summary>
+		/// <value>The display units plugin repo.</value>
+		IDisplayUnitPluginRepoManager DisplayUnitsPluginRepo {get;}
+        /// <summary>
+		/// Gets the application's OrganizationRepositoryManager
+		/// </summary>
+		/// <value>The organization repo.</value>
+		IOrganizationRepoManager OrganizationRepo { get; }
+        /// <summary>
+		/// Gets the application's UserRepositoryManager
+		/// </summary>
+		/// <value>The user repo.</value>
+		IUserRepoManager UserRepo{ get; }
+        /// <summary>
+		/// Gets the application's EventRepositoryManager
+		/// </summary>
+		/// <value>The event repo.</value>
+		IEventRepoManager EventRepo{ get; }
+        /// <summary>
+		/// Gets the application's EventScheduleRepositoryManager
+		/// </summary>
+		/// <value>The event schedule repo.</value>
+		IEventScheduleRepoManager EventScheduleRepo{ get; }
+        /// <summary>
+		/// Gets the application's CardProcessor
+		/// </summary>
+		/// <value>The card processor.</value>
+		ICardProcessor CardProcessor { get; }
+        /// <summary>
+		/// Gets the application's TemplatingService
+		/// </summary>
+		/// <value>The templating service.</value>
+		ITemplatingService TemplatingService{ get; }
+        /// <summary>
+		/// Gets the application's PluginFileManager
+		/// </summary>
+		/// <value>The plugin file manager.</value>
+		IPluginFileManager PluginFileManager{ get; }
+		/// <summary>
+		/// Get's the applications ConfigurationManager.
+		/// </summary>
+		/// <value>The config manager.</value>
 		IConfigRepository ConfigManager { get; }
-        IRegistrationService RegistrationService { get; }
+        /// <summary>
+		/// Gets the application's RegistrationService
+		/// </summary>
+		/// <value>The registration service.</value>
+		IRegistrationService RegistrationService { get; }
+		/// <summary>
+		/// Gets the application's PluginManager
+		/// </summary>
+		/// <value>The plugin manager.</value>
 		IPluginManager PluginManager { get; }
+		/// <summary>
+		/// Obtains any other kind of requested dependency from the application, EXCEPT the application's IContainer,
+		/// which is not permitted for security reasons.
+		/// </summary>
+		/// <returns>The other.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		T GetOther<T>();
     }
 }
