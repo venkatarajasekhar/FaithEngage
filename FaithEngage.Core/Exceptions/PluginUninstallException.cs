@@ -1,6 +1,9 @@
 ﻿using System;
 namespace FaithEngage.Core.Exceptions
 {
+	/// <summary>
+	/// Indicates a problem was encountered in the process of uninstalling a plugin.
+	/// </summary>
 	public class PluginUninstallException : Exception
 	{
 		public PluginUninstallException()

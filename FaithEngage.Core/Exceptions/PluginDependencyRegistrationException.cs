@@ -1,7 +1,11 @@
 ﻿using System;
 namespace FaithEngage.Core.Exceptions
 {
-    public class PluginDependencyRegistrationException : Exception
+    /// <summary>
+    /// Indicates there was a problem with plugin dependencies. Generally, this is because a plugin's assembly references
+	/// assemblies that are inaccessible.
+    /// </summary>
+	public class PluginDependencyRegistrationException : Exception
     {
         public PluginDependencyRegistrationException ()
         {

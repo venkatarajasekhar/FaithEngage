@@ -1,7 +1,10 @@
 ﻿using System;
 namespace FaithEngage.Core.Exceptions
 {
-    public class PluginLoadException : Exception
+    /// <summary>
+    /// Indicates there was a problem loading a plugin's assembly and registering it.
+    /// </summary>
+	public class PluginLoadException : Exception
     {
         public PluginLoadException ()
         {

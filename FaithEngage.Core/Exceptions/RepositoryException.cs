@@ -2,7 +2,10 @@
 
 namespace FaithEngage.Core.Exceptions
 {
-    public class RepositoryException : Exception
+    /// <summary>
+    /// The base Exception type from which all repository-associated exceptions derive.
+    /// </summary>
+	public class RepositoryException : Exception
     {
         public RepositoryException ()
         {

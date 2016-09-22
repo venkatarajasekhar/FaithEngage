@@ -1,6 +1,9 @@
 ﻿using System;
 namespace FaithEngage.Core
 {
+	/// <summary>
+	/// Indicates there was a problem accessing a plugin file resource.
+	/// </summary>
 	public class PluginFileException : Exception
 	{
 		public PluginFileException()

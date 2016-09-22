@@ -2,6 +2,9 @@
 
 namespace FaithEngage.Core.Exceptions
 {
+	/// <summary>
+	/// Indicates the plugin requested has an invalid id.
+	/// </summary>
 	public class PluginHasInvalidIdException : Exception
 	{
 		public PluginHasInvalidIdException ()

@@ -1,6 +1,9 @@
 ﻿using System;
 namespace FaithEngage.Core.Exceptions
 {
+	/// <summary>
+	/// Indicates that a plugin is missing information necessary to its functioning.
+	/// </summary>
 	public class PluginIsMissingNecessaryInfoException : Exception
 	{
 		public PluginIsMissingNecessaryInfoException()

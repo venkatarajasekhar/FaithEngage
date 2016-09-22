@@ -1,7 +1,10 @@
 ﻿using System;
 namespace FaithEngage.Core
 {
-    public class PluginInstallException : Exception
+    /// <summary>
+    /// Indicates a problem within the Plugin install process.
+    /// </summary>
+	public class PluginInstallException : Exception
     {
         public PluginInstallException ()
         {

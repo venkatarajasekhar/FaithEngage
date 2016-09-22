@@ -1,7 +1,11 @@
 ﻿using System;
 namespace FaithEngage.Core.Exceptions
 {
-    public class PluginInitializationException : Exception
+    /// <summary>
+    /// Indicates a problem with initializing a plugin. This is a catch-all exception for all exceptions encountered
+	/// during the initialization process for a given plugin.
+    /// </summary>
+	public class PluginInitializationException : Exception
     {
         public PluginInitializationException ()
         {

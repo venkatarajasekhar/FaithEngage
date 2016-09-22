@@ -2,7 +2,11 @@
 
 namespace FaithEngage.Core.Exceptions
 {
-    public class PluginHasInvalidConstructorsException : Exception
+    /// <summary>
+    /// Indicates the plugin desired cannot be constructed because it's constructor signature doesn't match the
+	/// required signature type.
+    /// </summary>
+	public class PluginHasInvalidConstructorsException : Exception
     {
         public PluginHasInvalidConstructorsException ()
         {
