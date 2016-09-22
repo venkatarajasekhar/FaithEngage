@@ -25,7 +25,7 @@ namespace FaithEngage.Core.RepoManagers
 			execute(() => _repo.DeleteEvent(id));
         }
 
-		public List<Event> GetByDate(DateTime date, Guid orgId)
+		public IList<Event> GetByDate(DateTimeOffset date, Guid orgId)
 		{
 			var dtos = execute(() => _repo.GetByDate(date, orgId));
 			if (dtos == null) return new List<Event>();
@@ -38,7 +38,7 @@ namespace FaithEngage.Core.RepoManagers
 			return _fac.Convert(dto);
         }
 
-        public List<Event> GetByOrgId (Guid orgId)
+        public IList<Event> GetByOrgId (Guid orgId)
         {
 			var dtos = execute(()=> _repo.GetByOrgId (orgId));
 			if (dtos == null) return new List<Event>();
