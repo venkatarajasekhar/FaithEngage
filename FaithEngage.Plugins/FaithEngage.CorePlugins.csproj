@@ -50,6 +50,9 @@
     <Compile Include="DisplayUnits\DisplayUnitsBootstrapper.cs" />
     <Compile Include="RazorTemplating\RazorTemplatingBootstrapper.cs" />
     <Compile Include="DisplayUnits\TextUnit\TextUnitBootstrapper.cs" />
+    <Compile Include="Obsolete Interfaces %28needs moving%29\IPptParser.cs" />
+    <Compile Include="Obsolete Interfaces %28needs moving%29\IReference.cs" />
+    <Compile Include="Obsolete Interfaces %28needs moving%29\IReferenceProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -60,6 +63,7 @@
     <Folder Include="Plugin Files\DisplayUnits\" />
     <Folder Include="Plugin Files\DisplayUnits\TextUnit\" />
     <Folder Include="Exceptions\" />
+    <Folder Include="Obsolete Interfaces %28needs moving%29\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FaithEngage.Core\FaithEngage.Core.csproj">

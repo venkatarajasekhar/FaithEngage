@@ -82,9 +82,6 @@
     <Compile Include="RepoManagers\DisplayUnitPluginRepoManager.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginFactory.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\DisplayUnitPluginBootstrapper.cs" />
-    <Compile Include="Obsolete Interfaces %28needs moving%29\IReferenceProvider.cs" />
-    <Compile Include="Obsolete Interfaces %28needs moving%29\IReference.cs" />
-    <Compile Include="Obsolete Interfaces %28needs moving%29\IPptParser.cs" />
     <Compile Include="Bootstrappers\IBootstrapper.cs" />
     <Compile Include="Exceptions\PluginHasInvalidIdException.cs" />
     <Compile Include="PluginManagers\DisplayUnitPlugins\Interfaces\IDisplayUnitPluginContainer.cs" />
@@ -195,7 +192,6 @@
     <Folder Include="PluginManagers\DisplayUnitPlugins\" />
     <Folder Include="PluginManagers\DisplayUnitPlugins\Interfaces\" />
     <Folder Include="PluginManagers\DisplayUnitPlugins\Factories\" />
-    <Folder Include="Obsolete Interfaces %28needs moving%29\" />
     <Folder Include="Bootstrappers\" />
     <Folder Include="UserClasses\" />
     <Folder Include="UserClasses\Interfaces\" />
