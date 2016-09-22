@@ -2,6 +2,9 @@
 
 namespace FaithEngage.Core.Exceptions
 {
+	/// <summary>
+	/// Indicates a failure in authentication.
+	/// </summary>
 	public class AuthenticationException : Exception
 	{
 		public AuthenticationException ()

@@ -3,8 +3,15 @@ using FaithEngage.Core.Events;
 
 namespace FaithEngage.Core.Exceptions
 {
+	/// <summary>
+	/// Indicates an event was invalid--likely due to illogical or invalid data being assigned to it.
+	/// </summary>
 	public class InvalidEventException : Exception
 	{
+		/// <summary>
+		/// Gets or sets the invalid event.
+		/// </summary>
+		/// <value>The invalid event.</value>
 		public Event InvalidEvent
 		{
 			get;

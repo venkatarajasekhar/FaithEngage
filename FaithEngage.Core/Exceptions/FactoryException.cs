@@ -1,6 +1,9 @@
 ﻿using System;
 namespace FaithEngage.Core.Exceptions
 {
+	/// <summary>
+	/// Indicates an exception encounted in the midst of factory conversion or instantiation.
+	/// </summary>
 	public class FactoryException : Exception
 	{
 		public FactoryException()

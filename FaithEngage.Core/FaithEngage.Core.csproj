@@ -37,18 +37,15 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Exceptions\ScriptureReferenceParseException.cs" />
-    <Compile Include="Exceptions\FileDoesNotExistException.cs" />
     <Compile Include="Exceptions\NotImageException.cs" />
     <Compile Include="Exceptions\InvalidFileException.cs" />
     <Compile Include="Exceptions\UnParsedReferenceObjectException.cs" />
-    <Compile Include="Exceptions\InvalidFileTypeException.cs" />
     <Compile Include="Exceptions\UnregisteredDependencyException.cs" />
     <Compile Include="Exceptions\DependencyException.cs" />
     <Compile Include="Exceptions\TypeNotRegisteredException.cs" />
     <Compile Include="Exceptions\InvalidTypeRelationshipException.cs" />
     <Compile Include="Exceptions\RegisteredObjectInstantiationException.cs" />
     <Compile Include="Exceptions\EmptyGuidException.cs" />
-    <Compile Include="Exceptions\CouldNotAccessRepositoryException.cs" />
     <Compile Include="Containers\IocContainer.cs" />
     <Compile Include="Containers\RegisteredObject.cs" />
     <Compile Include="Exceptions\NotDisplayUnitException.cs" />
@@ -57,14 +54,12 @@
     <Compile Include="Exceptions\PluginHasInvalidConstructorsException.cs" />
     <Compile Include="DisplayUnits\Interfaces\IDisplayUnitFactory.cs" />
     <Compile Include="Cards\CardAction.cs" />
-    <Compile Include="Exceptions\InvalidAttributesException.cs" />
     <Compile Include="Cards\DefaultImplementations\RenderableCard.cs" />
     <Compile Include="Cards\DefaultImplementations\RenderableCardSection.cs" />
     <Compile Include="Exceptions\NotRegisteredPluginException.cs" />
     <Compile Include="Exceptions\PluginAlreadyRegisteredException.cs" />
     <Compile Include="Exceptions\RepositoryException.cs" />
     <Compile Include="Exceptions\InvalidIdException.cs" />
-    <Compile Include="Exceptions\CouldNotFindException.cs" />
     <Compile Include="Cards\Interfaces\IRenderableCard.cs" />
     <Compile Include="Cards\Interfaces\IRenderableCardSection.cs" />
     <Compile Include="DisplayUnitEditor\IDisplayUnitEditorDefinition.cs" />
@@ -144,7 +139,6 @@
     <Compile Include="Events\EventSchedules\Factories\EventScheduleFactory.cs" />
     <Compile Include="Factories\IConverterFactory %28Tin,Tout%29.cs" />
     <Compile Include="RepoManagers\EventScheduleRepoManager.cs" />
-    <Compile Include="Exceptions\InvalidTimeZoneException.cs" />
     <Compile Include="TemplatingService\ITemplatingService.cs" />
     <Compile Include="DisplayUnitEditor\DisplayUnitEditorContext.cs" />
     <Compile Include="PluginManagers\Files\Interfaces\IPluginFileManager.cs" />

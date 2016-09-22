@@ -2,7 +2,10 @@
 
 namespace FaithEngage.Core.Exceptions
 {
-    public class EmptyGuidException : Exception
+    /// <summary>
+	/// Indicates an id was necessary and an empty GUID (i.e. uninitialized) was used.
+    /// </summary>
+	public class EmptyGuidException : Exception
     {
         public EmptyGuidException ()
         {

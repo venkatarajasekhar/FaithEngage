@@ -2,7 +2,10 @@
 
 namespace FaithEngage.Core.Exceptions
 {
-    public class InvalidIdException : RepositoryException
+    /// <summary>
+    /// Thrown by a repository when a critical id is not valid and a null return value would be misleading.
+    /// </summary>
+	public class InvalidIdException : RepositoryException
     {
         public InvalidIdException ()
         {

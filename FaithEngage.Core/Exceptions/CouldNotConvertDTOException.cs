@@ -2,7 +2,10 @@
 
 namespace FaithEngage.Core.Exceptions
 {
-    public class CouldNotConvertDTOException : Exception
+	/// <summary>
+	/// Indicates there was a failure converting from one type to a data transfer object within a factory.
+	/// </summary>
+	public class CouldNotConvertDTOException : FactoryException
     {
         public CouldNotConvertDTOException ()
         {
