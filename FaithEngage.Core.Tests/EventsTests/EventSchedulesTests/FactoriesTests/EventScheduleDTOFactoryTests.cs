@@ -32,8 +32,8 @@ namespace FaithEngage.Core.Events.EventSchedules.Factories
 				RecurringEnd = recurringEnd,
 				RecurringStart = recurringStart
 			};
-			sched.SetUTCEndTime(endTime);
-			sched.SetUTCStartTime(startTime);
+			sched.SetEndTime(endTime);
+			sched.SetStartTime(startTime);
 
 			var dto = _fac.Convert(sched);
 

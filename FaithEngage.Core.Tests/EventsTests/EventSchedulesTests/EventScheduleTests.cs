@@ -12,7 +12,7 @@ namespace FaithEngage.Core.Events.EventSchedules
 		public void SetUTCStartTime_ValidStartTime_GivesUTCStartTime()
 		{
 			var sched = new EventSchedule();
-			sched.SetUTCStartTime(startTime);
+			sched.SetStartTime(startTime);
 
 			var time = sched.UTCStartTime;
 
@@ -23,7 +23,7 @@ namespace FaithEngage.Core.Events.EventSchedules
 		public void SetUTCStartTime_EmptyStartTime_GivesUTCStartTimeOfMidNight()
 		{
 			var sched = new EventSchedule();
-			sched.SetUTCStartTime(new DateTimeOffset());
+			sched.SetStartTime(new DateTimeOffset());
 
 			var time = sched.UTCStartTime;
 
@@ -34,7 +34,7 @@ namespace FaithEngage.Core.Events.EventSchedules
 		public void SetUTCEndTime_ValidStartTime_GivesUTCStartTime()
 		{
 			var sched = new EventSchedule();
-			sched.SetUTCEndTime(endTime);
+			sched.SetEndTime(endTime);
 
 			var time = sched.UTCEndTime;
 
@@ -45,7 +45,7 @@ namespace FaithEngage.Core.Events.EventSchedules
 		public void SetUTCEndTime_EmptyStartTime_GivesUTCStartTimeOfMidNight()
 		{
 			var sched = new EventSchedule();
-			sched.SetUTCEndTime(new DateTimeOffset());
+			sched.SetEndTime(new DateTimeOffset());
 
 			var time = sched.UTCEndTime;
 

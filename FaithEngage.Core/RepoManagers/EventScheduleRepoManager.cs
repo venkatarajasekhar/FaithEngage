@@ -7,6 +7,7 @@ using FaithEngage.Core.RepoInterfaces;
 
 namespace FaithEngage.Core.RepoManagers
 {
+	//TODO: Flesh this out
 	public class EventScheduleRepoManager : IEventScheduleRepoManager
 	{
         public EventScheduleRepoManager (IEventScheduleRepository _repo, IConverterFactory<EventSchedule,EventScheduleDTO> dtoFactory, IConverterFactory<EventScheduleDTO, EventSchedule> factory)
