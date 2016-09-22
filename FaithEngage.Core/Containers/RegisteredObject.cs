@@ -76,28 +76,28 @@ namespace FaithEngage.Core.Containers
 				Instance = ConcreteType.GetConstructors ().FirstOrDefault ().Invoke (parameters);
             } catch(NullReferenceException ex){
                 message = "Type " + ConcreteType.Name + " does not have any constructors.";
-                throwException (message, ex);
+                throwException (ConcreteType, message, ex);
             }catch (MemberAccessException ex) {
                 message = "This class is abstract and cannot be instantiated.";                               
-                throwException (message, ex);
+                throwException (ConcreteType, message, ex);
             }catch(ArgumentException ex){
                 message = "The parameters don't fit the constructor";
-                throwException (message, ex);
+                throwException (ConcreteType, message, ex);
             }catch(TargetInvocationException ex){
                 message = "The invoked constructor threw an exception";
-                throwException (message, ex);
+                throwException (ConcreteType, message, ex);
             }catch(TargetParameterCountException ex){
                 message = "The number of parameters did not fit the constructor";
-                throwException (message, ex);
+                throwException (ConcreteType, message, ex);
             }catch(Exception ex){
                 message = ex.Message;
-                throwException (message, ex);
+                throwException (ConcreteType, message, ex);
             }
         }
 
-        private void throwException(string message, Exception ex)
+        private void throwException(Type typeAtIssue, string message, Exception ex)
         {
-            throw new RegisteredObjectInstantiationException (message, ex);
+            throw new RegisteredObjectInstantiationException (typeAtIssue, message, ex);
         }
 
     }

@@ -2,7 +2,10 @@
 
 namespace FaithEngage.Core.Exceptions
 {
-    public class RegisteredObjectInstantiationException : Exception
+    /// <summary>
+    /// Indicates there was a problem constructing the ConcreteType of a registered object.
+    /// </summary>
+	public class RegisteredObjectInstantiationException : DependencyException
     {
 
         public RegisteredObjectInstantiationException ()
@@ -10,7 +13,7 @@ namespace FaithEngage.Core.Exceptions
         }
         
 
-        public RegisteredObjectInstantiationException (string message) : base (message)
+        public RegisteredObjectInstantiationException (Type typeAtIssue, string message) : base (typeAtIssue, message)
         {
         }
         
@@ -20,7 +23,7 @@ namespace FaithEngage.Core.Exceptions
         }
         
 
-        public RegisteredObjectInstantiationException (string message, Exception innerException) : base (message, innerException)
+		public RegisteredObjectInstantiationException (Type typeAtIssue, string message, Exception innerException) : base (typeAtIssue, message, innerException)
         {
         }
         
