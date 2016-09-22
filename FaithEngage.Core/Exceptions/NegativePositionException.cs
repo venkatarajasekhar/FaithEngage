@@ -2,7 +2,10 @@
 
 namespace FaithEngage.Core.Exceptions
 {
-    public class NegativePositionException : Exception
+    /// <summary>
+    /// Indicates a position in a grouping is being set with a negative number and negative positions are disallowed.
+    /// </summary>
+	public class NegativePositionException : Exception
     {
         public NegativePositionException ()
         {

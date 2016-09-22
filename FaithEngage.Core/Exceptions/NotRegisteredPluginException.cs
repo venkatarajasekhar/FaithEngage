@@ -2,7 +2,10 @@
 
 namespace FaithEngage.Core.Exceptions
 {
-    public class NotRegisteredPluginException : Exception
+    /// <summary>
+    /// A Plugin is being requested that is not registered and therefore its id is not recognized.
+    /// </summary>
+	public class NotRegisteredPluginException : Exception
     {
         public NotRegisteredPluginException ()
         {

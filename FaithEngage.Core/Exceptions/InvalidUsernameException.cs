@@ -2,7 +2,10 @@
 
 namespace FaithEngage.Core.Exceptions
 {
-    public class InvalidUsernameException : Exception
+    /// <summary>
+    /// Indicates the username is invalid for the action being requested.
+    /// </summary>
+	public class InvalidUsernameException : Exception
     {
         public InvalidUsernameException ()
         {
