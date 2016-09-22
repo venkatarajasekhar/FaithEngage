@@ -25,7 +25,7 @@ namespace FaithEngage.Core.RepoManagers
 			throw new NotImplementedException();
 		}
 
-		public List<EventSchedule> GetByOrgId(Guid id)
+		public IList<EventSchedule> GetByOrgId(Guid id)
 		{
 			throw new NotImplementedException();
 		}
