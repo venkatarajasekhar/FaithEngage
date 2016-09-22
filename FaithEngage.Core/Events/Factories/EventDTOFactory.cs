@@ -16,7 +16,7 @@ namespace FaithEngage.Core.Events.Factories
 		{
             var dto = new EventDTO ();
             dto.AssociatedOrg = evnt.AssociatedOrg;
-			dto.UtcEventDate = evnt.EventDate.Value.UtcDateTime;
+			dto.UtcEventDate = evnt.EventDate.HasValue ? evnt.EventDate.Value.UtcDateTime.Date : (DateTime?)null;
             dto.EventId = evnt.EventId;
             dto.EventScheduleId = (evnt.Schedule != null) ? evnt.Schedule.Id : Guid.Empty;
             return dto;
