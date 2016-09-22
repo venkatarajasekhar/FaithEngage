@@ -7,7 +7,7 @@ namespace FaithEngage.Core.RepoInterfaces
 	public interface IEventRepository
 	{
 		EventDTO GetById(Guid id);
-		List<EventDTO> GetByDate (DateTime date, Guid orgId);
+		List<EventDTO> GetByDate (DateTimeOffset date, Guid orgId);
 		List<EventDTO> GetByOrgId (Guid orgId);
 		Guid SaveEvent(EventDTO eventToSave);
 		void UpdateEvent(EventDTO eventToUpdate);
