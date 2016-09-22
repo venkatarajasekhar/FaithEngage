@@ -29,7 +29,7 @@ namespace FaithEngage.Core.Events.Factories
             var dto = _fac.Convert (evnt);
 
             Assert.That (dto.AssociatedOrg, Is.EqualTo (VALID_GUID));
-            Assert.That (dto.EventDate, Is.EqualTo (DateTime.Now.Date));
+            Assert.That (dto.UtcEventDate, Is.EqualTo (DateTime.Now.Date));
             Assert.That (dto.EventId, Is.EqualTo (VALID_GUID));
             Assert.That (dto.EventScheduleId, Is.EqualTo (VALID_GUID));
         }
@@ -42,7 +42,7 @@ namespace FaithEngage.Core.Events.Factories
             var dto = _fac.Convert (evnt);
 
             Assert.That (dto.AssociatedOrg, Is.EqualTo (Guid.Empty));
-            Assert.That (dto.EventDate, Is.Null);
+            Assert.That (dto.UtcEventDate, Is.Null);
             Assert.That (dto.EventId, Is.EqualTo (Guid.Empty));
             Assert.That (dto.EventScheduleId, Is.EqualTo (Guid.Empty));
         }
