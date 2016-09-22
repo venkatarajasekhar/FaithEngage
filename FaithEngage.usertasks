@@ -1,3 +1,4 @@
 <ListOfTaskListEntry>
   <TaskListEntry file="" description="JF: Change OpenReference project to submodule tracking the ReferenceParser repo on my github" />
+  <TaskListEntry file="" description="JF: Add all plugin exceptions as derived from a common PluginException" />
 </ListOfTaskListEntry>
