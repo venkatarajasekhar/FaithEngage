@@ -29,7 +29,9 @@ namespace FaithEngage.Core.Events.Factories
 		{
             var evnt = new Event ();
             evnt.AssociatedOrg = dto.AssociatedOrg;
-			evnt.EventDate = new DateTimeOffset (dto.UtcEventDate.Value, new TimeSpan ());
+			if (dto.UtcEventDate.HasValue) {
+				evnt.EventDate = new DateTimeOffset (dto.UtcEventDate.Value);
+			}
             evnt.EventId = dto.EventId;
             try {
                 evnt.Schedule = _schedRepoMgr.GetById (dto.EventScheduleId);;
