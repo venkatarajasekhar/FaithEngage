@@ -3,10 +3,21 @@ using System;
 
 namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins.Interfaces
 {
-    public interface IDisplayUnitPluginContainer
+    /// <summary>
+    /// A centralized container to keep all DisplayUnitPlugin types in memory, as needed.
+    /// </summary>
+	public interface IDisplayUnitPluginContainer
     {
-        void Register(DisplayUnitPlugin plugin);
-        DisplayUnitPlugin Resolve (Guid PluginId);
+        /// <summary>
+        /// Register the specified plugin for later access.
+        /// </summary>
+        /// <param name="plugin">Plugin.</param>
+		void Register(DisplayUnitPlugin plugin);
+        /// <summary>
+        /// Resolve the specified PluginId to a DisplayUnitPlugin
+        /// </summary>
+        /// <param name="PluginId">Plugin identifier.</param>
+		DisplayUnitPlugin Resolve (Guid PluginId);
     }
 }
 

@@ -19,9 +19,11 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
 
         public void Execute(IAppFactory factory)
 		{
-            var pluginContainer = factory.GetOther<IDisplayUnitPluginContainer> ();
-            var repoManager = factory.DisplayUnitsPluginRepo;
-            var regService = factory.RegistrationService;
+            //Grab the DisplayUnitPluginContainer
+			var pluginContainer = factory.GetOther<IDisplayUnitPluginContainer> ();
+            //Grab the DisplayUnitPluginRepository
+			var repoManager = factory.DisplayUnitsPluginRepo;
+			//Register each of the plugins into the container
 			foreach (var plugin in repoManager.GetAll()) {
                 pluginContainer.Register (plugin);
 			}
