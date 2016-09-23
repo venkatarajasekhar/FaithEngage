@@ -16,12 +16,12 @@ namespace FaithEngage.Core.PluginManagers.Files.Factories
         private DirectoryInfo _pluginsFolder;
 
 		/// <summary>
-		/// Gets the temp folder's path.
+		/// Gets the temp folder's DirectoryInfo.
 		/// </summary>
 		/// <value>The temp folder.</value>
         public DirectoryInfo TempFolder { get { return _tempFolder; } }
         /// <summary>
-        /// Gets the plugins folder's path.
+        /// Gets the plugins folder's DirectoryInfo.
         /// </summary>
         /// <value>The plugins folder.</value>
 		public DirectoryInfo PluginsFolder { get { return _pluginsFolder; } }
