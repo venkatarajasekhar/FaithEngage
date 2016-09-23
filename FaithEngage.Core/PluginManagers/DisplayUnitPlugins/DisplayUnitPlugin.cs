@@ -80,14 +80,14 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
 			var files = fileMgr.GetFilesForPlugin (this.PluginId.Value)
 			                   .Select (p => p.Value.FileInfo);
 			//Project files and filesNeeded into ienumerable anonymous object
-            var filesObtained =
-                from f in files
-                from fn in filesNeeded
-                    //Only get those files needed actually contained in plugin files
-					where f.FullName.Contains (fn.FileName)
-                select new{
-                    fileInfo = f, key = fn.TemplateName
-                };
+			var filesObtained =
+				from f in files
+				from fn in filesNeeded
+					//Only get those files needed actually contained in plugin files
+				where f.FullName.Contains (fn.FileName)
+				select new {
+					fileInfo = f, key = fn.TemplateName
+				};
 			//Loop through the new anonymous object
             foreach (var file in filesObtained) {
                 try {
@@ -99,7 +99,6 @@ namespace FaithEngage.Core.PluginManagers.DisplayUnitPlugins
                     continue;
                 }
             }
-
         }
 		/// <summary>
 		/// Reads a template text file into a string.
