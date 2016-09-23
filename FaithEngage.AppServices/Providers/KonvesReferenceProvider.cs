@@ -1,5 +1,4 @@
 ﻿using System;
-using FaithEngage.Core.Interfaces;
 using Konves.Scripture.Version;
 using Konves.Scripture;
 using FaithEngage.Core.Exceptions;
@@ -7,6 +6,7 @@ using System.Reflection;
 using FaithEngage.AppServices.Wrappers;
 using System.Text;
 using System.Linq;
+using FaithEngage.CorePlugins.Interfaces;
 
 namespace FaithEngage.AppServices.Providers
 {
@@ -27,7 +27,7 @@ namespace FaithEngage.AppServices.Providers
             return _scriptureInfo;
         }
             
-        public FaithEngage.Core.Interfaces.IReference Parse (string reference)
+        public FaithEngage.CorePlugins.Interfaces.IReference Parse (string reference)
         {
             Reference kref;
 
@@ -49,7 +49,7 @@ namespace FaithEngage.AppServices.Providers
             return outRef;
         }
 
-        public string GetReference (FaithEngage.Core.Interfaces.IReference reference)
+        public string GetReference (IReference reference)
         {
             if (!reference.IsParsed)
                 throw new UnParsedReferenceObjectException ();
@@ -69,6 +69,7 @@ namespace FaithEngage.AppServices.Providers
             }
             return sb.ToString ();
         }
-    }
+
+	}
 }
 

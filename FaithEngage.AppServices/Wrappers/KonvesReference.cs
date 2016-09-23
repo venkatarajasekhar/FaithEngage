@@ -1,7 +1,7 @@
 ﻿using System;
-using FaithEngage.Core.Interfaces;
 using Konves.Scripture;
 using System.Linq;
+using FaithEngage.CorePlugins.Interfaces;
 
 namespace FaithEngage.AppServices.Wrappers
 {

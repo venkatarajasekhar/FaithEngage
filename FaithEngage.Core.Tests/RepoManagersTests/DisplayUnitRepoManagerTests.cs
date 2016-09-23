@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using FakeItEasy;
-using FaithEngage.Core.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using FaithEngage.Core.DisplayUnits.Interfaces;

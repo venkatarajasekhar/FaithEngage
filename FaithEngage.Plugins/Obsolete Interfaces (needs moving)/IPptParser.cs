@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using FaithEngage.Core.DisplayUnits;
 
-namespace FaithEngage.Core.Interfaces
+namespace FaithEngage.CorePlugins.Interfaces
 {
     public interface IPptParser
     {

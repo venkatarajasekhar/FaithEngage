@@ -1,5 +1,4 @@
 ﻿using System;
-using FaithEngage.Core.Interfaces;
 using FakeItEasy;
 using FaithEngage.Core.Tests;
 using NUnit.Framework;

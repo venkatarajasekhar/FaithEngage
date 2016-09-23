@@ -2,11 +2,9 @@
 using System;
 using FaithEngage.AppServices;
 using FaithEngage.AppServices.Providers;
-using FaithEngage.Core.Interfaces;
 using System.Security.Cryptography;
 using FakeItEasy;
-
-
+using FaithEngage.CorePlugins.Interfaces;
 
 namespace FaithEngage.AppServices.Tests.Providers
 {

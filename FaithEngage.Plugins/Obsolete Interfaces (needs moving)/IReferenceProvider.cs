@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FaithEngage.Core.Interfaces
+namespace FaithEngage.CorePlugins.Interfaces
 {
     public interface IReferenceProvider
     {
