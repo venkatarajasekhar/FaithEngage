@@ -5,11 +5,18 @@ using FaithEngage.Core.Factories;
 
 namespace FaithEngage.Core.PluginManagers.Factories
 {
+	/// <summary>
+	/// Converts Plugins to PluginDTOs
+	/// </summary>
 	public class PluginDtoFactory : IConverterFactory<Plugin,PluginDTO>
     {
-        public PluginDTO Convert(Plugin plugin)
+        /// <summary>
+		/// Converts Plugins to PluginDTOs
+		/// </summary>
+		public PluginDTO Convert(Plugin plugin)
         {
-			validate(plugin);
+			//Validate the plugin first.
+			validate (plugin);
 			var dto = new PluginDTO ();
 			dto.Id = plugin.PluginId;
 			dto.AssemblyLocation = plugin.AssemblyLocation;
@@ -24,10 +31,8 @@ namespace FaithEngage.Core.PluginManagers.Factories
 		{
 			if(plugin.AssemblyLocation == "") throwInvalidException("AssemblyLocation");
 			if(plugin.AssemblyLocation == null) throwInvalidException("AssemblyLocation");
-			if(plugin.FullName == "") throwInvalidException("FullName");
-			if(plugin.FullName == null) throwInvalidException("FullName");
-			if(plugin.PluginName == "") throwInvalidException("PluginName");
-			if(plugin.PluginName == null) throwInvalidException("PluginName");
+			if(string.IsNullOrWhiteSpace(plugin.FullName)) throwInvalidException("FullName");
+			if(string.IsNullOrWhiteSpace(plugin.PluginName)) throwInvalidException("PluginName");
 			if(plugin.PluginVersion == null) throwInvalidException("PluginVersion");
 		}
 
