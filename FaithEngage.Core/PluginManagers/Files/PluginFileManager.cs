@@ -248,76 +248,103 @@ namespace FaithEngage.Core.PluginManagers.Files
 			return Path.Combine (_factory.GetBasePluginPath (pluginId), relPath, file.Name);
 		}
 
+		/// <summary>
+		/// Will receive a list of files and, from them, determine the common directory they all fall in.
+		/// This helps to plant the while file group relative to each other in a plugin diretory.
+		/// </summary>
+		/// <returns>The common dir.</returns>
+		/// <param name="files">Files.</param>
 		private DirectoryInfo getCommonDir (IList<FileInfo> files)
 		{
+			//Start with the root directory of the first file.
 			string currentDir = Path.GetPathRoot (files [0].FullName);
-
-			//var plugTempFolder = $"{_tempFolder.FullName}{Path.DirectorySeparatorChar}{pluginId}";
-			//if (files.All (p => p.FullName.Contains (_tempFolder.FullName))) {
-			//    return _tempFolder;
-			//}
-
+			//For each file...
 			for (int i = 0; i < files.Count; i++) {
 				string commonDir;
+				//As long as this isn't the last file, find the common directory between this file and the next.
 				if (files.ElementAtOrDefault (i + 1) != null) {
 					commonDir = FindCommonDir (files [i].FullName, files [i + 1].FullName);
-				} else {
+				} else {//Else, if this IS the last file, use the directory of this file as the common directory
 					commonDir = files [i].Directory.FullName;
 				}
-
+				//If currentDir is the same as the path root of the current file (first file), make the current dir the 
+				//common directory found.
 				if (currentDir == Path.GetPathRoot (files [i].FullName)) {
 					currentDir = commonDir;
-				} else if (currentDir == commonDir) {
+				} else if (currentDir == commonDir) {//Else if the common directory IS the current root directory, move to the next file.
 					continue;
-				} else {
+				} else {//Else set the current directory as the common dir between the two files and the current directory
 					currentDir = FindCommonDir (currentDir, commonDir);
 				}
 			}
 			return new DirectoryInfo (currentDir);
 		}
 
+		/// <summary>
+		/// Finds the common directory between two paths.
+		/// </summary>
+		/// <returns>The common dir.</returns>
+		/// <param name="path1">Path1.</param>
+		/// <param name="path2">Path2.</param>
 		private string FindCommonDir (string path1, string path2)
 		{
+			//Get the directory names for each of the paths.
 			string p1 = File.Exists (path1) ? Path.GetDirectoryName (path1) : path1;
 			string p2 = File.Exists (path2) ? Path.GetDirectoryName (path2) : path2;
+			//If both paths are the same, return the first path.
 			if (p1 == p2) return p1;
+			//Split both paths into arrays by their directory separator character
 			var segs1 = p1.Split (Path.DirectorySeparatorChar);
 			var segs2 = p2.Split (Path.DirectorySeparatorChar);
 
-			if (segs1.Length > segs2.Length) {
+			if (segs1.Length > segs2.Length) { //If the first array is longer than the second...
+				//Initialize a new array with the of the shorter array
 				string [] segs = new string [segs2.Length];
+				//Copy the number of segments as segs2 is long from segs1 to the new array.
 				Array.Copy (segs1, segs, segs2.Length);
+				//Make segs1 = the new array.
 				segs1 = segs;
-			} else if (segs1.Length < segs2.Length) {
+			} 
+			/*I don't thing this part is necessary -Jon
+			 * else if (segs1.Length < segs2.Length) {
 				string [] segs = new string [segs1.Length];
 				Array.Copy (segs2, segs, segs1.Length);
-			}
-			int index;
-
+				segs2 = segs;
+			}*/
 			var list = new List<string> ();
-
-			for (index = 0; index < segs1.Length; index++) {
+			//For each index of segs1...
+			for (int index = 0; index < segs1.Length; index++) {
+				//If the elements of segs1 and seg2 at that index aren't the same, break out.
 				if (segs1 [index] != segs2 [index]) break;
+				//Otherwise, add that segment to the index.
 				list.Add (segs1 [index]);
 			}
 
-			if (list [0] == "") { //In the case of a unix-based system
-				list [0] = Path.DirectorySeparatorChar.ToString ();
-			} else if (Path.GetPathRoot (p1).Contains (list [0])) //In the case of windows-based system
-			 {
-				list [0] += Path.DirectorySeparatorChar;
+			if (list [0] == "") { //In the case of a unix-based system...
+				list [0] = Path.DirectorySeparatorChar.ToString ();//Set the first segment to be "/"
+			} 
+			else if (Path.GetPathRoot (p1).Contains (list [0])) //In the case of windows-based system
+			{
+				//Add the directory separator character to the end of the first segment.
+				list [0] += Path.DirectorySeparatorChar; 
 			}
 
-
+			//Join the list of segments to a path.
 			var commondir = Path.Combine (list.ToArray ());
 			return commondir;
 
 		}
 
-
+		/// <summary>
+		/// Throws a PluginFileException.
+		/// </summary>
+		/// <param name="ex">The inner exception to add.</param>
+		/// <param name="subject">The subject that was problematic. ToString() will be called on it.</param>
 		private void throwFileException (Exception ex, object subject)
 		{
-			try { throw ex; } catch (IOException) {
+			try { 
+				throw ex; 
+			} catch (IOException) {
 				throw new PluginFileException ($"IO Exception encountered regarding {subject.ToString ()}", ex);
 			} catch (UnauthorizedAccessException) {
 				throw new PluginFileException ($"Unauthorized Access on {subject.ToString ()}", ex);
@@ -326,6 +353,15 @@ namespace FaithEngage.Core.PluginManagers.Files
 			}
 		}
 
+		/// <summary>
+		/// Executes a file-related action and returns a result. throwFileException will be called with any encountered 
+		/// exceptions.
+		/// </summary>
+		/// <returns>The result of the file action.</returns>
+		/// <param name="source">The object to be acted upon.</param>
+		/// <param name="func">A function to execute upon the object.</param>
+		/// <typeparam name="Tinput">The type of the source.</typeparam>
+		/// <typeparam name="Tresult">The 2nd type parameter.</typeparam>
 		private Tresult doFileAction<Tinput, Tresult> (Tinput source, Func<Tinput, Tresult> func)
 		{
 			Tresult result = default (Tresult);
@@ -336,7 +372,12 @@ namespace FaithEngage.Core.PluginManagers.Files
 			}
 			return result;
 		}
-
+		/// <summary>
+		/// Executes a file-related action. throwFileException will be called with any encountered exceptions.
+		/// </summary>
+		/// <param name="source">Source.</param>
+		/// <param name="func">Func.</param>
+		/// <typeparam name="Tinput">The 1st type parameter.</typeparam>
 		private void doFileAction<Tinput> (Tinput source, Action<Tinput> func)
 		{
 			try {
