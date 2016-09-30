@@ -30,23 +30,30 @@ namespace FaithEngage.Core.PluginManagers
             _mgr = mgr;
             _factory = factory;
 			_regService = regService;
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            /* Because we're dealing with loading assemblies, we need to make sure that any unresolved
+             * assembly dependencies can be resolved. */
+			AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             AppDomain.CurrentDomain.AssemblyResolve += pluginAssembly_Resolve;
         }
-
+		/// <summary>
+		/// Installs a plugin from a zip archive.
+		/// </summary>
+		/// <param name="zipFile">Zip file.</param>
 		public int Install(ZipArchive zipFile)
 		{
 			var key = Guid.NewGuid();
             IList<FileInfo> files = null;
-            try {
+            //1. Extract and obtain references to all the files in the ziparchive.
+			try {
                 files = _fileMgr.ExtractZipToTempFolder (zipFile, key);
             } catch (PluginFileException ex) {
                 throw new PluginLoadException ("There was a problem extracting the zipfile to the temp folder.", ex);
             }
-
+			//2. Get the file called "plugins.json"
             var pluginsFile = files.FirstOrDefault (p => p.Name == "plugins.json");
             if (pluginsFile == null) throw new PluginLoadException ("There was no file called plugins.json in the zip folder.");
-            PluginPackage pPackage = null;
+            //3. Obtain the pluginPackage from the plugins.json file.
+			PluginPackage pPackage = null;
             try {
                 pPackage = getPluginPackage (pluginsFile);
             }catch (SecurityException ex) {
@@ -62,19 +69,25 @@ namespace FaithEngage.Core.PluginManagers
             }
 
             int num = 0;
+			//4. Loop through the plugins in the package (there could be more than one). For each one...
             foreach (var pinfo in pPackage.Plugins){
-                var plugId = storeFilesForPlugin (pinfo, files);
-                var dll = getDll (pinfo, plugId);
-                if (dll == null){
+                //4a. Store the files for the plugin as needed by the plugins.json file.
+				var plugId = storeFilesForPlugin (pinfo, files);
+                //4b. Get the main assembly for the plugin.
+				var dll = getDll (pinfo, plugId);
+                if (dll == null){//If the dll can't be obtained, fail and and throw.
                     _fileMgr.FlushTempFolder (key);
                     _fileMgr.DeleteAllFilesForPlugin (plugId);
                     throw new PluginLoadException 
                     ("Dll not found for plugin: " + pinfo.PluginTypeName);
                 }
-                var plugin = getPlugin (pinfo, dll);
+                //4c. Get the plugin from the assembly.
+				var plugin = getPlugin (pinfo, dll);
                 num++;
-                _mgr.RegisterNew (plugin, plugId);
-                try {
+                //4d. Register the plugin.
+				_mgr.RegisterNew (plugin, plugId);
+                //4e. Install the pugin.
+				try {
                     plugin.Install (_factory);
                 } catch (Exception ex) {
                     throw new PluginInstallException 
@@ -82,23 +95,34 @@ namespace FaithEngage.Core.PluginManagers
                 }
 
             }
-            _fileMgr.FlushTempFolder (key);
-            return num;
+            //5. clear out the temp folder.
+			_fileMgr.FlushTempFolder (key);
+            //Return the number of Plugins installed.
+			return num;
 		}
 
+		/// <summary>
+		/// Installs the specified Plugin type with the given files.
+		/// </summary>
+		/// <param name="files">Files.</param>
+		/// <typeparam name="TPlugin">The 1st type parameter.</typeparam>
         public void Install<TPlugin>(IList<FileInfo> files = null) where TPlugin : Plugin, new()
         {
-            var plugin = new TPlugin ();
+            //1. Insantiate the plugin.
+			var plugin = new TPlugin ();
             Guid plugId;
-            if (files != null) plugId = storeFilesForPlugin (files);
+            //2. Store the files for the plugin and get a plugin id.
+			if (files != null) plugId = storeFilesForPlugin (files);
             else plugId = Guid.NewGuid ();
-            try {
+            //3. Register the new plugin.
+			try {
                 _mgr.RegisterNew (plugin, plugId);
             } catch (RepositoryException ex) {
                 throw new PluginLoadException 
                 ($"There was a problem registering the {plugin.PluginName} plugin to the database.", ex);
             }
-            try {
+            //4. Install the plugin.
+			try {
                 plugin.Install (_factory);
             } catch (Exception ex) {
                 throw new PluginInstallException 
@@ -107,6 +131,11 @@ namespace FaithEngage.Core.PluginManagers
 
         }
 
+		/// <summary>
+		/// Gets the plugin package from the fileinfo for the plugins.json file.
+		/// </summary>
+		/// <returns>The plugin package.</returns>
+		/// <param name="file">File.</param>
         private PluginPackage getPluginPackage (FileInfo file)
         {
             string json;
@@ -116,30 +145,42 @@ namespace FaithEngage.Core.PluginManagers
             var jobject = JObject.Parse (json);
             return jobject.ToObject<PluginPackage> ();
         }
-
+		/// <summary>
+		/// Stores the files for a new plugin and returns the new id for those files. Used for plugins loaded from a 
+		/// zip archive.
+		/// </summary>
+		/// <returns>The files for plugin.</returns>
+		/// <param name="pinfo">Pinfo.</param>
+		/// <param name="allFiles">All files.</param>
         private Guid storeFilesForPlugin(PluginPackage.pluginInfo pinfo,IList<FileInfo> allFiles)
         {
             var plugId = Guid.NewGuid ();
-            var relPaths = pinfo.Files.Select (p => Path.Combine (p.Split ('/', '\\')));
-
+            //Get the OS safe paths of each of the needed files for the plugin.
+			var relPaths = pinfo.Files.Select (p => Path.Combine (p.Split ('/', '\\')));
+			//Get the files where the relative paths in the pinfo are found in the allFiles list. 
             var pFiles = allFiles.Where (p => relPaths.Any (q => p.FullName.Contains (q)));
-            try {
+            //Store those files.
+			try {
                 _fileMgr.StoreFilesForPlugin (pFiles.ToList (), plugId, true);
             } catch (PluginFileException ex) {
                 throw new PluginLoadException($"There was a problem storing files for {pinfo.PluginTypeName}.", ex);
             }
-           
             return plugId;
         }
-
+		/// <summary>
+		/// Stores the files for plugin and returns the new id for those files. Used for plugins loaded from a passed 
+		/// in plugin type.
+		/// </summary>
+		/// <returns>The files for plugin.</returns>
+		/// <param name="files">Files.</param>
         private Guid storeFilesForPlugin(IList<FileInfo> files){
-            var existentFiles = files.Where (p => {
+            //Gets all the files that actually exist.
+			var existentFiles = files.Where (p => {
                 p.Refresh ();
                 if (p.Exists) return true;
                 return false;
             }).ToList ();
             var pluginId = Guid.NewGuid ();
-
             try {
                 if (existentFiles.Count != 0)
                     _fileMgr.StoreFilesForPlugin (existentFiles, pluginId, true);
@@ -148,7 +189,12 @@ namespace FaithEngage.Core.PluginManagers
             }
             return pluginId;
         }
-
+		/// <summary>
+		/// Obtains the dll referenced in a plugininfo object from stored filesystem.
+		/// </summary>
+		/// <returns>The dll.</returns>
+		/// <param name="pinfo">Pinfo.</param>
+		/// <param name="plugId">Plug identifier.</param>
         private FileInfo getDll(PluginPackage.pluginInfo pinfo, Guid plugId){
             var plugFiles = _fileMgr.GetFilesForPlugin (plugId);
             var dll = plugFiles.FirstOrDefault (
@@ -157,41 +203,73 @@ namespace FaithEngage.Core.PluginManagers
                 ));
             return (dll.Value != null) ? dll.Value.FileInfo : null;
         }
-
+		/// <summary>
+		/// Obtains the plugin specified in the plugininfo object from the passed in dll file.
+		/// </summary>
+		/// <returns>The plugin.</returns>
+		/// <param name="pinfo">Pinfo.</param>
+		/// <param name="dll">Dll.</param>
         private Plugin getPlugin(PluginPackage.pluginInfo pinfo, FileInfo dll)
         {
-            var assembly = Assembly.LoadFrom (dll.FullName);
-            var types = assembly.GetTypes ();
-            var ptype = types.FirstOrDefault (p => p.Name == pinfo.PluginTypeName);
-            if (!ptype.IsSubclassOf (typeof (Plugin))) throw new PluginLoadException ("Plugin type is not derived from Plugin");
-            var ctor = ptype.GetConstructors ().FirstOrDefault ();
+            //Load the assembly
+			var assembly = Assembly.LoadFrom (dll.FullName);
+            //Get all the types in the Assembly.
+			var types = assembly.GetTypes ();
+            //Look for the type with the name specified in the plugininfo object.
+			var ptype = types.FirstOrDefault (p => p.Name == pinfo.PluginTypeName);
+            //If the type isn't derived from Plugin, throw.
+			if (!ptype.IsSubclassOf (typeof (Plugin))) throw new PluginLoadException ("Plugin type is not derived from Plugin");
+            //Get the first construct for the plugin.
+			var ctor = ptype.GetConstructors ().FirstOrDefault ();
             if (ctor == null) throw new PluginLoadException ("Plugin has no valid constructors");
-            var plugin = (Plugin)ctor.Invoke (new object [] { });
+            //Invoke the constructor to create the plugin.
+			var plugin = (Plugin)ctor.Invoke (new object [] { });
             if (plugin == null) throw new PluginLoadException ("Plugin could not be constructed");
             return plugin;
         }
 
 
-
+		/// <summary>
+		/// Resolves the assembly from within the current domain.
+		/// </summary>
+		/// <returns>The domain assembly resolve.</returns>
+		/// <param name="sender">Sender.</param>
+		/// <param name="args">Arguments.</param>
         private Assembly CurrentDomain_AssemblyResolve (object sender, ResolveEventArgs args)
         {
-            var name = args.Name.Split (',') [0];
+            //Get the assembly name, without the version number, etc...
+			var name = args.Name.Split (',') [0];
+			//Get all assemblies currently loaded in the current appdomain.
             var assemblies = AppDomain.CurrentDomain.GetAssemblies ();
-            var foundAssembly = assemblies.FirstOrDefault (p => p.FullName.Split (',') [0] == name);
+            //Compare the searched for name with the names of all the assemblies.
+			var foundAssembly = assemblies.FirstOrDefault (p => p.FullName.Split (',') [0] == name);
             return foundAssembly;
         }
-
+		/// <summary>
+		/// Resolves the assembly from within the other files surrounding the requesting assembly.
+		/// </summary>
+		/// <returns>The assembly resolve.</returns>
+		/// <param name="sender">Sender.</param>
+		/// <param name="args">Arguments.</param>
         private Assembly pluginAssembly_Resolve(object sender, ResolveEventArgs args)
         {
-            var baseDir = Path.GetDirectoryName (args.RequestingAssembly.Location);
-            var name = args.Name.Split (',') [0];
+            //Get the directory of the requesting assembly.
+			var baseDir = Path.GetDirectoryName (args.RequestingAssembly.Location);
+            //Get the name of the requested assembly.
+			var name = args.Name.Split (',') [0];
+			//Get all the files in the requesting assembly's directory, recursively down.
             var baseDirFiles = Directory.EnumerateFiles (baseDir, "*", SearchOption.AllDirectories).ToList ();
-            var foundFile = baseDirFiles.FirstOrDefault (p => p.Contains (name + ".dll"));
+            //For each file, see if its name contains the requested assembly's name.
+			var foundFile = baseDirFiles.FirstOrDefault (p => p.Contains (name + ".dll"));
             if (foundFile == null) return null;
             var assembly = Assembly.LoadFrom (foundFile);
             return assembly;
         }
 
+		/// <summary>
+		/// Uninstalls a plugin specified by the given id.
+		/// </summary>
+		/// <param name="pluginId">Plugin identifier.</param>
         public void Uninstall(Guid pluginId)
 		{
             Plugin plug;
@@ -217,6 +295,9 @@ namespace FaithEngage.Core.PluginManagers
 			}
 		}
 
+		/// <summary>
+		/// Registers dependencies for and then initializes all currently installed plugins.
+		/// </summary>
 		public void InitializeAllPlugins()
 		{
 			var plugins = _mgr.GetAllPlugins();
@@ -240,11 +321,21 @@ namespace FaithEngage.Core.PluginManagers
 			}
 		}
 
+		/// <summary>
+		/// Checks whether the specified plugin is registered.
+		/// </summary>
+		/// <returns><c>true</c>, if registered, <c>false</c> otherwise.</returns>
+		/// <param name="pluginId">Plugin identifier.</param>
         public bool CheckRegistered (Guid pluginId)
         {
             return _mgr.CheckRegistered (pluginId);
         }
 
+		/// <summary>
+		/// Checks whether the specified plugin type is registered.
+		/// </summary>
+		/// <returns><c>true</c>, if registered, <c>false</c> otherwise.</returns>
+		/// <typeparam name="TPlugin">The 1st type parameter.</typeparam>
         public bool CheckRegistered<TPlugin> () where TPlugin : Plugin
         {
             return _mgr.CheckRegistered<TPlugin> ();

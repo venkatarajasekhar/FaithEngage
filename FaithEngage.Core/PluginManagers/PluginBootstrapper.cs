@@ -23,7 +23,7 @@ namespace FaithEngage.Core.PluginManagers
         public void Execute(IAppFactory factory)
 		{
 			var pmgr = factory.PluginManager;
-            pmgr.InitializeAllPlugins();
+			pmgr.InitializeAllPlugins();
 		}
 
         public void LoadBootstrappers (IBootList bootstrappers)
